@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout>
+
+  <size>
+    <xSize>3000</xSize>
+    <ySize>3000</ySize>
+  </size>
+
+  <entranceDoor>
+
+    <leftupperCorner>
+      <xPos>1400</xPos>
+      <yPos>3000</yPos>
+     </leftupperCorner>
+
+     <downrightCorner>
+       <xPos>1500</xPos>
+       <yPos>3000</yPos>
+     </downrightCorner>
+
+  </entranceDoor>
+
+  <store id="001">
+
+    <position>
+      <leftupperCorner>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </leftupperCorner>
+
+      <downrightCorner>
+        <xPos>100</xPos>
+        <yPos>200</yPos>
+      </downrightCorner>
+    </position>
+	
+      <door>
+        <leftupperCorner>
+          <xPos>40</xPos>
+          <yPos>200</yPos>
+        </leftupperCorner>
+
+        <downrightCorner>
+          <xPos>60</xPos>
+          <yPos>200</yPos>
+        </downrightCorner>
+      </door>
+
+
+    <name>Woods Sooper Dooper Shop</name>
+
+    <description>
+      <info>HP</info>
+      <info>Coldmirror</info>
+    </description>
+
+    <maxVisitors>300</maxVisitors>
+
+    <openingHours>
+      <openTime>09:00:00</openTime>
+      <closeTime>19:00:00</closeTime>
+    </openingHours>
+
+    <specialOffer>
+      <startTime>11:00:00</startTime>
+      <endTime>12:00:00</endTime>
+    </specialOffer>
+
+  </store>
+  
+  
+    <store id="002">
+
+    <position>
+      <leftupperCorner>
+        <xPos>300</xPos>
+        <yPos>300</yPos>
+      </leftupperCorner>
+
+      <downrightCorner>
+        <xPos>500</xPos>
+        <yPos>500</yPos>
+      </downrightCorner>
+
+      <door>
+        <leftupperCorner>
+          <xPos>40</xPos>
+          <yPos>200</yPos>
+        </leftupperCorner>
+
+        <downrightCorner>
+          <xPos>60</xPos>
+          <yPos>200</yPos>
+        </downrightCorner>
+      </door>
+    </position>
+
+    <name>Woods Sooper Dooper Shop 002</name>
+
+    <description>
+      <info>HP</info>
+      <info>Coldmirror</info>
+    </description>
+
+    <maxVisitors>300</maxVisitors>
+
+    <openingHours>
+      <openTime>09:00:00</openTime>
+      <closeTime>19:00:00</closeTime>
+    </openingHours>
+
+    <specialOffer>
+      <startTime>11:00:00</startTime>
+      <endTime>12:00:00</endTime>
+    </specialOffer>
+
+  </store>
+
+  <object id="003">
+
+    <leftupperCorner>
+      <xPos>1400</xPos>
+      <yPos>1200</yPos>
+    </leftupperCorner>
+
+    <downrightCorner>
+      <xPos>1600</xPos>
+      <yPos>1650</yPos>
+    </downrightCorner>
+
+    <type>plant</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
+ 
+  </object>
+  
+    <object id="004">
+
+    <leftupperCorner>
+      <xPos>100</xPos>
+      <yPos>200</yPos>
+    </leftupperCorner>
+
+    <downrightCorner>
+      <xPos>310</xPos>
+      <yPos>410</yPos>
+    </downrightCorner>
+
+    <type>trash bin</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
+ 
+  </object>
+  <store id="005">
+
+    <position>
+      <leftupperCorner>
+        <xPos>0</xPos>
+        <yPos>201</yPos>
+      </leftupperCorner>
+
+      <downrightCorner>
+        <xPos>90</xPos>
+        <yPos>450</yPos>
+      </downrightCorner>
+
+      <door>
+        <leftupperCorner>
+          <xPos>40</xPos>
+          <yPos>200</yPos>
+        </leftupperCorner>
+
+        <downrightCorner>
+          <xPos>60</xPos>
+          <yPos>200</yPos>
+        </downrightCorner>
+      </door>
+    </position>
+
+    <name>Woods Sooper Dooper Shop 002</name>
+
+    <description>
+      <info>HP</info>
+      <info>Coldmirror</info>
+    </description>
+
+    <maxVisitors>300</maxVisitors>
+
+    <openingHours>
+      <openTime>09:00:00</openTime>
+      <closeTime>19:00:00</closeTime>
+    </openingHours>
+
+    <specialOffer>
+      <startTime>11:00:00</startTime>
+      <endTime>12:00:00</endTime>
+    </specialOffer>
+
+  </store>
+  
+</layout>
