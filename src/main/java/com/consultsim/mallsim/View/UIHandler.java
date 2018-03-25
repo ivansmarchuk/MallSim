@@ -44,16 +44,16 @@ public class UIHandler  implements Initializable{
         /**
          * for load from File
          * */
-        /*
+
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(primaryStage);
         fileHandler.readFile(file.getAbsolutePath());
-        */
+
 
         /*
         * load from file in root directory
         * */
-        fileHandler.readFile("InputMallSim.xml");
+        //fileHandler.readFile("InputMallSim.xml");
 
 
 
