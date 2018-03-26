@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
-mainClassName = "com.consultsim.mallsim.Main"
+mainClassName = "com.consultsim.mallsim.MainApp"
 
 sourceCompatibility = 1.8
 

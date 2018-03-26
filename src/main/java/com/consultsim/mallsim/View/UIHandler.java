@@ -44,16 +44,16 @@ public class UIHandler  implements Initializable{
         /**
          * for load from File
          * */
-
+        /*
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(primaryStage);
         fileHandler.readFile(file.getAbsolutePath());
-
+        */
 
         /*
         * load from file in root directory
         * */
-        //fileHandler.readFile("InputMallSim.xml");
+        fileHandler.readFile("InputMallSim.xml");
 
 
 
@@ -64,7 +64,7 @@ public class UIHandler  implements Initializable{
 
         for(Objects o: fileHandler.getArrarOfObjects()){
             drawOblects(graphicsContext, o);
-            System.out.println("Oblect " + o.getId());
+            System.out.println("Object " + o.getId());
         }
         fileHandler.getArrayOfStores();
     }
@@ -84,8 +84,8 @@ public class UIHandler  implements Initializable{
     }
 
     private void initializeCanvas() {
-        canvas.setHeight(2000);
-        canvas.setWidth(2000);
+        canvas.setHeight(500);
+        canvas.setWidth(500);
         graphicsContext = canvas.getGraphicsContext2D();
         canvas.setLayoutY(-50);
         canvas.setLayoutX(-10);
