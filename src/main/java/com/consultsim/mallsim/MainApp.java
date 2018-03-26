@@ -30,7 +30,7 @@ public class MainApp extends Application {
         try{
             //Load the main layout from the fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SimulationHandler.class.getResource("MainTemplate.fxml"));
+            loader.setLocation(MainApp.class.getResource("View/MainTemplate.fxml"));
             mainLayout = (BorderPane)loader.load();
 
             //Display the scene containing the main layout.
