@@ -59,13 +59,18 @@ public class StatisticHandler {
     }
 
 
+//the width and heigth must be divisible by lengthwidth and lengthheigth with a rest of 0
+
+
 public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthheigth, ArrayList<Person> arrayOfPersons){
         int divisorheigth = heigth/lengthheigth;
         int divisorwidth = width/lengthwidth;
 
+        //Initialize Matrix
         matrix = new int[divisorheigth +1][divisorwidth +1];
         hcmatrix = new int[divisorheigth +1][divisorwidth +1];
 
+        //Fill matrices with zeros
         for(int i = 0; i < divisorheigth; i++){
             for(int a = 0; a < divisorwidth; a++){
                 matrix[i][a] = 0;
@@ -73,6 +78,7 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
             }
         }
 
+        //Iterate through all persons and increase the counter of the field in which they currently are
         for(Person p : arrayOfPersons){
             //System.out.println(p.x/lengthheigth + " "+ p.y/lengthwidth);
             matrix[p.getCurrentPosition().getX()/lengthheigth][p.getCurrentPosition().getY()/lengthwidth] += 1;
@@ -83,6 +89,7 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
         double borderLower = highestValue * 0.28;
         double borderHigher = highestValue * 0.87;
 
+        //iterate through matrix and compute the Hot- and Coldspots given on the highest value
         for(int i = 0; i < divisorheigth; i++){
             System.out.println();
             for(int a = 0; a < divisorwidth; a++){
@@ -95,6 +102,8 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
             }
         }
 
+
+        //Print out matrices
         System.out.println("Distribution matrix: ");
         System.out.println();
 
@@ -122,7 +131,7 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
     }
 
 
-
+//searches the matrix for highest value (so it can later compute the borders to classify Hot- and Coldspots
     public int searchForHighestValue(int divisorheigth, int divisorwidth){
 
         int highest = 0;
