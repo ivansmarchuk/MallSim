@@ -1,5 +1,7 @@
 package com.consultsim.mallsim.View;
 
+import java.util.ArrayList;
+
 public class StatisticHandler {
 
     public static void main(String[] args) {
@@ -10,12 +12,22 @@ public class StatisticHandler {
         System.out.println(out2);
     }
 
-    
-// 0 = kein spot; 1 = HotSpot; 2 = ColdSpot
-    public static int[] countHotColdSpots(int[][][] spotArray){
+
+    static ArrayList<int[][]> spotArrayList = new ArrayList<int[][]>();
+    //die Funktion updateHotColdSpots wird während des Schleifendurchlaufs im Simulationhandler aufgerufen und liefert Momentaufnahmen der Hot/Coldspots
+    public static void updateHotColdSpots(int[][] spotArray ){
+        spotArrayList.add(spotArray);
+
+    }
+
+
+
+    // 0 = kein Spot; 1 = HotSpot; 2 = ColdSpot
+    // Wird am Ende der Simulation aufgerufen
+    public static int[] countHotColdSpots(int[][][] spotArrayList){
         int hotSpots = 0;
         int coldSpots = 0;
-        for (int[][] x : spotArray){
+        for (int[][] x : spotArrayList){
             for (int[] y : x){
                 for (int z : y){
                     switch(z){
