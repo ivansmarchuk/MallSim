@@ -42,14 +42,14 @@ public class StatisticHandler {
     public void createSpotObjects(int height, int width, int divisorheigth, int divisorwidth, int[][] hctemp){
         int divheight = height/divisorheigth;
         int divwidth = width/divisorwidth;
-        for(int i = 0; i < divheight; i++){
-            for(int a = 0; a < divwidth; a++){
+        for(int y = 0; y < divheight; y++){
+            for(int x = 0; x < divwidth; x++){
                     //System.out.println(hctemp[i][a]);
                     //REBECCA: LOOK HERE ->
-                    if(hctemp[i][a] == 1) {
-                        hotColdSpots.add(new Spot((i+1) * (divisorwidth), a * (divisorheigth) + (divisorheigth), divisorwidth, divisorheigth, 1));
-                    }if(hctemp[i][a] == 2){
-                    hotColdSpots.add(new Spot((i+1) * (divisorwidth), a * (divisorheigth) + (divisorheigth), divisorwidth, divisorheigth, 2));
+                    if(hctemp[y][x] == 1) {
+                        hotColdSpots.add(new Spot(x * divisorwidth, 450-((y * divisorheigth)+divisorheigth), divisorwidth, divisorheigth, 1));
+                    }if(hctemp[y][x] == 2){
+                        hotColdSpots.add(new Spot(x * divisorwidth, 450-((y * divisorheigth) + divisorheigth), divisorwidth, divisorheigth, 2));
 
                 }
                 }
@@ -70,11 +70,12 @@ public class StatisticHandler {
         Random random = new Random();
         int x;
         int y;
-        for (int i = 0; i < 3000; i++) {
-            x = random.nextInt(1000) + 1;
-            y = random.nextInt(1000) + 1;
+        for (int i = 0; i < 1; i++) {
+            x = random.nextInt(450) + 1;
+            y = random.nextInt(450) + 1;
 
             arrayOfPerson.add(new Person(new Position(x,y), 0.0));
+            System.out.println("x: " + x + " y: " + y);
         }
         int m[][] = new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
 
@@ -156,25 +157,25 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
         //Iterate through all persons and increase the counter of the field in which they currently are
         for(Person p : arrayOfPersons){
             //System.out.println(p.x/lengthheigth + " "+ p.y/lengthwidth);
-            matrix[p.getCurrentPosition().getX()/lengthwidth][p.getCurrentPosition().getY()/lengthheigth] += 1;
+            matrix[p.getCurrentPosition().getY()/lengthheigth][p.getCurrentPosition().getX()/lengthwidth] += 1;
         }
 
 
         int highestValue = searchForHighestValue(divisorheigth, divisorwidth);
-        double borderLower = highestValue * 0.50;
+        double borderLower = highestValue * 0.3;
         double borderHigher = highestValue * 0.87;
 
         //iterate through matrix and compute the Hot- and Coldspots given on the highest value
-        for(int i = 0; i < divisorheigth; i++){
+        for(int y = 0; y < divisorheigth; y++){
             System.out.println();
-            for(int a = 0; a < divisorwidth; a++){
-                if(matrix[i][a] < borderLower) {
-                    hcmatrix[i][a] = 2;
+            for(int x = 0; x < divisorwidth; x++){
+                if(matrix[y][x] < borderLower) {
+                    hcmatrix[y][x] = 2;
                     counterColdSpots++;
-                }else if(matrix[i][a] < borderHigher) {
-                    hcmatrix[i][a] = 0;
-                }else {
-                    hcmatrix[i][a] = 1;
+                }else if(matrix[y][x] < borderHigher) {
+                    hcmatrix[y][x] = 0;
+                }else{
+                    hcmatrix[y][x] = 1;
                     counterHotSpots++;
                 }
             }
@@ -185,10 +186,10 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
         System.out.println("Distribution matrix: ");
         System.out.println();
 
-        for(int i = 0; i < divisorheigth; i++){
+        for(int y = 0; y < divisorheigth; y++){
             System.out.println();
-            for(int a = 0; a < divisorwidth; a++){
-                System.out.print(" " + matrix[i][a] +" ");
+            for(int x = 0; x < divisorwidth; x++){
+                System.out.print(" " + matrix[y][x] +" ");
             }
         }
 
@@ -197,10 +198,10 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
         System.out.println("Matrix with Hot- and Coldspots: ");
         System.out.println();
 
-        for(int i = 0; i < divisorheigth; i++){
+        for(int y = 0; y < divisorheigth; y++){
             System.out.println();
-            for(int a = 0; a < divisorwidth; a++){
-                System.out.print(" " + hcmatrix[i][a] +" ");
+            for(int x = 0; x < divisorwidth; x++){
+                System.out.print(" " + hcmatrix[y][x] +" ");
             }
         }
 

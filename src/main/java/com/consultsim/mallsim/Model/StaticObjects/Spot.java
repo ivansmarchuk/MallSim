@@ -9,9 +9,9 @@ public class Spot {
 
     //point of origin is bottom left corner!!! -> 1000 (heigth) must be subtracted from y
 
-    public Spot(int y, int x, int width, int heigth, int semaphor){
+    public Spot(int x, int y, int width, int heigth, int semaphor){
         this.x = x;
-        this.y = 1000-y;
+        this.y = y;
         this.width = width;
         this.heigth = heigth;
         this.semaphor = semaphor;

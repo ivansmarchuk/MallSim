@@ -126,7 +126,7 @@ public class UIHandler implements Initializable {
          * load from file in root directory
          * */
         fileHandler.readFile("InputMallSim.xml");
-
+        drawStuff(graphicsContext);
         for(Person p: arrayOfPerson){
             drawPersons(graphicsContext, p);
         }
@@ -171,26 +171,31 @@ public class UIHandler implements Initializable {
     private void drawHotColdSpots(GraphicsContext gc, Spot spot) {
 
         if(spot.getSemaphor() == 1){
-            gc.setFill(Color.ORANGE);
+            gc.setFill(Color.rgb(255, 64, 64, 0.5));
         }else if(spot.getSemaphor() == 2){
-            gc.setFill(Color.BLUE);
+            gc.setFill(Color.rgb(0, 0, 139, 0.5));
         }
-
-        gc.scale(-1,-1);
         //gc.fillRect(0,0, 50,50);
-        gc.fillRect(1000-spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
+        gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
     }
 
     private void drawPersons(GraphicsContext gc, Person p){
 
         gc.setFill(Color.BLACK);
-        gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5,5);
+        gc.fillOval(p.getCurrentPosition().getX(), 450-p.getCurrentPosition().getY(), 5,5);
+
+    }
+
+    private void drawStuff(GraphicsContext gc){
+
+        gc.setFill(Color.YELLOW);
+        gc.fillOval(0,0, 40,40);
 
     }
 
     private void initializeCanvas() {
-        canvas.setHeight(1000);
-        canvas.setWidth(1000);
+        canvas.setHeight(450);
+        canvas.setWidth(450);
         graphicsContext = canvas.getGraphicsContext2D();
         canvas.setLayoutY(-50);
         canvas.setLayoutX(-10);
