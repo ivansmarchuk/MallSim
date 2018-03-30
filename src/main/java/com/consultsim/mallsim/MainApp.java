@@ -1,6 +1,9 @@
 package com.consultsim.mallsim;
 
+import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.View.SimulationHandler;
+import com.consultsim.mallsim.View.StatisticHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,7 +13,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 
 public class MainApp extends Application {
 
@@ -57,8 +62,26 @@ public class MainApp extends Application {
         }
     }
 
-    public static void main(String[] args){
+    public static void testHotColdSpots(){
+        ArrayList<Person> arrayOfPerson;
+        arrayOfPerson = new ArrayList<Person>();
+        Random random = new Random();
+        int x;
+        int y;
+        for (int i = 0; i < 3000; i++) {
+            x = random.nextInt(1000) + 1;
+            y = random.nextInt(1000) + 1;
 
+            arrayOfPerson.add(new Person(new Position(x,y), 0.0));
+        }
+
+       new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
+    }
+
+
+
+    public static void main(String[] args){
+        testHotColdSpots();
         launch(args);
     }
 

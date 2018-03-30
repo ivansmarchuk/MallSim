@@ -1,18 +1,32 @@
 package com.consultsim.mallsim.Model;
 
-import javafx.beans.property.DoubleProperty;
+
 
 /**
  * The Position with x and y coordinate
  */
 public class Position {
-    private double x;
-    private double y;
+    private int x;
+    private int y;
 
-    public Position(double x, double y){
+    public Position(int x, int y){
         this.x = x;
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }
