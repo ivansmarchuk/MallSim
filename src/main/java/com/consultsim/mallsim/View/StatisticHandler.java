@@ -8,6 +8,14 @@ public class StatisticHandler {
 
     public int matrix[][];
     public int hcmatrix[][];
+    public int counterHotSpots;
+    public int counterColdSpots;
+
+    public StatisticHandler(){
+        this.counterHotSpots = 0;
+        this.counterColdSpots = 0;
+    }
+
 
     public static void start() {
         int[][][] y = {{{1,1,0},{1,1,2}},{{1,2,1},{1,1,0}}};
@@ -93,12 +101,15 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
         for(int i = 0; i < divisorheigth; i++){
             System.out.println();
             for(int a = 0; a < divisorwidth; a++){
-                if(matrix[i][a] < borderLower)
+                if(matrix[i][a] < borderLower) {
                     hcmatrix[i][a] = 2;
-                else if(matrix[i][a] < borderHigher)
+                    counterColdSpots++;
+                }else if(matrix[i][a] < borderHigher) {
                     hcmatrix[i][a] = 0;
-                else
+                }else {
                     hcmatrix[i][a] = 1;
+                    counterHotSpots++;
+                }
             }
         }
 
@@ -126,6 +137,9 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
             }
         }
 
+        System.out.println();
+        System.out.println(counterHotSpots);
+        System.out.println(counterColdSpots);
 
 
     }
