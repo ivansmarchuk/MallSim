@@ -5,6 +5,8 @@ import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Position;
 import javafx.scene.shape.Circle;
 
+import java.util.Random;
+
 /**
  * A presentation of a person in the simulation
  */
@@ -21,6 +23,29 @@ public class Person extends Circle{
         this.currentPosition = pos;
         this.speed = speed;
 
+
+    }
+
+    public void computeNext(){
+        Random random = new Random();
+        int temp;
+            temp = random.nextInt(3) + 1;
+
+            switch (temp){
+                case 0: {
+                    this.currentPosition.setX(this.currentPosition.getX()+1);
+                }
+                case 1: {
+                    this.currentPosition.setY(this.currentPosition.getY()+1);
+                }
+                case 2: {
+                    this.currentPosition.setX(this.currentPosition.getX()-1);
+                }
+                case 3: {
+                    this.currentPosition.setY(this.currentPosition.getY()-1);
+                }
+
+            }
 
     }
 

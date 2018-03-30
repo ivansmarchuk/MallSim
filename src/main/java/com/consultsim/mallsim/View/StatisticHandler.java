@@ -47,9 +47,9 @@ public class StatisticHandler {
                     //System.out.println(hctemp[i][a]);
                     //REBECCA: LOOK HERE ->
                     if(hctemp[y][x] == 1) {
-                        hotColdSpots.add(new Spot(x * divisorwidth, 450-((y * divisorheigth)+divisorheigth), divisorwidth, divisorheigth, 1));
+                        hotColdSpots.add(new Spot(x * divisorwidth, 1000-((y * divisorheigth)+divisorheigth), divisorwidth, divisorheigth, 1));
                     }if(hctemp[y][x] == 2){
-                        hotColdSpots.add(new Spot(x * divisorwidth, 450-((y * divisorheigth) + divisorheigth), divisorwidth, divisorheigth, 2));
+                        hotColdSpots.add(new Spot(x * divisorwidth, 1000-((y * divisorheigth) + divisorheigth), divisorwidth, divisorheigth, 2));
 
                 }
                 }
@@ -66,13 +66,14 @@ public class StatisticHandler {
 
     //test purposes
     public void testHotColdSpots(){
+        hotColdSpots.clear();
         arrayOfPerson = new ArrayList<Person>();
         Random random = new Random();
         int x;
         int y;
-        for (int i = 0; i < 1; i++) {
-            x = random.nextInt(450) + 1;
-            y = random.nextInt(450) + 1;
+        for (int i = 0; i < 400; i++) {
+            x = random.nextInt(1000) + 1;
+            y = random.nextInt(1000) + 1;
 
             arrayOfPerson.add(new Person(new Position(x,y), 0.0));
             System.out.println("x: " + x + " y: " + y);

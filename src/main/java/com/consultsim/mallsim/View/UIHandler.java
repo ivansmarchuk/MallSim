@@ -40,6 +40,7 @@ public class UIHandler implements Initializable {
 
     public static ArrayList<Person> arrayOfPerson;
     public static ArrayList<Spot> arrayOfSpots;
+    public static StatisticHandler stat;
 
 
     public UIHandler(){
@@ -48,16 +49,22 @@ public class UIHandler implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources){
         initializeCanvas();
 
 
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
-        StatisticHandler stat = new StatisticHandler();
-        stat.testHotColdSpots();
-        arrayOfPerson = stat.getArrayOfPerson();
-        arrayOfSpots = stat.getHotColdSpots();
+        stat = new StatisticHandler();
+
+
+
+
+                stat.testHotColdSpots();
+                arrayOfPerson = stat.getArrayOfPerson();
+                arrayOfSpots = stat.getHotColdSpots();
+
+
 
 
     }
@@ -77,7 +84,7 @@ public class UIHandler implements Initializable {
 
     private void initializeSliderDayTime() {
 
-        sliderDayTime.setMajorTickUnit(4500);
+        sliderDayTime.setMajorTickUnit(10000);
         sliderDayTime.setShowTickLabels(true);
         StringConverter<Double> stringConverter = new StringConverter<Double>() {
 
@@ -113,6 +120,10 @@ public class UIHandler implements Initializable {
 
         FileHandler fileHandler = new FileHandler();
 
+        stat.testHotColdSpots();
+        arrayOfPerson = stat.getArrayOfPerson();
+        arrayOfSpots = stat.getHotColdSpots();
+
         /**
          * for load from File
          * */
@@ -126,7 +137,7 @@ public class UIHandler implements Initializable {
          * load from file in root directory
          * */
         fileHandler.readFile("InputMallSim.xml");
-        drawStuff(graphicsContext);
+        graphicsContext.clearRect(0,0, graphicsContext.getCanvas().getWidth(), graphicsContext.getCanvas().getHeight());
         for(Person p: arrayOfPerson){
             drawPersons(graphicsContext, p);
         }
@@ -182,7 +193,7 @@ public class UIHandler implements Initializable {
     private void drawPersons(GraphicsContext gc, Person p){
 
         gc.setFill(Color.BLACK);
-        gc.fillOval(p.getCurrentPosition().getX(), 450-p.getCurrentPosition().getY(), 5,5);
+        gc.fillOval(p.getCurrentPosition().getX(), 1000-p.getCurrentPosition().getY(), 5,5);
 
     }
 
@@ -194,8 +205,8 @@ public class UIHandler implements Initializable {
     }
 
     private void initializeCanvas() {
-        canvas.setHeight(450);
-        canvas.setWidth(450);
+        canvas.setHeight(1000);
+        canvas.setWidth(1000);
         graphicsContext = canvas.getGraphicsContext2D();
         canvas.setLayoutY(-50);
         canvas.setLayoutX(-10);
