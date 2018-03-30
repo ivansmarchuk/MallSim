@@ -1,15 +1,26 @@
 package com.consultsim.mallsim.View;
 
 import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.Model.Position;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class StatisticHandler {
+    public static ArrayList<Person> getArrayOfPerson() {
+        return arrayOfPerson;
+    }
+
+    public static void setArrayOfPerson(ArrayList<Person> arrayOfPerson) {
+        StatisticHandler.arrayOfPerson = arrayOfPerson;
+    }
 
     public int matrix[][];
     public int hcmatrix[][];
     public int counterHotSpots;
     public int counterColdSpots;
+
+    public static ArrayList<Person> arrayOfPerson;
 
     public StatisticHandler(){
         this.counterHotSpots = 0;
@@ -17,6 +28,21 @@ public class StatisticHandler {
     }
 
 
+    //test purposes
+    public static void testHotColdSpots(){
+        arrayOfPerson = new ArrayList<Person>();
+        Random random = new Random();
+        int x;
+        int y;
+        for (int i = 0; i < 3000; i++) {
+            x = random.nextInt(1000) + 1;
+            y = random.nextInt(799) + 1;
+
+            arrayOfPerson.add(new Person(new Position(x,y), 0.0));
+        }
+
+        new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
+    }
     public static void start() {
         int[][][] y = {{{1,1,0},{1,1,2}},{{1,2,1},{1,1,0}}};
         int out = countHotColdSpots(y)[0];

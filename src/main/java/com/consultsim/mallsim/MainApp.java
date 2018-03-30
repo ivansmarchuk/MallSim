@@ -4,6 +4,7 @@ import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.View.SimulationHandler;
 import com.consultsim.mallsim.View.StatisticHandler;
+import com.consultsim.mallsim.View.UIHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,6 +22,9 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane mainLayout;
+    public static ArrayList<Person> arrayOfPerson;
+
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -31,8 +35,17 @@ public class MainApp extends Application {
     }
 
 
+    public static ArrayList<Person> getArrayOfPerson() {
+        return arrayOfPerson;
+    }
+
+    public static void setArrayOfPerson(ArrayList<Person> arrayOfPerson) {
+        MainApp.arrayOfPerson = arrayOfPerson;
+    }
+
     private void initMainLayout() {
         try{
+
             //Load the main layout from the fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("View/MainTemplate.fxml"));
@@ -62,26 +75,12 @@ public class MainApp extends Application {
         }
     }
 
-    public static void testHotColdSpots(){
-        ArrayList<Person> arrayOfPerson;
-        arrayOfPerson = new ArrayList<Person>();
-        Random random = new Random();
-        int x;
-        int y;
-        for (int i = 0; i < 3000; i++) {
-            x = random.nextInt(1000) + 1;
-            y = random.nextInt(1000) + 1;
 
-            arrayOfPerson.add(new Person(new Position(x,y), 0.0));
-        }
-
-       new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
-    }
 
 
 
     public static void main(String[] args){
-        testHotColdSpots();
+
         launch(args);
     }
 

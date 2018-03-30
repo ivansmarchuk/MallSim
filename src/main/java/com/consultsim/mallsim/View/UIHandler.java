@@ -1,6 +1,7 @@
 package com.consultsim.mallsim.View;
 
 import com.consultsim.mallsim.Model.Objects;
+import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Store;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -35,7 +37,11 @@ public class UIHandler implements Initializable {
     @FXML
     private Canvas canvas;
 
+    public static ArrayList<Person> arrayOfPerson;
 
+    public UIHandler(){
+        arrayOfPerson = new ArrayList<Person>();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,7 +50,13 @@ public class UIHandler implements Initializable {
 
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
+        StatisticHandler stat = new StatisticHandler();
+        stat.testHotColdSpots();
+        arrayOfPerson = stat.getArrayOfPerson();
+
+
     }
+
 
     private void initializeSliderNumberOfPersons() {
         sliderNumberOfPersons.setMajorTickUnit(10);
@@ -110,11 +122,16 @@ public class UIHandler implements Initializable {
          * */
         fileHandler.readFile("InputMallSim.xml");
 
+        for(Person p: arrayOfPerson){
+            drawPersons(graphicsContext, p);
+        }
 
         for (Store s : fileHandler.getArrayOfStores()) {
             drawStores(graphicsContext, s);
             System.out.println(s.getId());
         }
+
+
 
         for (Objects o : fileHandler.getArrarOfObjects()) {
             drawOblects(graphicsContext, o);
@@ -137,9 +154,16 @@ public class UIHandler implements Initializable {
                 store.getPosition()[3] - store.getPosition()[1]);
     }
 
+    private void drawPersons(GraphicsContext gc, Person p){
+
+        gc.setFill(Color.BLACK);
+        gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5,5);
+
+    }
+
     private void initializeCanvas() {
-        canvas.setHeight(500);
-        canvas.setWidth(500);
+        canvas.setHeight(1000);
+        canvas.setWidth(800);
         graphicsContext = canvas.getGraphicsContext2D();
         canvas.setLayoutY(-50);
         canvas.setLayoutX(-10);
