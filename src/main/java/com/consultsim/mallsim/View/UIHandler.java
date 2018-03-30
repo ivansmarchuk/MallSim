@@ -1,22 +1,31 @@
 package com.consultsim.mallsim.View;
 
+import com.consultsim.mallsim.MainApp;
+import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -25,6 +34,16 @@ import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
 
+    private int speedOfSim;
+
+    @FXML
+    public Button btnNextStep;
+    @FXML
+    public Slider sliderSpeedOfSim;
+    @FXML
+    public Label lblSpeedValue;
+    @FXML
+    public Button btnStartPause;
     @FXML
     private Slider sliderDayTime;
     @FXML
@@ -38,50 +57,76 @@ public class UIHandler implements Initializable {
     @FXML
     private Canvas canvas;
 
+
     public static ArrayList<Person> arrayOfPerson;
     public static ArrayList<Spot> arrayOfSpots;
     public static StatisticHandler stat;
+    private ArrayList<Store> arrayOfStores;
+    private ArrayList<Objects> arrayOfObjects;
 
-
-    public UIHandler(){
+    //Initialisirung der Objekten ohne Konstruktor
+    static {
         arrayOfPerson = new ArrayList<Person>();
         arrayOfSpots = new ArrayList<Spot>();
     }
-
+    
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
+        
         initializeCanvas();
+        speedOfSim = Configuration.INITIAL_SPEED;
+        btnStartPause.setText("Start");
+        lblSpeedValue.setText(String.format("%d", this.speedOfSim));
+        sliderSpeedOfSim.setValue(this.speedOfSim);
 
 
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
+        initializeSliderSpeedOfSim();
+
         stat = new StatisticHandler();
 
 
-
-
-                stat.testHotColdSpots();
-                arrayOfPerson = stat.getArrayOfPerson();
-                arrayOfSpots = stat.getHotColdSpots();
-
-
+        stat.testHotColdSpots();
+        arrayOfPerson = stat.getArrayOfPerson();
+        arrayOfSpots = stat.getHotColdSpots();
 
 
     }
 
+    /**
+     * Event handling for slider  'Geschwindigkeit'
+     */
+    private void initializeSliderSpeedOfSim() {
+        sliderSpeedOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
+            sliderSpeedOfSim.setValue(newValue.intValue());
+            lblSpeedValue.setText(String.format("%d", newValue.intValue()));
+            speedOfSim = (int) sliderSpeedOfSim.getValue();
+            changeFrame(speedOfSim);
+        });
+    }
 
+    private void changeFrame(int speedOfSim) {
+        //TODO: to implement the function for automatically changing a speed of simulation if the slider was used
+    }
+
+    /**
+     * Event handling for slider  'Person Anzahl'
+     */
     private void initializeSliderNumberOfPersons() {
         sliderNumberOfPersons.setMajorTickUnit(10);
         sliderNumberOfPersons.setShowTickLabels(true);
         labelNumberOfPersons.textProperty()
-                .bindBidirectional(sliderNumberOfPersons.valueProperty(),NumberFormat.getNumberInstance());
+                .bindBidirectional(sliderNumberOfPersons.valueProperty(), NumberFormat.getNumberInstance());
         sliderNumberOfPersons.valueProperty()
                 .addListener((observable, oldValue, newValue) ->
                         sliderNumberOfPersons.setValue(newValue.intValue()));
 
     }
 
-
+    /**
+     * Event handling for slider  'Tageszeit'
+     */
     private void initializeSliderDayTime() {
 
         sliderDayTime.setMajorTickUnit(10000);
@@ -89,8 +134,8 @@ public class UIHandler implements Initializable {
         StringConverter<Double> stringConverter = new StringConverter<Double>() {
 
             /*
-            * convert int to hours format hh:mm
-            * */
+             * convert int to hours format hh:mm
+             * */
             @Override
             public String toString(Double object) {
                 long seconds = object.longValue();
@@ -99,6 +144,7 @@ public class UIHandler implements Initializable {
                 long remainingMinutes = minutes - TimeUnit.HOURS.toMinutes(hour);
                 return String.format("%02d", hour) + ":" + String.format("%02d", remainingMinutes);
             }
+
             @Override
             public Double fromString(String string) {
                 return null;
@@ -119,11 +165,6 @@ public class UIHandler implements Initializable {
         graphicsContext = canvas.getGraphicsContext2D();
 
         FileHandler fileHandler = new FileHandler();
-
-        stat.testHotColdSpots();
-        arrayOfPerson = stat.getArrayOfPerson();
-        arrayOfSpots = stat.getHotColdSpots();
-
         /**
          * for load from File
          * */
@@ -133,85 +174,145 @@ public class UIHandler implements Initializable {
         fileHandler.readFile(file.getAbsolutePath());
         */
 
-        /*
-         * load from file in root directory
-         * */
+        //load from file in root directory
         fileHandler.readFile("InputMallSim.xml");
-        graphicsContext.clearRect(0,0, graphicsContext.getCanvas().getWidth(), graphicsContext.getCanvas().getHeight());
-        for(Person p: arrayOfPerson){
-            drawPersons(graphicsContext, p);
-        }
+        arrayOfStores = fileHandler.getArrayOfStores();
+        arrayOfObjects = fileHandler.getArrarOfObjects();
+        btnNextStep.setDisable(false);
 
-        /*for (Store s : fileHandler.getArrayOfStores()) {
-            drawStores(graphicsContext, s);
-            System.out.println(s.getId());
-        }*/
+        //TODO soll nich hier sein. Diese Funktion nur für Laden aus XML - file
+        stat.testHotColdSpots();
+        arrayOfPerson = stat.getArrayOfPerson();
+        arrayOfSpots = stat.getHotColdSpots();
 
-        for(Spot s: arrayOfSpots){
+        clearCanvas(graphicsContext);
+        for (Person p : arrayOfPerson) {
+            drawPersons(graphicsContext, p);        }
+
+    
+        for (Spot s : arrayOfSpots) {
             drawHotColdSpots(graphicsContext, s);
             System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
         }
 
 
+    }
 
-        /*for (Objects o : fileHandler.getArrarOfObjects()) {
-            drawOblects(graphicsContext, o);
-            System.out.println("Object " + o.getId());
+
+    /**
+     * @param gc GraphicsContext
+     * @param arrayOfObjects array of objects from XML temmplate
+     */
+    private void drawObjects(GraphicsContext gc, ArrayList<Objects> arrayOfObjects) {
+        for (Objects obj : arrayOfObjects) {
+            gc.setFill(Color.RED);
+            gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
+                    obj.getPosition()[2] - obj.getPosition()[0],
+                    obj.getPosition()[3] - obj.getPosition()[1]);
+            System.out.println("Object " + obj.getId());
         }
-        */
-        fileHandler.getArrayOfStores();
+
     }
 
-
-
-
-    private void drawOblects(GraphicsContext gc, Objects store) {
-        gc.setFill(Color.RED);
-        gc.fillRect(store.getPosition()[0], store.getPosition()[1],
-                store.getPosition()[2] - store.getPosition()[0],
-                store.getPosition()[3] - store.getPosition()[1]);
+    /**
+     * @param gc GraphicsContext
+     * @param arrayOfStores array of stores from XML temmplate
+     */
+    private void drawStores(GraphicsContext gc, ArrayList<Store> arrayOfStores) {
+        for (Store store : arrayOfStores) {
+            gc.setFill(Color.DARKMAGENTA);
+            gc.fillRect(store.getPosition()[0], store.getPosition()[1],
+                    store.getPosition()[2] - store.getPosition()[0],
+                    store.getPosition()[3] - store.getPosition()[1]);
+            System.out.println(store.getId());
+        }
     }
 
-    private void drawStores(GraphicsContext gc, Store store) {
-        gc.setFill(Color.BLUE);
-        gc.fillRect(store.getPosition()[0], store.getPosition()[1],
-                store.getPosition()[2] - store.getPosition()[0],
-                store.getPosition()[3] - store.getPosition()[1]);
-    }
 
     private void drawHotColdSpots(GraphicsContext gc, Spot spot) {
 
-        if(spot.getSemaphor() == 1){
+        if (spot.getSemaphor() == 1) {
             gc.setFill(Color.rgb(255, 64, 64, 0.5));
-        }else if(spot.getSemaphor() == 2){
+        } else if (spot.getSemaphor() == 2) {
             gc.setFill(Color.rgb(0, 0, 139, 0.5));
         }
         //gc.fillRect(0,0, 50,50);
         gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
     }
 
-    private void drawPersons(GraphicsContext gc, Person p){
-
+    private void drawPersons(GraphicsContext gc, Person p) {
         gc.setFill(Color.BLACK);
-        gc.fillOval(p.getCurrentPosition().getX(), 1000-p.getCurrentPosition().getY(), 5,5);
+        gc.fillOval(p.getCurrentPosition().getX(), 1000 - p.getCurrentPosition().getY(), 5, 5);
 
     }
 
-    private void drawStuff(GraphicsContext gc){
+    private void drawStuff(GraphicsContext gc) {
 
         gc.setFill(Color.YELLOW);
-        gc.fillOval(0,0, 40,40);
+        gc.fillOval(0, 0, 40, 40);
 
     }
+
 
     private void initializeCanvas() {
         canvas.setHeight(1000);
         canvas.setWidth(1000);
         graphicsContext = canvas.getGraphicsContext2D();
-        canvas.setLayoutY(-50);
+        canvas.setLayoutY(-20);
         canvas.setLayoutX(-10);
         canvas.setScaleX(1);
         canvas.setScaleY(-1);
 
+    }
+
+    /**
+     * called when the button 'Next Step' is pressed
+     * @param event
+     */
+    public void getNextStep(ActionEvent event) {
+        Duration duration = Duration.millis(1000 / (float) speedOfSim);
+        KeyFrame frame = changeToNextFrame(duration);
+        Timeline loopOfSim = new Timeline();
+        loopOfSim.setCycleCount(1);
+        loopOfSim.getKeyFrames().add(frame);
+        loopOfSim.play();
+    }
+
+    /**
+     * additional function that initializes all the changes that are necessary for changing a single frame
+     * @param duration duration of time
+     * @return new {@link KeyFrame}
+     */
+    private KeyFrame changeToNextFrame(Duration duration) {
+        return new KeyFrame(duration, event -> {
+            clearCanvas(graphicsContext);
+
+            drawStores(graphicsContext, arrayOfStores);
+            drawObjects(graphicsContext, arrayOfObjects);
+            //TODO add all events that change with each frame
+
+        });
+    }
+
+    /**
+     * Clears the content
+     * @param gc is the {@link GraphicsContext} that needs to be cleared
+     */
+    private void clearCanvas(GraphicsContext gc) {
+        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    /**
+     * to reset and new start of simulation
+     * @param event
+     */
+    public void resetSim(ActionEvent event) {
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        btnStartPause.getScene().setRoot(root);
     }
 }
