@@ -2,11 +2,31 @@ package com.consultsim.mallsim.View;
 
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
+import com.consultsim.mallsim.Model.StaticObjects.Spot;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class StatisticHandler {
+
+    //VARIABLES
+
+    public ArrayList<Spot> hotColdSpots;
+
+    public static ArrayList<Person> arrayOfPerson;
+    static ArrayList<int[][]> spotArrayList = new ArrayList<int[][]>();
+    public int matrix[][];
+    public int hcmatrix[][];
+    public int newmatrix[][];
+    public int counterHotSpots;
+    public int counterColdSpots;
+
+
+    //METHODS
+
+
+
     public static ArrayList<Person> getArrayOfPerson() {
         return arrayOfPerson;
     }
@@ -15,33 +35,51 @@ public class StatisticHandler {
         StatisticHandler.arrayOfPerson = arrayOfPerson;
     }
 
-    public int matrix[][];
-    public int hcmatrix[][];
-    public int counterHotSpots;
-    public int counterColdSpots;
+    public ArrayList<Spot> getHotColdSpots() {
+        return hotColdSpots;
+    }
 
-    public static ArrayList<Person> arrayOfPerson;
+    public void createSpotObjects(int height, int width, int divisorheigth, int divisorwidth, int[][] hctemp){
+        int divheight = height/divisorheigth;
+        int divwidth = width/divisorwidth;
+        for(int i = 0; i < divheight; i++){
+            for(int a = 0; a < divwidth; a++){
+                    //System.out.println(hctemp[i][a]);
+                    //REBECCA: LOOK HERE ->
+                    if(hctemp[i][a] == 1) {
+                        hotColdSpots.add(new Spot((i+1) * (divisorwidth), a * (divisorheigth) + (divisorheigth), divisorwidth, divisorheigth, 1));
+                    }if(hctemp[i][a] == 2){
+                    hotColdSpots.add(new Spot((i+1) * (divisorwidth), a * (divisorheigth) + (divisorheigth), divisorwidth, divisorheigth, 2));
+
+                }
+                }
+        }
+    }
+
+
 
     public StatisticHandler(){
         this.counterHotSpots = 0;
         this.counterColdSpots = 0;
+        this.hotColdSpots = new ArrayList<Spot>();
     }
 
-
     //test purposes
-    public static void testHotColdSpots(){
+    public void testHotColdSpots(){
         arrayOfPerson = new ArrayList<Person>();
         Random random = new Random();
         int x;
         int y;
         for (int i = 0; i < 3000; i++) {
             x = random.nextInt(1000) + 1;
-            y = random.nextInt(799) + 1;
+            y = random.nextInt(1000) + 1;
 
             arrayOfPerson.add(new Person(new Position(x,y), 0.0));
         }
+        int m[][] = new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
 
-        new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
+        createSpotObjects(1000,1000,100,100, m);
+
     }
     public static void start() {
         int[][][] y = {{{1,1,0},{1,1,2}},{{1,2,1},{1,1,0}}};
@@ -51,15 +89,19 @@ public class StatisticHandler {
         System.out.println(out2);
     }
 
-
-    static ArrayList<int[][]> spotArrayList = new ArrayList<int[][]>();
     //die Funktion updateHotColdSpots wird während des Schleifendurchlaufs im Simulationhandler aufgerufen und liefert Momentaufnahmen der Hot/Coldspots
     public static void updateHotColdSpots(int[][] spotArray ){
         spotArrayList.add(spotArray);
 
     }
 
+    public int getCounterHotSpots() {
+        return counterHotSpots;
+    }
 
+    public int getCounterColdSpots() {
+        return counterColdSpots;
+    }
 
     // 0 = kein Spot; 1 = HotSpot; 2 = ColdSpot
     // Wird am Ende der Simulation aufgerufen
@@ -92,11 +134,10 @@ public class StatisticHandler {
         return klrf;
     }
 
-
 //the width and heigth must be divisible by lengthwidth and lengthheigth with a rest of 0
 
 
-public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthheigth, ArrayList<Person> arrayOfPersons){
+public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthheigth, ArrayList<Person> arrayOfPersons){
         int divisorheigth = heigth/lengthheigth;
         int divisorwidth = width/lengthwidth;
 
@@ -115,12 +156,12 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
         //Iterate through all persons and increase the counter of the field in which they currently are
         for(Person p : arrayOfPersons){
             //System.out.println(p.x/lengthheigth + " "+ p.y/lengthwidth);
-            matrix[p.getCurrentPosition().getX()/lengthheigth][p.getCurrentPosition().getY()/lengthwidth] += 1;
+            matrix[p.getCurrentPosition().getX()/lengthwidth][p.getCurrentPosition().getY()/lengthheigth] += 1;
         }
 
 
         int highestValue = searchForHighestValue(divisorheigth, divisorwidth);
-        double borderLower = highestValue * 0.28;
+        double borderLower = highestValue * 0.50;
         double borderHigher = highestValue * 0.87;
 
         //iterate through matrix and compute the Hot- and Coldspots given on the highest value
@@ -167,9 +208,8 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
         System.out.println(counterHotSpots);
         System.out.println(counterColdSpots);
 
-
+        return hcmatrix;
     }
-
 
 //searches the matrix for highest value (so it can later compute the borders to classify Hot- and Coldspots
     public int searchForHighestValue(int divisorheigth, int divisorwidth){
@@ -184,5 +224,9 @@ public void recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthh
         }
         return highest;
     }
+
+
+
+
 
 }

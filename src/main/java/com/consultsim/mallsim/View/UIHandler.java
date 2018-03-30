@@ -2,6 +2,7 @@ package com.consultsim.mallsim.View;
 
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,9 +39,12 @@ public class UIHandler implements Initializable {
     private Canvas canvas;
 
     public static ArrayList<Person> arrayOfPerson;
+    public static ArrayList<Spot> arrayOfSpots;
+
 
     public UIHandler(){
         arrayOfPerson = new ArrayList<Person>();
+        arrayOfSpots = new ArrayList<Spot>();
     }
 
     @Override
@@ -53,6 +57,7 @@ public class UIHandler implements Initializable {
         StatisticHandler stat = new StatisticHandler();
         stat.testHotColdSpots();
         arrayOfPerson = stat.getArrayOfPerson();
+        arrayOfSpots = stat.getHotColdSpots();
 
 
     }
@@ -126,18 +131,34 @@ public class UIHandler implements Initializable {
             drawPersons(graphicsContext, p);
         }
 
-        for (Store s : fileHandler.getArrayOfStores()) {
+        /*for (Store s : fileHandler.getArrayOfStores()) {
             drawStores(graphicsContext, s);
             System.out.println(s.getId());
+        }*/
+
+        for(Spot s: arrayOfSpots){
+            drawHotColdSpots(graphicsContext, s);
+            System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
         }
 
 
 
-        for (Objects o : fileHandler.getArrarOfObjects()) {
+        /*for (Objects o : fileHandler.getArrarOfObjects()) {
             drawOblects(graphicsContext, o);
             System.out.println("Object " + o.getId());
         }
+        */
         fileHandler.getArrayOfStores();
+    }
+
+
+
+
+    private void drawOblects(GraphicsContext gc, Objects store) {
+        gc.setFill(Color.RED);
+        gc.fillRect(store.getPosition()[0], store.getPosition()[1],
+                store.getPosition()[2] - store.getPosition()[0],
+                store.getPosition()[3] - store.getPosition()[1]);
     }
 
     private void drawStores(GraphicsContext gc, Store store) {
@@ -147,11 +168,17 @@ public class UIHandler implements Initializable {
                 store.getPosition()[3] - store.getPosition()[1]);
     }
 
-    private void drawOblects(GraphicsContext gc, Objects store) {
-        gc.setFill(Color.RED);
-        gc.fillRect(store.getPosition()[0], store.getPosition()[1],
-                store.getPosition()[2] - store.getPosition()[0],
-                store.getPosition()[3] - store.getPosition()[1]);
+    private void drawHotColdSpots(GraphicsContext gc, Spot spot) {
+
+        if(spot.getSemaphor() == 1){
+            gc.setFill(Color.ORANGE);
+        }else if(spot.getSemaphor() == 2){
+            gc.setFill(Color.BLUE);
+        }
+
+        gc.scale(-1,-1);
+        //gc.fillRect(0,0, 50,50);
+        gc.fillRect(1000-spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
     }
 
     private void drawPersons(GraphicsContext gc, Person p){
@@ -163,7 +190,7 @@ public class UIHandler implements Initializable {
 
     private void initializeCanvas() {
         canvas.setHeight(1000);
-        canvas.setWidth(800);
+        canvas.setWidth(1000);
         graphicsContext = canvas.getGraphicsContext2D();
         canvas.setLayoutY(-50);
         canvas.setLayoutX(-10);
