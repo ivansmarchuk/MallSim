@@ -16,7 +16,7 @@ public class SimulationHandler{
     public StatisticHandler stat;
     public int crashMap[][];
 
-
+//Initialize values
     public SimulationHandler() {
         stat = new StatisticHandler();
         arrayOfPersons = new ArrayList<Person>();
@@ -30,6 +30,7 @@ public class SimulationHandler{
         }
     }
 
+    //Test function, adds specific amount of persons
     public void initializePersons(){
         Random random = new Random();
         int x;
@@ -49,9 +50,11 @@ public class SimulationHandler{
         stat.createSpotObjects(1000,1000,100,100, m);
     }
 
+    //deletes content of hotcoldspots and computes them new, so only a momentary picture is shown
     public void clearEverything(){
         //this.arrayOfPersons.clear();
         this.stat.hotColdSpots.clear();
+
 
         int m[][] = stat.recognizeHCSpots(1000,1000, 100, 100, arrayOfPersons);
         this.stat.createSpotObjects(1000,1000,100,100, m);

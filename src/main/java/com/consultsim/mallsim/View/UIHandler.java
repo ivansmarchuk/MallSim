@@ -188,9 +188,13 @@ public class UIHandler implements Initializable {
         btnNextStep.setDisable(false);
 
         //TODO soll nich hier sein. Diese Funktion nur für Laden aus XML - file
+        //for test purposes
         simulationHandler.initializePersons();
+        //---------
+
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
+
 
         clearCanvas(graphicsContext);
         for (Person p : arrayOfPerson) {

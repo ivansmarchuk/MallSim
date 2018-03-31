@@ -35,6 +35,7 @@ public class Person extends Circle{
         this.movedSince = 0;
     }
 
+    //compute next position (simple and randomized)
     public void computeNext(){
 
         int temp;
@@ -69,6 +70,7 @@ public class Person extends Circle{
 
                         break;
                 }
+                //check if valid move
                 if(isValidMove(nextX, nextY)){
                     //System.out.println("true");
                     this.currentPosition.setX(nextX);
@@ -117,7 +119,7 @@ public class Person extends Circle{
         return tempPos;
     }
 
-
+    //check, if the next position is a valid one
     public boolean isValidMove(int nextX, int nextY){
         if(nextX < 0 || nextY < 0 || nextX > 999 || nextY > 999){
             return false;
