@@ -71,13 +71,7 @@ public class StatisticHandler {
         Random random = new Random();
         int x;
         int y;
-        for (int i = 0; i < 400; i++) {
-            x = random.nextInt(1000) + 1;
-            y = random.nextInt(1000) + 1;
 
-            arrayOfPerson.add(new Person(new Position(x,y), 0.0));
-            System.out.println("x: " + x + " y: " + y);
-        }
         int m[][] = new StatisticHandler().recognizeHCSpots(1000,1000, 100, 100, arrayOfPerson);
 
         createSpotObjects(1000,1000,100,100, m);

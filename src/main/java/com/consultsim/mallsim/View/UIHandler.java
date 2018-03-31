@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -61,6 +62,7 @@ public class UIHandler implements Initializable {
     public static ArrayList<Person> arrayOfPerson;
     public static ArrayList<Spot> arrayOfSpots;
     public static StatisticHandler stat;
+    public static SimulationHandler simulationHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
 
@@ -84,12 +86,17 @@ public class UIHandler implements Initializable {
         initializeSliderNumberOfPersons();
         initializeSliderSpeedOfSim();
 
-        stat = new StatisticHandler();
+
+        simulationHandler = new SimulationHandler();
 
 
-        stat.testHotColdSpots();
-        arrayOfPerson = stat.getArrayOfPerson();
-        arrayOfSpots = stat.getHotColdSpots();
+        simulationHandler.initializePersons();
+        arrayOfPerson = simulationHandler.getArrayOfPersons();
+        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
+
+
+        //arrayOfPerson = stat.getArrayOfPerson();
+        //arrayOfSpots = stat.getHotColdSpots();
 
 
     }
@@ -181,9 +188,9 @@ public class UIHandler implements Initializable {
         btnNextStep.setDisable(false);
 
         //TODO soll nich hier sein. Diese Funktion nur für Laden aus XML - file
-        stat.testHotColdSpots();
-        arrayOfPerson = stat.getArrayOfPerson();
-        arrayOfSpots = stat.getHotColdSpots();
+        simulationHandler.initializePersons();
+        arrayOfPerson = simulationHandler.getArrayOfPersons();
+        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
         clearCanvas(graphicsContext);
         for (Person p : arrayOfPerson) {
@@ -269,7 +276,18 @@ public class UIHandler implements Initializable {
      * called when the button 'Next Step' is pressed
      * @param event
      */
+    public void startSimulation(ActionEvent event){
+        Duration duration = Duration.millis(1000 * (float) speedOfSim);
+        KeyFrame frame = changeToNextFrame(duration);
+        Timeline loopOfSim = new Timeline();
+        loopOfSim.setCycleCount(Timeline.INDEFINITE);
+        loopOfSim.getKeyFrames().add(frame);
+        loopOfSim.play();
+    }
+
+
     public void getNextStep(ActionEvent event) {
+
         Duration duration = Duration.millis(1000 / (float) speedOfSim);
         KeyFrame frame = changeToNextFrame(duration);
         Timeline loopOfSim = new Timeline();
@@ -286,13 +304,14 @@ public class UIHandler implements Initializable {
     private KeyFrame changeToNextFrame(Duration duration) {
         return new KeyFrame(duration, event -> {
             clearCanvas(graphicsContext);
+            simulationHandler.clearEverything();
 
             //drawStores(graphicsContext, arrayOfStores);
             //drawObjects(graphicsContext, arrayOfObjects);
 
-            stat.testHotColdSpots();
-            arrayOfPerson = stat.getArrayOfPerson();
-            arrayOfSpots = stat.getHotColdSpots();
+            simulationHandler.initializePersons();
+            arrayOfPerson = simulationHandler.getArrayOfPersons();
+            arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
             for (Person p : arrayOfPerson) {
                 drawPersons(graphicsContext, p);
