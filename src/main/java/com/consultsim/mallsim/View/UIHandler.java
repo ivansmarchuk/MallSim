@@ -287,8 +287,22 @@ public class UIHandler implements Initializable {
         return new KeyFrame(duration, event -> {
             clearCanvas(graphicsContext);
 
-            drawStores(graphicsContext, arrayOfStores);
-            drawObjects(graphicsContext, arrayOfObjects);
+            //drawStores(graphicsContext, arrayOfStores);
+            //drawObjects(graphicsContext, arrayOfObjects);
+
+            stat.testHotColdSpots();
+            arrayOfPerson = stat.getArrayOfPerson();
+            arrayOfSpots = stat.getHotColdSpots();
+
+            for (Person p : arrayOfPerson) {
+                drawPersons(graphicsContext, p);
+            }
+
+            for (Spot s : arrayOfSpots) {
+                drawHotColdSpots(graphicsContext, s);
+                System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
+            }
+
             //TODO add all events that change with each frame
 
         });
