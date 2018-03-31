@@ -199,7 +199,7 @@ public class UIHandler implements Initializable {
     
         for (Spot s : arrayOfSpots) {
             drawHotColdSpots(graphicsContext, s);
-            System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
+            //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
         }
 
 
@@ -216,7 +216,7 @@ public class UIHandler implements Initializable {
             gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
                     obj.getPosition()[2] - obj.getPosition()[0],
                     obj.getPosition()[3] - obj.getPosition()[1]);
-            System.out.println("Object " + obj.getId());
+            //System.out.println("Object " + obj.getId());
         }
 
     }
@@ -231,7 +231,7 @@ public class UIHandler implements Initializable {
             gc.fillRect(store.getPosition()[0], store.getPosition()[1],
                     store.getPosition()[2] - store.getPosition()[0],
                     store.getPosition()[3] - store.getPosition()[1]);
-            System.out.println(store.getId());
+            //System.out.println(store.getId());
         }
     }
 
@@ -277,7 +277,8 @@ public class UIHandler implements Initializable {
      * @param event
      */
     public void startSimulation(ActionEvent event){
-        Duration duration = Duration.millis(1000 * (float) speedOfSim);
+        simulationHandler.initializePersons();
+        Duration duration = Duration.millis(80);
         KeyFrame frame = changeToNextFrame(duration);
         Timeline loopOfSim = new Timeline();
         loopOfSim.setCycleCount(Timeline.INDEFINITE);
@@ -309,7 +310,7 @@ public class UIHandler implements Initializable {
             //drawStores(graphicsContext, arrayOfStores);
             //drawObjects(graphicsContext, arrayOfObjects);
 
-            simulationHandler.initializePersons();
+            simulationHandler.computeNextPositionOfPersons();
             arrayOfPerson = simulationHandler.getArrayOfPersons();
             arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
@@ -319,7 +320,7 @@ public class UIHandler implements Initializable {
 
             for (Spot s : arrayOfSpots) {
                 drawHotColdSpots(graphicsContext, s);
-                System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
+                //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
             }
 
             //TODO add all events that change with each frame

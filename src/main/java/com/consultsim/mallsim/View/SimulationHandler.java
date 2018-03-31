@@ -14,25 +14,35 @@ public class SimulationHandler{
     ArrayList<Store> arrayOfStores;
     ArrayList<Object> arrayOfObjects;
     public StatisticHandler stat;
+    public int crashMap[][];
+
 
     public SimulationHandler() {
         stat = new StatisticHandler();
         arrayOfPersons = new ArrayList<Person>();
         arrayOfStores = new ArrayList<Store>();
         arrayOfObjects = new ArrayList<Object>();
+        crashMap = new int[1000][1000];
+        for(int i = 0; i < 1000; i++){
+            for(int a = 0; a < 1000; a++){
+                crashMap[i][a] = 0;
+            }
+        }
     }
 
     public void initializePersons(){
         Random random = new Random();
         int x;
         int y;
-        
-        for (int i = 0; i < 400; i++) {
-            x = random.nextInt(1000) + 1;
-            y = random.nextInt(1000) + 1;
 
-            arrayOfPersons.add(new Person(new Position(x,y), 0.0));
+
+        for (int i = 0; i < 600; i++) {
+            x = random.nextInt(1000);
+            y = random.nextInt(1000);
+
+            arrayOfPersons.add(new Person(new Position(x,y), 0.0, this));
             System.out.println("x: " + x + " y: " + y);
+            crashMap[y][x] = 1;
         }
 
         int m[][] = stat.recognizeHCSpots(1000,1000, 100, 100, arrayOfPersons);
@@ -40,13 +50,18 @@ public class SimulationHandler{
     }
 
     public void clearEverything(){
-        this.arrayOfPersons.clear();
+        //this.arrayOfPersons.clear();
         this.stat.hotColdSpots.clear();
+
+        int m[][] = stat.recognizeHCSpots(1000,1000, 100, 100, arrayOfPersons);
+        this.stat.createSpotObjects(1000,1000,100,100, m);
     }
 
 
     public void computeNextPositionOfPersons(){
-
+        for(Person p: arrayOfPersons){
+            p.computeNext();
+        }
     }
 
     public void addPersons(){
