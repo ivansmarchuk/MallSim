@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -57,7 +58,7 @@ public class UIHandler implements Initializable {
     @FXML
     private Canvas canvas;
 
-    private Timeline SimulationLoop;
+    private Timeline simulationLoop;
     public ArrayList<Person> arrayOfPerson;
     public ArrayList<Spot> arrayOfSpots;
     public static StatisticHandler stat;
@@ -67,7 +68,7 @@ public class UIHandler implements Initializable {
 
 
 
-
+    //TODO bug fix  Falls Nextstep button gedruck wurde, kann man nicht mehr mit Start die Simulation weiter fließend fortsetzen
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -89,6 +90,11 @@ public class UIHandler implements Initializable {
         arrayOfPerson = new ArrayList<Person>();
         arrayOfSpots = new ArrayList<Spot>();
 
+
+        // Here are initialized persons
+        simulationHandler.initializePersons();
+        arrayOfPerson = simulationHandler.getArrayOfPersons();
+        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
     }
 
     /**
@@ -123,9 +129,23 @@ public class UIHandler implements Initializable {
 
     private void drawCanvasSim() {
         buildSimulationStart(this.speedOfSim);
-        initializePerson();
+
+        drawPersons(graphicsContext, arrayOfPerson);
+        drawHotColdSpots(graphicsContext, arrayOfSpots);
     }
 
+
+
+
+    private void computeNextPositionOfPersons() {
+
+        simulationHandler.clearEverything();
+
+        simulationHandler.computeNextPositionOfPersons();
+        arrayOfPerson = simulationHandler.getArrayOfPersons();
+        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
+
+    }
     /**
      * Initializes the simulation loop
      *
@@ -133,33 +153,43 @@ public class UIHandler implements Initializable {
      */
     private void buildSimulationStart(int speedOfSim) {
         Duration duration = Duration.millis(1000 / (float) speedOfSim);
-        KeyFrame frame = changeToNextFrame(duration);
-        SimulationLoop = new Timeline();
-        SimulationLoop.setCycleCount(Timeline.INDEFINITE);
-        SimulationLoop.getKeyFrames().add(frame);
+        KeyFrame frame = getToNextFrame(duration);
+        simulationLoop = new Timeline();
+        simulationLoop.setCycleCount(Timeline.INDEFINITE);
+        simulationLoop.getKeyFrames().add(frame);
     }
-
     /**
-     * Here are initialized persons
+     * additional function that initializes all the changes that are necessary for changing a single frame
+     *
+     * @param duration duration of time
+     * @return new {@link KeyFrame}
      */
-    private void initializePerson() {
-        simulationHandler.initializePersons();
-        arrayOfPerson = simulationHandler.getArrayOfPersons();
-        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
-    }
+    private KeyFrame getToNextFrame(Duration duration) {
+        return new KeyFrame(duration, event -> {
 
+            clearCanvas(graphicsContext);
+            drawLayoutFromXMLFile();
+
+            drawPersons(graphicsContext, arrayOfPerson);
+            drawHotColdSpots(graphicsContext, arrayOfSpots);
+            computeNextPositionOfPersons();
+
+
+
+        });
+    }
 
     @FXML
     public void pauseStartSim(ActionEvent event) {
-        switch (SimulationLoop.getStatus()) {
+        switch (simulationLoop.getStatus()) {
             case RUNNING:
-                SimulationLoop.pause();
+                simulationLoop.pause();
                 btnStartPause.setText("Start");
                 btnNextStep.setDisable(false);
                 break;
             case PAUSED:
             case STOPPED:
-                SimulationLoop.play();
+                simulationLoop.play();
                 btnStartPause.setText("Pause");
                 btnNextStep.setDisable(true);
                 break;
@@ -179,14 +209,13 @@ public class UIHandler implements Initializable {
     }
 
     private void changeFrame(int speedOfSim) {
-        Animation.Status status = SimulationLoop.getStatus();
-        SimulationLoop.stop();
-        SimulationLoop.getKeyFrames().clear();
+        Animation.Status status = simulationLoop.getStatus();
+        simulationLoop.stop();
+        simulationLoop.getKeyFrames().clear();
         buildSimulationStart(speedOfSim);
         if (status == Animation.Status.RUNNING) {
-            SimulationLoop.play();
+            simulationLoop.play();
         }
-        //TODO: to implement the function for automatically changing a speed of simulation if the slider was used
     }
 
 
@@ -278,21 +307,32 @@ public class UIHandler implements Initializable {
 
     }
 
-    private void drawHotColdSpots(GraphicsContext gc, Spot spot) {
-
-        if (spot.getSemaphor() == 1) {
-            gc.setFill(Color.rgb(255, 64, 64, 0.5));
-        } else if (spot.getSemaphor() == 2) {
-            gc.setFill(Color.rgb(0, 0, 139, 0.5));
+    private void drawHotColdSpots(GraphicsContext gc, ArrayList<Spot> arrayOfSpots) {
+        for (Spot spot : arrayOfSpots) {
+            if (spot.getSemaphor() == 1) {
+                gc.setFill(Color.rgb(255, 64, 64, 0.5));
+            } else if (spot.getSemaphor() == 2) {
+                gc.setFill(Color.rgb(0, 0, 139, 0.5));
+            }
+            //gc.fillRect(0,0, 50,50);
+            gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
         }
-        //gc.fillRect(0,0, 50,50);
-        gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
+        //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
     }
 
-    private void drawPersons(GraphicsContext gc, Person p) {
-        gc.setFill(Color.BLACK);
-        gc.fillOval(p.getCurrentPosition().getX(), 1000 - p.getCurrentPosition().getY(), 5, 5);
+    /**
+     * @param gc            GraphicsContext
+     * @param arrayOfPerson array of Person
+     */
+    private void drawPersons(GraphicsContext gc, ArrayList<Person> arrayOfPerson) {
 
+        for (Person p : arrayOfPerson) {
+            gc.setFill(Color.BLACK);
+
+            double radius = p.getRadius();
+            gc.fillOval(p.getCurrentPosition().getX(), 1000 - p.getCurrentPosition().getY(), 5, 5);
+
+        }
     }
 
     private void drawStuff(GraphicsContext gc) {
@@ -320,59 +360,17 @@ public class UIHandler implements Initializable {
      * @param event
      */
 
-    public void startSimulation(ActionEvent event) {
-
-        simulationHandler.initializePersons();
-        Duration duration = Duration.millis(80);
-        KeyFrame frame = changeToNextFrame(duration);
-        Timeline loopOfSim = new Timeline();
-        loopOfSim.setCycleCount(Timeline.INDEFINITE);
-        loopOfSim.getKeyFrames().add(frame);
-        loopOfSim.play();
-    }
-
 
     public void getNextStep(ActionEvent event) {
-
         Duration duration = Duration.millis(1000 / (float) speedOfSim);
-        KeyFrame frame = changeToNextFrame(duration);
-        SimulationLoop = new Timeline();
-        SimulationLoop.setCycleCount(1);
-        SimulationLoop.getKeyFrames().add(frame);
-        SimulationLoop.play();
+        KeyFrame frame = getToNextFrame(duration);
+        simulationLoop = new Timeline();
+        simulationLoop.setCycleCount(1);
+        simulationLoop.getKeyFrames().add(frame);
+        simulationLoop.play();
     }
 
-    /**
-     * additional function that initializes all the changes that are necessary for changing a single frame
-     *
-     * @param duration duration of time
-     * @return new {@link KeyFrame}
-     */
-    private KeyFrame changeToNextFrame(Duration duration) {
-        return new KeyFrame(duration, event -> {
-            clearCanvas(graphicsContext);
-            simulationHandler.clearEverything();
-            drawLayoutFromXMLFile();
-            //drawStores(graphicsContext, arrayOfStores);
-            //drawObjects(graphicsContext, arrayOfObjects);
 
-            simulationHandler.computeNextPositionOfPersons();
-            arrayOfPerson = simulationHandler.getArrayOfPersons();
-            arrayOfSpots = simulationHandler.stat.getHotColdSpots();
-
-            for (Person p : arrayOfPerson) {
-                drawPersons(graphicsContext, p);
-            }
-
-            for (Spot s : arrayOfSpots) {
-                drawHotColdSpots(graphicsContext, s);
-                //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
-            }
-
-            //TODO add all events that change with each frame
-
-        });
-    }
 
     /**
      * Clears the content

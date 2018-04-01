@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * A presentation of a person in the simulation
  */
-public class Person extends Circle{
+public class Person {
 
     private Position currentPosition;
     private Position nextPosition;
@@ -22,10 +22,11 @@ public class Person extends Circle{
     private static int nextID = 0;
     private int id;
     private int movedSince;
+    private double radius;
 
     public Person (Position pos, double speed, SimulationHandler simulationHandler){
         //radius
-        super(Configuration.PERSON_RADIUS);
+        this.radius = Configuration.PERSON_RADIUS;
         this.currentPosition = pos;
         this.nextPosition = pos;
         this.speed = speed;
@@ -33,6 +34,14 @@ public class Person extends Circle{
         this.simulationHandler = simulationHandler;
         this.id = Person.nextID++;
         this.movedSince = 0;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 
     //compute next position (simple and randomized)
