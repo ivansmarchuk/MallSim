@@ -130,8 +130,6 @@ public class UIHandler implements Initializable {
     private void drawCanvasSim() {
         buildSimulationStart(this.speedOfSim);
 
-        drawPersons(graphicsContext, arrayOfPerson);
-        drawHotColdSpots(graphicsContext, arrayOfSpots);
     }
 
 
@@ -391,6 +389,7 @@ public class UIHandler implements Initializable {
         Parent root = null;
         try {
             root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
+            simulationLoop.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
