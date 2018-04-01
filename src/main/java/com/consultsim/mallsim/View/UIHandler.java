@@ -67,8 +67,6 @@ public class UIHandler implements Initializable {
     private ArrayList<Objects> arrayOfObjects;
 
 
-
-    //TODO bug fix  Falls Nextstep button gedruck wurde, kann man nicht mehr mit Start die Simulation weiter fließend fortsetzen
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -89,8 +87,6 @@ public class UIHandler implements Initializable {
         simulationHandler = new SimulationHandler();
         arrayOfPerson = new ArrayList<Person>();
         arrayOfSpots = new ArrayList<Spot>();
-
-
         // Here are initialized persons
         simulationHandler.initializePersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
@@ -99,54 +95,39 @@ public class UIHandler implements Initializable {
 
     /**
      * If Button LoadFromFile was pressed
-     *
      * @param actionEvent Load from File was pressed
      */
     public void loadLayoutFromFile(ActionEvent actionEvent) {
-        btnNextStep.setDisable(false);
         btnStartPause.setDisable(false);
+        btnNextStep.setDisable(false);
         graphicsContext = canvas.getGraphicsContext2D();
 
         FileHandler fileHandler = new FileHandler();
-        /**
-         * for load from File
-         * */
-        /*
-        final FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(primaryStage);
-        fileHandler.readFile(file.getAbsolutePath());
-        */
+
+        //for load from File
+        //final FileChooser fileChooser = new FileChooser();
+       // File file = fileChooser.showOpenDialog(primaryStage);
+        //fileHandler.readFile(file.getAbsolutePath());
 
         //load from file in root directory
         fileHandler.readFile("InputMallSim.xml");
+
         arrayOfStores = fileHandler.getArrayOfStores();
         arrayOfObjects = fileHandler.getArrarOfObjects();
 
         drawLayoutFromXMLFile();
-        drawCanvasSim();
-
-    }
-
-    private void drawCanvasSim() {
         buildSimulationStart(this.speedOfSim);
 
     }
 
-
-
-
     private void computeNextPositionOfPersons() {
-
-        simulationHandler.clearEverything();
-
         simulationHandler.computeNextPositionOfPersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
-
     }
+
     /**
      * Initializes the simulation loop
-     *
      * @param speedOfSim fps
      */
     private void buildSimulationStart(int speedOfSim) {
@@ -156,27 +137,27 @@ public class UIHandler implements Initializable {
         simulationLoop.setCycleCount(Timeline.INDEFINITE);
         simulationLoop.getKeyFrames().add(frame);
     }
+
     /**
      * additional function that initializes all the changes that are necessary for changing a single frame
-     *
      * @param duration duration of time
      * @return new {@link KeyFrame}
      */
     private KeyFrame getToNextFrame(Duration duration) {
         return new KeyFrame(duration, event -> {
-
+            simulationHandler.clearEverything();
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
-
             drawPersons(graphicsContext, arrayOfPerson);
             drawHotColdSpots(graphicsContext, arrayOfSpots);
             computeNextPositionOfPersons();
-
-
-
         });
     }
 
+    /**
+     * called when the button 'Start' is pressed
+     * @param event
+     */
     @FXML
     public void pauseStartSim(ActionEvent event) {
         switch (simulationLoop.getStatus()) {
@@ -195,25 +176,18 @@ public class UIHandler implements Initializable {
     }
 
     /**
-     * Event handling for slider  'Geschwindigkeit'
+     * called when the button 'Next Step' is pressed
+     * @param event
      */
-    private void initializeSliderSpeedOfSim() {
-        sliderSpeedOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
-            sliderSpeedOfSim.setValue(newValue.intValue());
-            lblSpeedValue.setText(String.format("%d", newValue.intValue()));
-            speedOfSim = (int) sliderSpeedOfSim.getValue();
-            changeFrame(speedOfSim);
-        });
-    }
-
-    private void changeFrame(int speedOfSim) {
-        Animation.Status status = simulationLoop.getStatus();
-        simulationLoop.stop();
-        simulationLoop.getKeyFrames().clear();
-        buildSimulationStart(speedOfSim);
-        if (status == Animation.Status.RUNNING) {
-            simulationLoop.play();
-        }
+    @FXML
+    public void getNextStep(ActionEvent event) {
+        Duration duration = Duration.millis(1000 / (float) speedOfSim);
+        KeyFrame frame = getToNextFrame(duration);
+        simulationLoop = new Timeline();
+        simulationLoop.setCycleCount(1);
+        simulationLoop.getKeyFrames().add(frame);
+        simulationLoop.play();
+        simulationLoop.setCycleCount(Timeline.INDEFINITE);
     }
 
 
@@ -239,10 +213,7 @@ public class UIHandler implements Initializable {
         sliderDayTime.setMajorTickUnit(10000);
         sliderDayTime.setShowTickLabels(true);
         StringConverter<Double> stringConverter = new StringConverter<Double>() {
-
-            /*
-             * convert int to hours format hh:mm
-             * */
+             //convert int to hours format hh:mm
             @Override
             public String toString(Double object) {
                 long seconds = object.longValue();
@@ -251,7 +222,6 @@ public class UIHandler implements Initializable {
                 long remainingMinutes = minutes - TimeUnit.HOURS.toMinutes(hour);
                 return String.format("%02d", hour) + ":" + String.format("%02d", remainingMinutes);
             }
-
             @Override
             public Double fromString(String string) {
                 return null;
@@ -263,10 +233,6 @@ public class UIHandler implements Initializable {
                 labelDayTime.setText(stringConverter.toString(newValue.doubleValue())));
 
     }
-
-    public static ArrayList<Rectangle> rectangles;
-    private Stage primaryStage;
-
 
     /**
      * Draws stores and other objects on canvas
@@ -323,23 +289,17 @@ public class UIHandler implements Initializable {
      * @param arrayOfPerson array of Person
      */
     private void drawPersons(GraphicsContext gc, ArrayList<Person> arrayOfPerson) {
-
         for (Person p : arrayOfPerson) {
             gc.setFill(Color.BLACK);
-
             double radius = p.getRadius();
             gc.fillOval(p.getCurrentPosition().getX(), 1000 - p.getCurrentPosition().getY(), 5, 5);
-
         }
     }
 
     private void drawStuff(GraphicsContext gc) {
-
         gc.setFill(Color.YELLOW);
         gc.fillOval(0, 0, 40, 40);
-
     }
-
 
     private void initializeCanvas() {
         canvas.setHeight(1000);
@@ -349,30 +309,32 @@ public class UIHandler implements Initializable {
         canvas.setLayoutX(-10);
         canvas.setScaleX(1);
         canvas.setScaleY(-1);
-
     }
+
 
     /**
-     * called when the button 'Next Step' is pressed
-     *
-     * @param event
+     * Event handling for slider  'Geschwindigkeit'
      */
-
-
-    public void getNextStep(ActionEvent event) {
-        Duration duration = Duration.millis(1000 / (float) speedOfSim);
-        KeyFrame frame = getToNextFrame(duration);
-        simulationLoop = new Timeline();
-        simulationLoop.setCycleCount(1);
-        simulationLoop.getKeyFrames().add(frame);
-        simulationLoop.play();
+    private void initializeSliderSpeedOfSim() {
+        sliderSpeedOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
+            sliderSpeedOfSim.setValue(newValue.intValue());
+            lblSpeedValue.setText(String.format("%d", newValue.intValue()));
+            speedOfSim = (int) sliderSpeedOfSim.getValue();
+            changeFrame(speedOfSim);
+        });
     }
-
-
+    private void changeFrame(int speedOfSim) {
+        Animation.Status status = simulationLoop.getStatus();
+        simulationLoop.stop();
+        simulationLoop.getKeyFrames().clear();
+        buildSimulationStart(speedOfSim);
+        if (status == Animation.Status.RUNNING) {
+            simulationLoop.play();
+        }
+    }
 
     /**
      * Clears the content
-     *
      * @param gc is the {@link GraphicsContext} that needs to be cleared
      */
     private void clearCanvas(GraphicsContext gc) {
@@ -382,7 +344,6 @@ public class UIHandler implements Initializable {
 
     /**
      * to reset and new start of simulation
-     *
      * @param event
      */
     public void resetSim(ActionEvent event) {
