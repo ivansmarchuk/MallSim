@@ -6,6 +6,7 @@ import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -19,13 +20,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -58,47 +57,113 @@ public class UIHandler implements Initializable {
     @FXML
     private Canvas canvas;
 
-
-    public static ArrayList<Person> arrayOfPerson;
-    public static ArrayList<Spot> arrayOfSpots;
+    private Timeline SimulationLoop;
+    public ArrayList<Person> arrayOfPerson;
+    public ArrayList<Spot> arrayOfSpots;
     public static StatisticHandler stat;
-    public static SimulationHandler simulationHandler;
+    public SimulationHandler simulationHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
 
-    //Initialisirung der Objekten ohne Konstruktor
-    static {
-        arrayOfPerson = new ArrayList<Person>();
-        arrayOfSpots = new ArrayList<Spot>();
-    }
-    
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+
         initializeCanvas();
         speedOfSim = Configuration.INITIAL_SPEED;
         btnStartPause.setText("Start");
         lblSpeedValue.setText(String.format("%d", this.speedOfSim));
         sliderSpeedOfSim.setValue(this.speedOfSim);
 
-
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
         initializeSliderSpeedOfSim();
+        initializeSimHandler();
 
+    }
 
+    private void initializeSimHandler() {
         simulationHandler = new SimulationHandler();
+        arrayOfPerson = new ArrayList<Person>();
+        arrayOfSpots = new ArrayList<Spot>();
 
+    }
 
+    /**
+     * If Button LoadFromFile was pressed
+     *
+     * @param actionEvent Load from File was pressed
+     */
+    public void loadLayoutFromFile(ActionEvent actionEvent) {
+        btnNextStep.setDisable(false);
+        btnStartPause.setDisable(false);
+        graphicsContext = canvas.getGraphicsContext2D();
+
+        FileHandler fileHandler = new FileHandler();
+        /**
+         * for load from File
+         * */
+        /*
+        final FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(primaryStage);
+        fileHandler.readFile(file.getAbsolutePath());
+        */
+
+        //load from file in root directory
+        fileHandler.readFile("InputMallSim.xml");
+        arrayOfStores = fileHandler.getArrayOfStores();
+        arrayOfObjects = fileHandler.getArrarOfObjects();
+
+        drawLayoutFromXMLFile();
+        drawCanvasSim();
+
+    }
+
+    private void drawCanvasSim() {
+        buildSimulationStart(this.speedOfSim);
+        initializePerson();
+    }
+
+    /**
+     * Initializes the simulation loop
+     *
+     * @param speedOfSim fps
+     */
+    private void buildSimulationStart(int speedOfSim) {
+        Duration duration = Duration.millis(1000 / (float) speedOfSim);
+        KeyFrame frame = changeToNextFrame(duration);
+        SimulationLoop = new Timeline();
+        SimulationLoop.setCycleCount(Timeline.INDEFINITE);
+        SimulationLoop.getKeyFrames().add(frame);
+    }
+
+    /**
+     * Here are initialized persons
+     */
+    private void initializePerson() {
         simulationHandler.initializePersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
+    }
 
 
-        //arrayOfPerson = stat.getArrayOfPerson();
-        //arrayOfSpots = stat.getHotColdSpots();
-
-
+    @FXML
+    public void pauseStartSim(ActionEvent event) {
+        switch (SimulationLoop.getStatus()) {
+            case RUNNING:
+                SimulationLoop.pause();
+                btnStartPause.setText("Start");
+                btnNextStep.setDisable(false);
+                break;
+            case PAUSED:
+            case STOPPED:
+                SimulationLoop.play();
+                btnStartPause.setText("Pause");
+                btnNextStep.setDisable(true);
+                break;
+        }
     }
 
     /**
@@ -114,8 +179,16 @@ public class UIHandler implements Initializable {
     }
 
     private void changeFrame(int speedOfSim) {
+        Animation.Status status = SimulationLoop.getStatus();
+        SimulationLoop.stop();
+        SimulationLoop.getKeyFrames().clear();
+        buildSimulationStart(speedOfSim);
+        if (status == Animation.Status.RUNNING) {
+            SimulationLoop.play();
+        }
         //TODO: to implement the function for automatically changing a speed of simulation if the slider was used
     }
+
 
     /**
      * Event handling for slider  'Person Anzahl'
@@ -167,66 +240,17 @@ public class UIHandler implements Initializable {
     public static ArrayList<Rectangle> rectangles;
     private Stage primaryStage;
 
-    public void loadLayoutFromFile(ActionEvent actionEvent) {
-
-        graphicsContext = canvas.getGraphicsContext2D();
-
-        FileHandler fileHandler = new FileHandler();
-        /**
-         * for load from File
-         * */
-        /*
-        final FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(primaryStage);
-        fileHandler.readFile(file.getAbsolutePath());
-        */
-
-        //load from file in root directory
-        fileHandler.readFile("InputMallSim.xml");
-        arrayOfStores = fileHandler.getArrayOfStores();
-        arrayOfObjects = fileHandler.getArrarOfObjects();
-        btnNextStep.setDisable(false);
-
-        //TODO soll nich hier sein. Diese Funktion nur für Laden aus XML - file
-        //for test purposes
-        simulationHandler.initializePersons();
-        //---------
-
-        arrayOfPerson = simulationHandler.getArrayOfPersons();
-        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
-
-
-        clearCanvas(graphicsContext);
-        for (Person p : arrayOfPerson) {
-            drawPersons(graphicsContext, p);        }
-
-    
-        for (Spot s : arrayOfSpots) {
-            drawHotColdSpots(graphicsContext, s);
-            //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
-        }
-
-
-    }
-
 
     /**
-     * @param gc GraphicsContext
-     * @param arrayOfObjects array of objects from XML temmplate
+     * Draws stores and other objects on canvas
      */
-    private void drawObjects(GraphicsContext gc, ArrayList<Objects> arrayOfObjects) {
-        for (Objects obj : arrayOfObjects) {
-            gc.setFill(Color.RED);
-            gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
-                    obj.getPosition()[2] - obj.getPosition()[0],
-                    obj.getPosition()[3] - obj.getPosition()[1]);
-            //System.out.println("Object " + obj.getId());
-        }
-
+    private void drawLayoutFromXMLFile() {
+        drawStores(graphicsContext, arrayOfStores);
+        drawObjects(graphicsContext, arrayOfObjects);
     }
 
     /**
-     * @param gc GraphicsContext
+     * @param gc            GraphicsContext
      * @param arrayOfStores array of stores from XML temmplate
      */
     private void drawStores(GraphicsContext gc, ArrayList<Store> arrayOfStores) {
@@ -239,6 +263,20 @@ public class UIHandler implements Initializable {
         }
     }
 
+    /**
+     * @param gc             GraphicsContext
+     * @param arrayOfObjects array of objects from XML temmplate
+     */
+    private void drawObjects(GraphicsContext gc, ArrayList<Objects> arrayOfObjects) {
+        for (Objects obj : arrayOfObjects) {
+            gc.setFill(Color.RED);
+            gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
+                    obj.getPosition()[2] - obj.getPosition()[0],
+                    obj.getPosition()[3] - obj.getPosition()[1]);
+            //System.out.println("Object " + obj.getId());
+        }
+
+    }
 
     private void drawHotColdSpots(GraphicsContext gc, Spot spot) {
 
@@ -278,9 +316,12 @@ public class UIHandler implements Initializable {
 
     /**
      * called when the button 'Next Step' is pressed
+     *
      * @param event
      */
-    public void startSimulation(ActionEvent event){
+
+    public void startSimulation(ActionEvent event) {
+
         simulationHandler.initializePersons();
         Duration duration = Duration.millis(80);
         KeyFrame frame = changeToNextFrame(duration);
@@ -295,14 +336,15 @@ public class UIHandler implements Initializable {
 
         Duration duration = Duration.millis(1000 / (float) speedOfSim);
         KeyFrame frame = changeToNextFrame(duration);
-        Timeline loopOfSim = new Timeline();
-        loopOfSim.setCycleCount(1);
-        loopOfSim.getKeyFrames().add(frame);
-        loopOfSim.play();
+        SimulationLoop = new Timeline();
+        SimulationLoop.setCycleCount(1);
+        SimulationLoop.getKeyFrames().add(frame);
+        SimulationLoop.play();
     }
 
     /**
      * additional function that initializes all the changes that are necessary for changing a single frame
+     *
      * @param duration duration of time
      * @return new {@link KeyFrame}
      */
@@ -310,7 +352,7 @@ public class UIHandler implements Initializable {
         return new KeyFrame(duration, event -> {
             clearCanvas(graphicsContext);
             simulationHandler.clearEverything();
-
+            drawLayoutFromXMLFile();
             //drawStores(graphicsContext, arrayOfStores);
             //drawObjects(graphicsContext, arrayOfObjects);
 
@@ -334,14 +376,17 @@ public class UIHandler implements Initializable {
 
     /**
      * Clears the content
+     *
      * @param gc is the {@link GraphicsContext} that needs to be cleared
      */
     private void clearCanvas(GraphicsContext gc) {
-        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
+
 
     /**
      * to reset and new start of simulation
+     *
      * @param event
      */
     public void resetSim(ActionEvent event) {
@@ -353,4 +398,5 @@ public class UIHandler implements Initializable {
         }
         btnStartPause.getScene().setRoot(root);
     }
+
 }

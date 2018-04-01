@@ -55,7 +55,8 @@
                         </HBox>
                         <HBox alignment="TOP_CENTER" spacing="5.0">
                             <children>
-                                <Button fx:id="btnStartPause" mnemonicParsing="false" onAction="#startSimulation" prefWidth="75.0" text="Start/Pause" />
+                                <Button fx:id="btnStartPause" disable="true" mnemonicParsing="false" onAction="#pauseStartSim" prefWidth="75.0" text="Start/Pause" />
+
                                 <Button fx:id="btnNextStep" disable="true" mnemonicParsing="false" onAction="#getNextStep" prefWidth="75.0" text="Next Step" />
                                 <Button mnemonicParsing="false" onAction="#resetSim" prefWidth="75.0" text="Reset" />
                             </children>
