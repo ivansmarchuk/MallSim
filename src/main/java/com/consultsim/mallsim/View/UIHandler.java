@@ -106,7 +106,7 @@ public class UIHandler implements Initializable {
 
         //for load from File
         //final FileChooser fileChooser = new FileChooser();
-       // File file = fileChooser.showOpenDialog(primaryStage);
+        // File file = fileChooser.showOpenDialog(primaryStage);
         //fileHandler.readFile(file.getAbsolutePath());
 
         //load from file in root directory
@@ -204,7 +204,8 @@ public class UIHandler implements Initializable {
                         sliderNumberOfPersons.setValue(newValue.intValue()));
 
     }
-
+    /**/
+    
     /**
      * Event handling for slider  'Tageszeit'
      */
@@ -213,7 +214,7 @@ public class UIHandler implements Initializable {
         sliderDayTime.setMajorTickUnit(10000);
         sliderDayTime.setShowTickLabels(true);
         StringConverter<Double> stringConverter = new StringConverter<Double>() {
-             //convert int to hours format hh:mm
+            //convert int to hours format hh:mm
             @Override
             public String toString(Double object) {
                 long seconds = object.longValue();
