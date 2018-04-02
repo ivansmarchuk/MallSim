@@ -119,7 +119,7 @@ public class Person {
                 if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
                     if((simulationHandler.crashMap[tempy][tempx] == 0)){
                         tempPos = new Position(tempx, tempy);
-                    }else{
+                    }else if(simulationHandler.crashMap[tempy][tempx] != 10){
                         simulationHandler.crashMap[tempy][tempx] = 1;
                     }
                 }
