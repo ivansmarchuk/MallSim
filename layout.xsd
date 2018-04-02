@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+         <!-- XML Schema Generated from XML Document on Mon Apr 02 2018 12:29:20 GMT+0200 (Mitteleuropäische Sommerzeit) -->
+         <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
+         <xs:element name="layout">
+               <xs:complexType>
+                     <xs:sequence>
+                           <xs:element name="generalInfo">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="size">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xSize" type="xs:int"></xs:element>
+                                                               <xs:element name="ySize" type="xs:int"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="entranceDoor">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="leftupperCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                               <xs:element name="downrightCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="store" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="color" type="xs:string"></xs:element>
+                                             <xs:element name="position">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="leftupperCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                               <xs:element name="downrightCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="door">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="leftupperCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                               <xs:element name="downrightCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="name" type="xs:string"></xs:element>
+                                             <xs:element name="description">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="info" maxOccurs="unbounded" type="xs:string"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="maxVisitors" type="xs:int"></xs:element>
+                                             <xs:element name="openingHours">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="openTime" type="xs:string"></xs:element>
+                                                               <xs:element name="closeTime" type="xs:string"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="specialOffer">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="startTime" type="xs:string"></xs:element>
+                                                               <xs:element name="endTime" type="xs:string"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="id" type="xs:int"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="object" maxOccurs="unbounded">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="leftDownCorner">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xPos" type="xs:int"></xs:element>
+                                                               <xs:element name="yPos" type="xs:int"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="uprightCorner">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="xPos" type="xs:int"></xs:element>
+                                                               <xs:element name="yPos" type="xs:int"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="type" type="xs:string"></xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="id" type="xs:int"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                           <xs:element name="store">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="color" type="xs:string"></xs:element>
+                                             <xs:element name="position">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="leftupperCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                               <xs:element name="downrightCorner">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                 <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                               <xs:element name="door">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="leftupperCorner">
+                                                                                       <xs:complexType>
+                                                                                             <xs:sequence>
+                                                                                                   <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                                   <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                                             </xs:sequence>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                                 <xs:element name="downrightCorner">
+                                                                                       <xs:complexType>
+                                                                                             <xs:sequence>
+                                                                                                   <xs:element name="xPos" type="xs:int"></xs:element>
+                                                                                                   <xs:element name="yPos" type="xs:int"></xs:element>
+                                                                                             </xs:sequence>
+                                                                                       </xs:complexType>
+                                                                                 </xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="name" type="xs:string"></xs:element>
+                                             <xs:element name="description">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="info" maxOccurs="unbounded" type="xs:string"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="maxVisitors" type="xs:int"></xs:element>
+                                             <xs:element name="openingHours">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="openTime" type="xs:string"></xs:element>
+                                                               <xs:element name="closeTime" type="xs:string"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="specialOffer">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="startTime" type="xs:string"></xs:element>
+                                                               <xs:element name="endTime" type="xs:string"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                       </xs:sequence>
+                                       <xs:attribute name="id" type="xs:int"></xs:attribute>
+                                 </xs:complexType>
+                           </xs:element>
+                     </xs:sequence>
+               </xs:complexType>
+         </xs:element>
+   </xs:schema>

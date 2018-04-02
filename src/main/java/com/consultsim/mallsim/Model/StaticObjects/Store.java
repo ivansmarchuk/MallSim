@@ -1,7 +1,6 @@
 package com.consultsim.mallsim.Model.StaticObjects;
 
-
-import javafx.scene.paint.Color;
+import com.consultsim.mallsim.Model.Position;
 
 public class Store {
   private int id;
@@ -9,8 +8,26 @@ public class Store {
   private int doorPosition[];
   private String label;
   private String interestingFor[];
-  private Color color;
+  private String color;
   private int peopleCounter;
+  private Position posLeftUpper;
+  private Position posDownRight;
+
+  public Position getPosLeftUpper() {
+    return posLeftUpper;
+  }
+
+  public void setPosLeftUpper(Position posLeftUpper) {
+    this.posLeftUpper = posLeftUpper;
+  }
+
+  public Position getPosDownRight() {
+    return posDownRight;
+  }
+
+  public void setPosDownRight(Position posDownRight) {
+    this.posDownRight = posDownRight;
+  }
 
   public int getId() {
     return id;
@@ -62,11 +79,11 @@ public class Store {
     this.interestingFor = interestingFor;
   }
 
-  public Color getColor() {
+  public String getColor() {
     return color;
   }
 
-  public void setColor(Color color) {
+  public void setColor(String color) {
     this.color = color;
   }
 

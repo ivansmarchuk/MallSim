@@ -71,18 +71,19 @@ public class Person extends Circle{
                         break;
                 }
                 //check if valid move
+                //if condition here 
                 if(isValidMove(nextX, nextY)){
                     //System.out.println("true");
                     this.currentPosition.setX(nextX);
                     this.currentPosition.setY(nextY);
-                    System.out.println("nexty: " + nextY + " nextx: " + nextX);
+                    //System.out.println("nexty: " + nextY + " nextx: " + nextX);
                     simulationHandler.crashMap[nextY][nextX] = 1;
                     simulationHandler.crashMap[currentY][currentX] = 0;
                 }else{
                     simulationHandler.crashMap[currentY][currentX]++;
                 }
 
-                if(simulationHandler.crashMap[currentY][currentX] > 4){
+                if(simulationHandler.crashMap[currentY][currentX] == 4){
                     nextPosition = handleCollision(nextX, nextY, currentX, currentY);
                     simulationHandler.crashMap[nextPosition.getY()][nextPosition.getX()] = 1;
                     simulationHandler.crashMap[currentY][currentX] = 0;
@@ -131,6 +132,10 @@ public class Person extends Circle{
                 //System.out.println("Dist: " + distance);
 
                 if((distance < 11) && (p.id != this.id)){
+                    return false;
+                }
+
+                if(simulationHandler.crashMap[nextY][nextX] == 10){
                     return false;
                 }
             }

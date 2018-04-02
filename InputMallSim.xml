@@ -2,6 +2,7 @@
 
 <layout>
 
+<generalInfo>
   <size>
     <xSize>3000</xSize>
     <ySize>3000</ySize>
@@ -20,9 +21,10 @@
      </downrightCorner>
 
   </entranceDoor>
+  </generalInfo>
 
   <store id="001">
-
+  <color>#FF0004</color>
     <position>
       <leftupperCorner>
         <xPos>0</xPos>
@@ -71,7 +73,7 @@
   
   
     <store id="002">
-
+    <color>#FF0002</color>
     <position>
       <leftupperCorner>
         <xPos>300</xPos>
@@ -119,15 +121,15 @@
 
   <object id="003">
 
-    <leftupperCorner>
-      <xPos>1400</xPos>
-      <yPos>1200</yPos>
-    </leftupperCorner>
+    <leftDownCorner>
+      <xPos>800</xPos>
+      <yPos>800</yPos>
+    </leftDownCorner>
 
-    <downrightCorner>
-      <xPos>1600</xPos>
-      <yPos>1650</yPos>
-    </downrightCorner>
+    <uprightCorner>
+      <xPos>1000</xPos>
+      <yPos>1000</yPos>
+    </uprightCorner>
 
     <type>plant</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
  
@@ -149,7 +151,7 @@
  
   </object>
   <store id="005">
-
+  <color>#FF0000</color>
     <position>
       <leftupperCorner>
         <xPos>0</xPos>

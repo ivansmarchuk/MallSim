@@ -26,6 +26,7 @@ import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -90,10 +91,10 @@ public class UIHandler implements Initializable {
         simulationHandler = new SimulationHandler();
 
 
-        simulationHandler.initializePersons();
+        /*simulationHandler.initializePersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
-
+        */
 
         //arrayOfPerson = stat.getArrayOfPerson();
         //arrayOfSpots = stat.getHotColdSpots();
@@ -167,7 +168,7 @@ public class UIHandler implements Initializable {
     public static ArrayList<Rectangle> rectangles;
     private Stage primaryStage;
 
-    public void loadLayoutFromFile(ActionEvent actionEvent) {
+    public void loadLayoutFromFile(ActionEvent actionEvent) throws FileNotFoundException {
 
         graphicsContext = canvas.getGraphicsContext2D();
 
@@ -185,11 +186,13 @@ public class UIHandler implements Initializable {
         fileHandler.readFile("InputMallSim.xml");
         arrayOfStores = fileHandler.getArrayOfStores();
         arrayOfObjects = fileHandler.getArrarOfObjects();
+        simulationHandler.setArrayOfStores(arrayOfStores);
+        simulationHandler.setArrayOfObjects(arrayOfObjects);
         btnNextStep.setDisable(false);
 
         //TODO soll nich hier sein. Diese Funktion nur für Laden aus XML - file
         //for test purposes
-        simulationHandler.initializePersons();
+        //simulationHandler.initializePersons();
         //---------
 
         arrayOfPerson = simulationHandler.getArrayOfPersons();
@@ -197,12 +200,15 @@ public class UIHandler implements Initializable {
 
 
         clearCanvas(graphicsContext);
+        drawStores(graphicsContext, arrayOfStores);
+        drawObjects(graphicsContext, arrayOfObjects);
         for (Person p : arrayOfPerson) {
             drawPersons(graphicsContext, p);        }
 
     
         for (Spot s : arrayOfSpots) {
             drawHotColdSpots(graphicsContext, s);
+
             //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
         }
 
@@ -216,7 +222,11 @@ public class UIHandler implements Initializable {
      */
     private void drawObjects(GraphicsContext gc, ArrayList<Objects> arrayOfObjects) {
         for (Objects obj : arrayOfObjects) {
-            gc.setFill(Color.RED);
+            if(obj.getLabel().contains("plant")){
+                gc.setFill(Color.GREEN);
+            }else if(obj.getLabel().contains("trash bin")){
+                gc.setFill(Color.BROWN);
+            }
             gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
                     obj.getPosition()[2] - obj.getPosition()[0],
                     obj.getPosition()[3] - obj.getPosition()[1]);
@@ -313,7 +323,8 @@ public class UIHandler implements Initializable {
 
             //drawStores(graphicsContext, arrayOfStores);
             //drawObjects(graphicsContext, arrayOfObjects);
-
+            drawStores(graphicsContext, arrayOfStores);
+            drawObjects(graphicsContext, arrayOfObjects);
             simulationHandler.computeNextPositionOfPersons();
             arrayOfPerson = simulationHandler.getArrayOfPersons();
             arrayOfSpots = simulationHandler.stat.getHotColdSpots();
