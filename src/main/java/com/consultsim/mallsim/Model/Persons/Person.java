@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * A presentation of a person in the simulation
  */
-public class Person extends Circle{
+public class Person {
 
     private Position currentPosition;
     private Position nextPosition;
@@ -22,10 +22,11 @@ public class Person extends Circle{
     private static int nextID = 0;
     private int id;
     private int movedSince;
+    private double radius;
 
     public Person (Position pos, double speed, SimulationHandler simulationHandler){
         //radius
-        super(Configuration.PERSON_RADIUS);
+        this.radius = Configuration.PERSON_RADIUS;
         this.currentPosition = pos;
         this.nextPosition = pos;
         this.speed = speed;
@@ -33,6 +34,14 @@ public class Person extends Circle{
         this.simulationHandler = simulationHandler;
         this.id = Person.nextID++;
         this.movedSince = 0;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 
     //compute next position (simple and randomized)
@@ -44,29 +53,29 @@ public class Person extends Circle{
         int currentY = this.currentPosition.getY();
         int nextX = currentX;
         int nextY = currentY;
-            temp = (int) random.nextInt(5);
-            nextStep = 4;
-           //System.out.println("Rand: " + temp);
-            if(!((currentX >= 1000) || (currentX <= 0 ) || (currentY >= 1000) || (currentY <= 0))) {
+        temp = (int) random.nextInt(5);
+        nextStep = 4;
+        //System.out.println("Rand: " + temp);
+        if(!((currentX >= 1000) || (currentX <= 0 ) || (currentY >= 1000) || (currentY <= 0))) {
 
-                switch (temp) {
-                    case 0:
-                        nextX = currentX + nextStep;
-                        break;
+            switch (temp) {
+                case 0:
+                    nextX = currentX + nextStep;
+                    break;
 
-                    case 1:
-                        nextY = currentY + nextStep;
-                        break;
+                case 1:
+                    nextY = currentY + nextStep;
+                    break;
 
-                    case 2:
-                        nextX = currentX - nextStep;
-                        break;
+                case 2:
+                    nextX = currentX - nextStep;
+                    break;
 
-                    case 3:
-                       nextY = currentY - nextStep;
-                        break;
+                case 3:
+                    nextY = currentY - nextStep;
+                    break;
 
-                    case 4:
+                case 4:
 
                         break;
                 }
@@ -92,9 +101,10 @@ public class Person extends Circle{
                     this.currentPosition.setY(nextPosition.getY());
                 }
 
-                //System.out.println("X: " + this.getCurrentPosition().getX()  + " Y: " + this.getCurrentPosition().getY());
 
-            }
+            //System.out.println("X: " + this.getCurrentPosition().getX()  + " Y: " + this.getCurrentPosition().getY());
+
+        }
 
     }
 
@@ -139,10 +149,10 @@ public class Person extends Circle{
                     return false;
                 }
             }
+            return true;
+        }
 
 
-        return true;
-    }
 
 
     public double getSpeed() {

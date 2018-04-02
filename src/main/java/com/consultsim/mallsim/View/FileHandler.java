@@ -50,8 +50,8 @@ public class FileHandler {
 
 
     public void readFile(String fileName) throws FileNotFoundException {
-        InputStream xmlFile = new FileInputStream("C:\\Users\\MediaMarkt\\Desktop\\GitHub MallSim\\InputMallSim.xml");
-        InputStream xsdFile = new FileInputStream( "C:\\Users\\MediaMarkt\\Desktop\\GitHub MallSim\\xsd.xsd");
+        InputStream xmlFile = new FileInputStream("InputMallSim.xml");
+        InputStream xsdFile = new FileInputStream( "xsd.xsd");
         validateAgainstXSD(xmlFile, xsdFile);
 
 
