@@ -56,6 +56,9 @@ public class Person {
         temp = (int) random.nextInt(5);
         nextStep = 4;
         //System.out.println("Rand: " + temp);
+
+        //REBECCA: INSERT YOUR CODE HERE
+        //TODO: Create Function to compute the position of the people
         if(!((currentX >= 1000) || (currentX <= 0 ) || (currentY >= 1000) || (currentY <= 0))) {
 
             switch (temp) {
