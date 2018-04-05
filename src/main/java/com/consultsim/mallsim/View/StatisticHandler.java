@@ -21,6 +21,7 @@ public class StatisticHandler {
     public int newmatrix[][];
     public int counterHotSpots;
     public int counterColdSpots;
+    public static int counterTotalPersons;
 
 
     //METHODS
@@ -48,7 +49,7 @@ public class StatisticHandler {
                     //REBECCA: LOOK HERE ->
                     if(hctemp[y][x] == 1) {
                         hotColdSpots.add(new Spot(x * divisorwidth, 1000-((y * divisorheigth)+divisorheigth), divisorwidth, divisorheigth, 1));
-                    }if(hctemp[y][x] == 2){
+                    }if(hctemp[y][x] == -1){
                         hotColdSpots.add(new Spot(x * divisorwidth, 1000-((y * divisorheigth) + divisorheigth), divisorwidth, divisorheigth, 2));
 
                 }
@@ -56,6 +57,9 @@ public class StatisticHandler {
         }
     }
 
+    public static int getCounterTotalPersons() {
+        return counterTotalPersons;
+    }
 
 
     public StatisticHandler(){
@@ -99,7 +103,7 @@ public class StatisticHandler {
         return counterColdSpots;
     }
 
-    // 0 = kein Spot; 1 = HotSpot; 2 = ColdSpot
+    // 0 = kein Spot; 1 = HotSpot; -1 = ColdSpot
     // Wird am Ende der Simulation aufgerufen
     public static int[] countHotColdSpots(int[][][] spotArrayList){
         int hotSpots = 0;
@@ -110,7 +114,7 @@ public class StatisticHandler {
                     switch(z){
                         case 1: hotSpots += 1;
                                 break;
-                        case 2: coldSpots += 1;
+                        case -1: coldSpots += 1;
                                 break;
                     }
 
@@ -129,6 +133,25 @@ public class StatisticHandler {
         int[] klrf = {hotSpots,coldSpots};
         return klrf;
     }
+//Ungetestet
+public int[][] hottestColdestSpots(int [][][] spotArrayList){
+    int[][] hottestColdestSpotsMatrix = new int[10 +1][10 +1];
+    //fill with 0 MUSS GEÄNDERT WERDEN FALLS HEIGHT/WIDTH ZU GLOBALE VARIABLE WIRD
+    for(int i = 0; i < 10; i++){
+        for(int j = 0; j < 10; j++){
+            hottestColdestSpotsMatrix[i][j] = 0;
+        }
+    }
+    //int hottestColdestSpotsMatrix = new int[1][1];
+    for (int[][] x : spotArrayList) {
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+            hottestColdestSpotsMatrix[i][j]+=x[i][j];
+            }
+        }
+    }
+    return hottestColdestSpotsMatrix;
+}
 
 //the width and heigth must be divisible by lengthwidth and lengthheigth with a rest of 0
 
@@ -157,15 +180,15 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
 
 
         int highestValue = searchForHighestValue(divisorheigth, divisorwidth);
-        double borderLower = highestValue * 0.3;
-        double borderHigher = highestValue * 0.87;
+        double borderLower = highestValue * 0.04;
+        double borderHigher = highestValue * 0.91;
 
         //iterate through matrix and compute the Hot- and Coldspots given on the highest value
         for(int y = 0; y < divisorheigth; y++){
             System.out.println();
             for(int x = 0; x < divisorwidth; x++){
                 if(matrix[y][x] < borderLower) {
-                    hcmatrix[y][x] = 2;
+                    hcmatrix[y][x] = -1;
                     counterColdSpots++;
                 }else if(matrix[y][x] < borderHigher) {
                     hcmatrix[y][x] = 0;
@@ -176,7 +199,7 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
             }
         }
 
-    /*
+
         //Print out matrices
         System.out.println("Distribution matrix: ");
         System.out.println();
@@ -200,10 +223,11 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
             }
         }
 
+
         System.out.println();
         System.out.println(counterHotSpots);
         System.out.println(counterColdSpots);
-*/
+
         return hcmatrix;
     }
 

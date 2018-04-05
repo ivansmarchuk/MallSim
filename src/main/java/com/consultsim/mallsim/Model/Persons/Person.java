@@ -59,7 +59,7 @@ public class Person {
 
         //REBECCA: INSERT YOUR CODE HERE
         //TODO: Create Function to compute the position of the people
-        if(!((currentX >= 1000) || (currentX <= 0 ) || (currentY >= 1000) || (currentY <= 0))) {
+        if(!((currentX > 1000) || (currentX < 0 ) || (currentY > 1000) || (currentY < 0))) {
 
             switch (temp) {
                 case 0:

@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class UIHandler implements Initializable {
 
     private int speedOfSim;
+    public int counterTotalPersons = StatisticHandler.getCounterTotalPersons();
 
     @FXML
     public Button btnNextStep;
@@ -338,6 +339,7 @@ public class UIHandler implements Initializable {
             changeFrame(speedOfSim);
         });
     }
+
     private void changeFrame(int speedOfSim) {
         Animation.Status status = simulationLoop.getStatus();
         simulationLoop.stop();
