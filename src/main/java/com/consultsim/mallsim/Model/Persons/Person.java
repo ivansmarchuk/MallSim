@@ -34,6 +34,13 @@ public class Person {
     private int detourX;
     private int detourY;
 
+    //Variables for the maze solving algorithm
+    //Es wird sinnvoll sein, das Maze auszulagern, wegen Speicherplatz
+    private boolean[][] wasHere = new boolean[1000][1000];
+    private boolean[][] correctPath = new boolean[1000][1000]; // The solution to the maze
+    private int goalX;
+    private int goalY;
+
     public Person (Position pos, double speed, SimulationHandler simulationHandler){
         //radius
         this.radius = Configuration.PERSON_RADIUS;
@@ -51,6 +58,18 @@ public class Person {
         timeSearching = 0;
         detourX = 0;
         detourY = 0;
+
+        if (interestedIn != "nothing") {
+            int[] goal = getGoalCoordinates();
+            goalX = goal[0];
+            goalY = goal[1];
+            //findCompleteWayWithGoalMaze(currentX, currentY);
+        }
+        else{
+            goalX = -1;
+            goalY = -1;
+        }
+
     }
 
     public double getRadius() {
@@ -69,29 +88,24 @@ public class Person {
         int currentY = this.currentPosition.getY();
         int nextX = currentX;
         int nextY = currentY;
-        int goalX = -1;
-        int goalY = -1;
+
 
         //System.out.println("Rand: " + direction);
 
         //REBECCA: INSERT YOUR CODE HERE
         //TO DO: Create Function to compute the position of the people
 
-        if (interestedIn != "nothing") {
-            int[] goal = getGoalCoordinates();
-            goalX = goal[0];
-            goalY = goal[1];
-        }
         if (goalX == -1){
             //System.out.println("No shop found or needed");
             // Was passiert dann?
             //compute next position (simple and randomized)
             direction = (int) random.nextInt(5);
         }
-        else{
-            direction = findDirectionWithGoal(goalX, goalY, currentX, currentY);
-        }
 
+        else{
+            //direction = findDirectionWithGoal(goalX, goalY, currentX, currentY);
+            direction = findPathfromMaze(currentX, currentY);
+        }
 
 
            /* if(inShop && (timeInShop < 20) ){
@@ -179,7 +193,6 @@ public class Person {
             return true;
         }
 
-
     public String generateInterest(){
         //choose what the person wants to buy
         //hier fehlen noch die richtigen Kategorien, die es dann auch für die Geschäfte geben muss
@@ -205,7 +218,7 @@ public class Person {
     public int[] getGoalCoordinates(){
         int goalX = -1;
         int goalY = -1;
-        int interestingShops[];
+        int interestingShops[] = new int[100];  //Ich weiß noch nicht wie viele Shops es gibt
         int nrInterestingShops = 0;
         int temp;
         int divisorForDoor;
@@ -290,7 +303,7 @@ public class Person {
     public int findDirectionWithGoal(int goalX, int goalY, int currentX, int currentY){
 
         int temp = (int) random.nextInt(2);
-        int[] nextDirection;
+        int nextDirection;
 
         if (detourX != 0){
             goalX = - goalX;
@@ -303,7 +316,7 @@ public class Person {
 
         if(goalX < currentX){
             //move left
-            nextDirection[0] = 2;
+            nextDirection = 2;
 
             if (simulationHandler.crashMap[movePerson(2, currentX, currentY)[0]][currentY] == 10){
                 for (int i = currentX; i < 1000 ;i++){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
@@ -317,7 +330,7 @@ public class Person {
 
         else if(goalX > currentX){
             //move right
-            nextDirection[0] = 0;
+            nextDirection = 0;
             if (simulationHandler.crashMap[movePerson(0, currentX, currentY)[0]][currentY] == 10){
                 for (int i = currentX; i >= 0 ;i--){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
                     if (simulationHandler.crashMap[i][currentY] == 10){
@@ -330,13 +343,13 @@ public class Person {
         }
 
         else{
-            nextDirection[0] = 4;
+            nextDirection = 4;
         }
 
 
         if(goalY > currentY){
             //move down
-            nextDirection[1] = 1;
+            nextDirection = 1;
             if (simulationHandler.crashMap[currentX][movePerson(1, currentX, currentY)[1]] == 10){
                 for (int i = currentX; i < 1000 ;i++){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
                     if (simulationHandler.crashMap[currentX][i] == 10){
@@ -349,7 +362,7 @@ public class Person {
 
         else if(goalY < currentY){
             //move up
-            nextDirection[1] = 3;
+            nextDirection = 3;
             if (simulationHandler.crashMap[currentX][movePerson(1, currentX, currentY)[1]] == 10){
                 for (int i = currentX; i >= 0 ;i--){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
                     if (simulationHandler.crashMap[currentX][i] == 10){
@@ -360,16 +373,92 @@ public class Person {
             }
         }
         else{
-            nextDirection[0] = 4;
+            nextDirection = 4;
         }
 
         //TO DO: check if  detour still applies
 
        // simulationHandler.crashMap[movePerson(nextDirection[temp], currentX, currentY)[0]][movePerson(nextDirection[temp], currentX, currentY)[1]]
 
-return nextDirection[temp];
+return nextDirection;
     }
 
+    public void findCompleteWayWithGoalMaze(int currentX, int currentY){
+
+        //This method will compute the complete path -> Performance might be pretty bad
+        //To save space only save the directions or compute direction to save performance -> try
+
+        // The maze is the crashmap, with objects being 10 and everything else being okay
+        boolean[][] wasHere = new boolean[1000][1000];
+        boolean[][] correctPath = new boolean[1000][1000]; // The solution to the maze
+        //int startX, startY; // Starting X and Y values of maze
+        //int endX, endY;     // Ending X and Y values of maze
+
+        for (int row = 0; row < simulationHandler.crashMap.length; row++)
+            // Sets boolean Arrays to default values
+            for (int col = 0; col < simulationHandler.crashMap[row].length; col++){
+                wasHere[row][col] = false;
+                correctPath[row][col] = false;
+            }
+        boolean b = recursiveSolve(currentX, currentY);
+        // Will leave you with a boolean array (correctPath)
+        // with the path indicated by true values.
+        // If b is false, there is no solution to the maze
+
+    }
+
+    public boolean recursiveSolve(int x, int y) {
+        if (x == goalX && y == goalY) return true; // If you reached the end
+        if (simulationHandler.crashMap[x][y] == 10 || wasHere[x][y]) return false;
+        // If you are on a wall or already were here
+        wasHere[x][y] = true;
+        if (x != 0) // Checks if not on left edge
+            if (recursiveSolve(x-1, y)) { // Recalls method one to the left
+                correctPath[x][y] = true; // Sets that path value to true;
+                return true;
+            }
+        if (x != 1000 - 1) // Checks if not on right edge
+            if (recursiveSolve(x+1, y)) { // Recalls method one to the right
+                correctPath[x][y] = true;
+                return true;
+            }
+        if (y != 0)  // Checks if not on top edge
+            if (recursiveSolve(x, y-1)) { // Recalls method one up
+                correctPath[x][y] = true;
+                return true;
+            }
+        if (y != 1000 - 1) // Checks if not on bottom edge
+            if (recursiveSolve(x, y+1)) { // Recalls method one down
+                correctPath[x][y] = true;
+                return true;
+            }
+        return false;
+    }
+
+    public int findPathfromMaze(int currentX, int currentY){
+
+      if(correctPath[currentX + 1][currentY] == true){
+          //right
+          return 0;
+      }
+      else if(correctPath[currentX - 1][currentY] == true){
+            //left
+          return 2;
+        }
+      else if(correctPath[currentX][currentY + 1] == true){
+          //down
+          return 1;
+      }
+      else if(correctPath[currentX][currentY - 1] == true){
+          //up
+          return 3;
+      }
+      else{
+          System.out.println("No path possible");
+          return 4;
+      }
+
+    }
 
     public double getSpeed() {
         return speed;
