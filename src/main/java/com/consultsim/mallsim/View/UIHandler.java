@@ -77,7 +77,7 @@ public class UIHandler implements Initializable {
     public SimulationHandler simulationHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
-
+    private double dayHours = 540;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -215,19 +215,22 @@ public class UIHandler implements Initializable {
     }
 
     private void generatePerson(double numberOfPerson, double dayTime) {
+
         int maxX = 500;
         int minX = 400;
         int maxY = 1000;
         int minY = 980;
-
         Random rand = new Random();
-        if (Math.round(dayTime) % 100 == 1){
+        System.out.println("DayTime: " + Math.round(dayTime)/60);
+        if (Math.round(dayTime)/60 - dayHours > 10){
             for (int i = 0; i < (int)numberOfPerson; i++) {
                 int x = rand.nextInt((maxX - minX) + 1) + minX;
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
                 arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler ));
+
             }
+            dayHours = Math.round(dayTime)/60;
         }
 
     }
