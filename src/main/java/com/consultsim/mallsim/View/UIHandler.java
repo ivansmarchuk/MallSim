@@ -220,7 +220,7 @@ public class UIHandler implements Initializable {
         int maxY = 990;
         int minY = 970;
         Random rand = new Random();
-        System.out.println("DayTime: " + Math.round(dayTime)/60);
+        //System.out.println("DayTime: " + Math.round(dayTime)/60);
         if (Math.round(dayTime)/60 - dayHours > 10){
             for (int i = 0; i < (int)numberOfPerson; i++) {
                 int x = rand.nextInt((maxX - minX) + 1) + minX;

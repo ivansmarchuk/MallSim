@@ -110,6 +110,7 @@ public class SimulationHandler{
         for(Person p: arrayOfPersons){
             p.computeNext();
         }
+
     }
 
     public void addPersons(){

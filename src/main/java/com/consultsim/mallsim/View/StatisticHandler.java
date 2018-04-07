@@ -201,7 +201,7 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
 
 
         //Print out matrices
-        System.out.println("Distribution matrix: ");
+       /* System.out.println("Distribution matrix: ");
         System.out.println();
 
         for(int y = 0; y < divisorheigth; y++){
@@ -227,7 +227,7 @@ public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int leng
         System.out.println();
         System.out.println(counterHotSpots);
         System.out.println(counterColdSpots);
-
+*/
         return hcmatrix;
     }
 
