@@ -153,10 +153,10 @@ public class Person {
         int tempx;
         int tempy;
         Position tempPos = new Position(currentX, currentY);
-        for(int y = 0; y < 20; y++){
-            for(int x = 0; x < 20; x++){
-                tempy = currentY - y;
-                tempx = currentX -x;
+        for(int y = -10; y < 10; y++){
+            for(int x = -10; x < 10; x++){
+                tempy = currentY + y;
+                tempx = currentX + x;
                 if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
                     if((simulationHandler.crashMap[tempy][tempx] == 0)){
                         tempPos = new Position(tempx, tempy);
