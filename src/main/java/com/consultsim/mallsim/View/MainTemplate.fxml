@@ -93,7 +93,7 @@
                                         <Insets top="20.0" />
                                     </VBox.margin>
                                     <children>
-                                        <Label alignment="TOP_LEFT" maxHeight="25.0" prefHeight="25.0" text="Geschwindigkeit:" />
+                                        <Label alignment="TOP_LEFT" maxHeight="25.0" prefHeight="25.0" text="Frame" />
                                         <Label fx:id="lblSpeedValue" text="labelSpeedValueValue" />
                                     </children>
                                 </HBox>
@@ -103,7 +103,13 @@
                                 <Insets right="5.0" />
                             </VBox.margin>
                         </VBox>
-
+                  <HBox spacing="10.0">
+                     <children>
+                        <Label alignment="TOP_LEFT" maxHeight="25.0" prefHeight="25.0" text="Geschwindigkeit:" />
+                        <Label fx:id="lblSpeedDayValue" text="labelSpeedValueValue" />
+                     </children>
+                  </HBox>
+                  <Slider fx:id="sliderSpeedDayOfSim"  max="1000" maxHeight="25.0" maxWidth="300.0" min="1" prefHeight="25.0" prefWidth="300.0" blockIncrement="200" showTickMarks="true"  value="200.0" />
                     </children>
                 </VBox>
             </children>

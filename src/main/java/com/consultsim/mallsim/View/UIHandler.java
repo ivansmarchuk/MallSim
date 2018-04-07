@@ -4,6 +4,7 @@ import com.consultsim.mallsim.MainApp;
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
 import javafx.animation.Animation;
@@ -31,18 +32,26 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
 
+
+
     private int speedOfSim;
+    private int speedDayOfSim;
     public int counterTotalPersons = StatisticHandler.getCounterTotalPersons();
 
+    @FXML
+    public Slider sliderSpeedDayOfSim;
     @FXML
     public Button btnNextStep;
     @FXML
     public Slider sliderSpeedOfSim;
+    @FXML
+    public Label lblSpeedDayValue;
     @FXML
     public Label lblSpeedValue;
     @FXML
@@ -74,6 +83,9 @@ public class UIHandler implements Initializable {
 
         initializeCanvas();
         speedOfSim = Configuration.INITIAL_SPEED;
+        speedDayOfSim = Configuration.INITIAL_DAY_SPEED;
+        lblSpeedDayValue.setText(String.format("%d", this.speedDayOfSim));
+        sliderSpeedOfSim.setValue(this.speedDayOfSim);
         btnStartPause.setText("Start");
         lblSpeedValue.setText(String.format("%d", this.speedOfSim));
         sliderSpeedOfSim.setValue(this.speedOfSim);
@@ -81,6 +93,7 @@ public class UIHandler implements Initializable {
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
         initializeSliderSpeedOfSim();
+        initializeSliderSpeedDayOfSim();
         //initializeSimHandler();
 
     }
@@ -133,6 +146,8 @@ public class UIHandler implements Initializable {
     }
 
     private void computeNextPositionOfPersons() {
+
+        //generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
         simulationHandler.computeNextPositionOfPersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
@@ -162,7 +177,15 @@ public class UIHandler implements Initializable {
             drawLayoutFromXMLFile();
             drawPersons(graphicsContext, arrayOfPerson);
             drawHotColdSpots(graphicsContext, arrayOfSpots);
-            computeNextPositionOfPersons();
+            double dayTime = sliderDayTime.getValue();
+            double newDayTime = dayTime + duration.toSeconds()*sliderSpeedDayOfSim.getValue();
+            System.out.println("new Day Time :" + newDayTime);
+            sliderDayTime.setValue(newDayTime);
+            if(sliderDayTime.getValue() != sliderDayTime.getMax()){
+                computeNextPositionOfPersons();
+            }else{
+                simulationLoop.stop();
+            }
         });
     }
 
@@ -184,6 +207,16 @@ public class UIHandler implements Initializable {
                 btnStartPause.setText("Pause");
                 btnNextStep.setDisable(true);
                 break;
+        }
+    }
+
+    private void generatePerson(double numberOfPerson, double dayTime) {
+        int max = 250;
+        int min = 200;
+        Random rand = new Random();
+        for (int i = 0; i < (int)numberOfPerson; i++) {
+            int x = rand.nextInt((max - min) + 1) + min;
+            arrayOfPerson.add(new Person(new Position(x, 1000), 10, simulationHandler ));
         }
     }
 
@@ -337,6 +370,14 @@ public class UIHandler implements Initializable {
             lblSpeedValue.setText(String.format("%d", newValue.intValue()));
             speedOfSim = (int) sliderSpeedOfSim.getValue();
             changeFrame(speedOfSim);
+        });
+    }
+
+    private void initializeSliderSpeedDayOfSim() {
+        sliderSpeedDayOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
+            sliderSpeedDayOfSim.setValue(newValue.intValue());
+            lblSpeedDayValue.setText(String.format("%d", newValue.intValue()));
+            speedDayOfSim = (int) sliderSpeedDayOfSim.getValue();
         });
     }
 
