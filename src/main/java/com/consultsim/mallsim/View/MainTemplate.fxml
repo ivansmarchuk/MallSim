@@ -76,7 +76,7 @@
                         <HBox spacing="5.0">
                             <children>
                                 <Label alignment="TOP_LEFT" maxHeight="25.0" maxWidth="50.0" prefHeight="25.0" prefWidth="50.0" text="P.Anzahl" textAlignment="CENTER" />
-                                <Slider fx:id="sliderNumberOfPersons" max="50" maxHeight="25.0" maxWidth="250.0" min="1" prefHeight="25.0" prefWidth="200.0" value="10" />
+                                <Slider fx:id="sliderNumberOfPersons" max="50" maxHeight="25.0" maxWidth="250.0" min="1" prefHeight="25.0" prefWidth="200.0" value="2" />
                                 <Label fx:id="labelNumberOfPersons" text="LabelNumberOfPersons">
                                     <HBox.margin>
                                         <Insets />
