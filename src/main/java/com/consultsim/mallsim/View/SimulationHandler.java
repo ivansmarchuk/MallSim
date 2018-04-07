@@ -80,7 +80,7 @@ public class SimulationHandler{
         int y;
 
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 1; i++) {
             x = random.nextInt(1000);
             y = random.nextInt(1000);
             if(crashMap[y][x] != 10){

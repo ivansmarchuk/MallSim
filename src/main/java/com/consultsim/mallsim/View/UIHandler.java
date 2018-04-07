@@ -177,11 +177,12 @@ public class UIHandler implements Initializable {
             drawLayoutFromXMLFile();
             drawPersons(graphicsContext, arrayOfPerson);
             drawHotColdSpots(graphicsContext, arrayOfSpots);
+
             double dayTime = sliderDayTime.getValue();
             double newDayTime = dayTime + duration.toSeconds()*sliderSpeedDayOfSim.getValue();
-            System.out.println("new Day Time :" + newDayTime);
             sliderDayTime.setValue(newDayTime);
             if(sliderDayTime.getValue() != sliderDayTime.getMax()){
+                generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons();
             }else{
                 simulationLoop.stop();
@@ -211,13 +212,21 @@ public class UIHandler implements Initializable {
     }
 
     private void generatePerson(double numberOfPerson, double dayTime) {
-        int max = 250;
-        int min = 200;
+        int maxX = 500;
+        int minX = 400;
+        int maxY = 1000;
+        int minY = 980;
+
         Random rand = new Random();
-        for (int i = 0; i < (int)numberOfPerson; i++) {
-            int x = rand.nextInt((max - min) + 1) + min;
-            arrayOfPerson.add(new Person(new Position(x, 1000), 10, simulationHandler ));
+        if (Math.round(dayTime) % 100 == 1){
+            for (int i = 0; i < (int)numberOfPerson; i++) {
+                int x = rand.nextInt((maxX - minX) + 1) + minX;
+                int y = rand.nextInt((maxY - minY) + 1) + minY;
+
+                arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler ));
+            }
         }
+
     }
 
     /**
