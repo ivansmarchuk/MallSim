@@ -103,14 +103,28 @@
                                 <Insets right="5.0" />
                             </VBox.margin>
                         </VBox>
-                  <HBox spacing="5.0">
+                  <VBox>
                      <children>
-                        <Label alignment="TOP_LEFT" maxHeight="25.0" prefHeight="25.0" text="Geschwindigkeit:" />
-                        <Label text="X" />
-                        <Label fx:id="lblSpeedDayValue" text="labelDaySpeedValue" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label alignment="TOP_LEFT" maxHeight="25.0" prefHeight="25.0" text="Geschwindigkeit:" />
+                              <Label text="X" />
+                              <Label fx:id="lblSpeedDayValue" text="labelDaySpeedValue" />
+                           </children>
+                        </HBox>
+                        <Slider fx:id="sliderSpeedDayOfSim" blockIncrement="200" max="2000" maxHeight="25.0" maxWidth="300.0" min="1" prefHeight="25.0" prefWidth="300.0" showTickMarks="true" value="200.0" />
+                     </children>
+                  </VBox>
+                  <HBox>
+                     <children>
+                        <Label text="Statistik" />
+                     </children></HBox>
+                  <HBox prefHeight="20.0" prefWidth="200.0" spacing="5.0">
+                     <children>
+                        <Label text="Anzahl Personen:" />
+                        <Label fx:id="lblCountPerson" text="0" />
                      </children>
                   </HBox>
-                  <Slider fx:id="sliderSpeedDayOfSim" blockIncrement="200" max="2000" maxHeight="25.0" maxWidth="300.0" min="1" prefHeight="25.0" prefWidth="300.0" showTickMarks="true" value="200.0" />
                     </children>
                 </VBox>
             </children>

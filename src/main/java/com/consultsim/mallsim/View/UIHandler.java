@@ -43,7 +43,8 @@ public class UIHandler implements Initializable {
     private int speedOfSim;
     private int speedDayOfSim;
     public int counterTotalPersons = StatisticHandler.getCounterTotalPersons();
-
+    @FXML
+    public Label lblCountPerson;
     @FXML
     public Slider sliderSpeedDayOfSim;
     @FXML
@@ -105,6 +106,7 @@ public class UIHandler implements Initializable {
         // Here are initialized persons
         simulationHandler.initializePersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
+        lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
     }
@@ -182,6 +184,7 @@ public class UIHandler implements Initializable {
             double newDayTime = dayTime + duration.toSeconds()*sliderSpeedDayOfSim.getValue();
             sliderDayTime.setValue(newDayTime);
             if(sliderDayTime.getValue() != sliderDayTime.getMax()){
+                lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons();
             }else{
