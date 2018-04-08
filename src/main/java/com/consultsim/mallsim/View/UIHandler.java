@@ -4,6 +4,7 @@ import com.consultsim.mallsim.MainApp;
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
 import javafx.animation.Animation;
@@ -31,18 +32,27 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
 
-    private int speedOfSim;
-    public int counterTotalPersons = StatisticHandler.getCounterTotalPersons();
 
+
+    private int speedOfSim;
+    private int speedDayOfSim;
+    public int counterTotalPersons = StatisticHandler.getCounterTotalPersons();
+    @FXML
+    public Label lblCountPerson;
+    @FXML
+    public Slider sliderSpeedDayOfSim;
     @FXML
     public Button btnNextStep;
     @FXML
     public Slider sliderSpeedOfSim;
+    @FXML
+    public Label lblSpeedDayValue;
     @FXML
     public Label lblSpeedValue;
     @FXML
@@ -67,13 +77,16 @@ public class UIHandler implements Initializable {
     public SimulationHandler simulationHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
-
+    private double dayHours = 540;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         initializeCanvas();
         speedOfSim = Configuration.INITIAL_SPEED;
+        speedDayOfSim = Configuration.INITIAL_DAY_SPEED;
+        lblSpeedDayValue.setText(String.format("%d", this.speedDayOfSim));
+        sliderSpeedOfSim.setValue(this.speedDayOfSim);
         btnStartPause.setText("Start");
         lblSpeedValue.setText(String.format("%d", this.speedOfSim));
         sliderSpeedOfSim.setValue(this.speedOfSim);
@@ -81,6 +94,7 @@ public class UIHandler implements Initializable {
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
         initializeSliderSpeedOfSim();
+        initializeSliderSpeedDayOfSim();
         //initializeSimHandler();
 
     }
@@ -92,6 +106,7 @@ public class UIHandler implements Initializable {
         // Here are initialized persons
         simulationHandler.initializePersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
+        lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
     }
@@ -133,6 +148,8 @@ public class UIHandler implements Initializable {
     }
 
     private void computeNextPositionOfPersons() {
+
+        //generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
         simulationHandler.computeNextPositionOfPersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
@@ -162,7 +179,17 @@ public class UIHandler implements Initializable {
             drawLayoutFromXMLFile();
             drawPersons(graphicsContext, arrayOfPerson);
             drawHotColdSpots(graphicsContext, arrayOfSpots);
-            computeNextPositionOfPersons();
+
+            double dayTime = sliderDayTime.getValue();
+            double newDayTime = dayTime + duration.toSeconds()*sliderSpeedDayOfSim.getValue();
+            sliderDayTime.setValue(newDayTime);
+            if(sliderDayTime.getValue() != sliderDayTime.getMax()){
+                lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
+                generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
+                computeNextPositionOfPersons();
+            }else{
+                simulationLoop.stop();
+            }
         });
     }
 
@@ -185,6 +212,26 @@ public class UIHandler implements Initializable {
                 btnNextStep.setDisable(true);
                 break;
         }
+    }
+
+    private void generatePerson(double numberOfPerson, double dayTime) {
+        int maxX = 500;
+        int minX = 480;
+        int maxY = 990;
+        int minY = 970;
+        Random rand = new Random();
+        //System.out.println("DayTime: " + Math.round(dayTime)/60);
+        if (Math.round(dayTime)/60 - dayHours > 10){
+            for (int i = 0; i < (int)numberOfPerson; i++) {
+                int x = rand.nextInt((maxX - minX) + 1) + minX;
+                int y = rand.nextInt((maxY - minY) + 1) + minY;
+
+                arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler ));
+
+            }
+            dayHours = Math.round(dayTime)/60;
+        }
+
     }
 
     /**
@@ -337,6 +384,14 @@ public class UIHandler implements Initializable {
             lblSpeedValue.setText(String.format("%d", newValue.intValue()));
             speedOfSim = (int) sliderSpeedOfSim.getValue();
             changeFrame(speedOfSim);
+        });
+    }
+
+    private void initializeSliderSpeedDayOfSim() {
+        sliderSpeedDayOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
+            sliderSpeedDayOfSim.setValue(newValue.intValue());
+            lblSpeedDayValue.setText(String.format("%d", newValue.intValue()));
+            speedDayOfSim = (int) sliderSpeedDayOfSim.getValue();
         });
     }
 

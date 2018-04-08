@@ -152,22 +152,93 @@ public class Person {
     private Position handleCollision(int nextX, int nextY, int currentX, int currentY){
         int tempx;
         int tempy;
+        int found = 0;
         Position tempPos = new Position(currentX, currentY);
-        for(int y = 0; y < 20; y++){
-            for(int x = 0; x < 20; x++){
-                tempy = currentY - y;
-                tempx = currentX -x;
-                if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
-                    if((simulationHandler.crashMap[tempy][tempx] == 0)){
-                        tempPos = new Position(tempx, tempy);
-                    }else if(simulationHandler.crashMap[tempy][tempx] != 10){
-                        simulationHandler.crashMap[tempy][tempx] = 1;
+
+        int chooseDirection = (int) random.nextInt(4);
+        System.out.println("chooseDir: " + chooseDirection);
+        switch (chooseDirection){
+            case 0: {
+                for(int y = -10 ; y < 10; y++){
+                    for(int x = -10; x < 10; x++){
+                        tempy = currentY + y;
+                        tempx = currentX + x;
+                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
+                            if((simulationHandler.crashMap[tempy][tempx] == 0) && found == 0){
+                                tempPos = new Position(tempx, tempy);
+                                found = 1;
+                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
+                                simulationHandler.crashMap[tempy][tempx] = 1;
+                            }
+                        }
+
+
                     }
                 }
-
-
+                break;
             }
+            case 1:
+                for(int y = 10 ; y < -10; y--){
+                    for(int x = 10; x < -10; x--){
+                        tempy = currentY + y;
+                        tempx = currentX + x;
+                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
+                            if((simulationHandler.crashMap[tempy][tempx] == 0) && found == 0){
+                                tempPos = new Position(tempx, tempy);
+                                found = 1;
+                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
+                                simulationHandler.crashMap[tempy][tempx] = 1;
+                            }
+                        }
+
+
+                    }
+                }
+                break;
+
+            case 2:
+                for(int y = -10 ; y < 10; y++){
+                    for(int x = 10; x < -10; x--){
+                        tempy = currentY + y;
+                        tempx = currentX + x;
+                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
+                            if((simulationHandler.crashMap[tempy][tempx] == 0) && found == 0){
+                                tempPos = new Position(tempx, tempy);
+                                found = 1;
+                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
+                                simulationHandler.crashMap[tempy][tempx] = 1;
+                            }
+                        }
+
+
+                    }
+                }
+                break;
+
+            case 3:
+                for(int y = 10 ; y < -10; y--){
+                    for(int x = -10; x < 10; x++){
+                        tempy = currentY + y;
+                        tempx = currentX + x;
+                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
+                            if((simulationHandler.crashMap[tempy][tempx] == 0) && found == 0){
+                                tempPos = new Position(tempx, tempy);
+                                found = 1;
+                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
+                                simulationHandler.crashMap[tempy][tempx] = 1;
+                            }
+                        }
+
+
+                    }
+                }
+                break;
+
         }
+
+
+
+
         return tempPos;
     }
 

@@ -79,8 +79,8 @@ public class SimulationHandler{
         int x;
         int y;
 
-
-        for (int i = 0; i < 30; i++) {
+        /*
+        for (int i = 0; i < 1; i++) {
             x = random.nextInt(1000);
             y = random.nextInt(1000);
             if(crashMap[y][x] != 10){
@@ -90,7 +90,7 @@ public class SimulationHandler{
             }
 
         }
-
+*/
         int m[][] = stat.recognizeHCSpots(1000,1000, 100, 100, arrayOfPersons);
         stat.createSpotObjects(1000,1000,100,100, m);
     }
@@ -110,6 +110,7 @@ public class SimulationHandler{
         for(Person p: arrayOfPersons){
             p.computeNext();
         }
+
     }
 
     public void addPersons(){
