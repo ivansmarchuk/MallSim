@@ -51,7 +51,7 @@ public class SimulationHandler{
                 xPosUpRight = s.getPosition()[2];
                 yPosUpRight = s.getPosition()[3];
 
-                for(int y = 1000-yPosUpRight; y < 1000-yPosLeftDown; y++){
+                for(int y = yPosUpRight; y < yPosLeftDown; y++){
                     for(int x = xPosLeftDown; x < xPosUpRight; x++){
                         crashMap[y][x] = 10;
                     }
@@ -65,7 +65,7 @@ public class SimulationHandler{
                 xPosUpRight = s.getPosition()[2];
                 yPosUpRight = s.getPosition()[3];
 
-                for(int y = 1000-yPosUpRight; y < 1000-yPosLeftDown; y++){
+                for(int y = yPosUpRight; y < yPosLeftDown; y++){
                     for(int x = xPosLeftDown; x < xPosUpRight; x++){
                         crashMap[y][x] = 10;
                     }

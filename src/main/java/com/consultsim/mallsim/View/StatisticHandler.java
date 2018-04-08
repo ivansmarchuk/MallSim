@@ -48,9 +48,9 @@ public class StatisticHandler {
                     //System.out.println(hctemp[i][a]);
                     //REBECCA: LOOK HERE ->
                     if(hctemp[y][x] == 1) {
-                        hotColdSpots.add(new Spot(x * divisorwidth, 1000-((y * divisorheigth)+divisorheigth), divisorwidth, divisorheigth, 1));
+                        hotColdSpots.add(new Spot(x * divisorwidth, ((y * divisorheigth)), divisorwidth, divisorheigth, 1));
                     }if(hctemp[y][x] == -1){
-                        hotColdSpots.add(new Spot(x * divisorwidth, 1000-((y * divisorheigth) + divisorheigth), divisorwidth, divisorheigth, 2));
+                        hotColdSpots.add(new Spot(x * divisorwidth, ((y * divisorheigth)), divisorwidth, divisorheigth, 2));
 
                 }
                 }

@@ -362,7 +362,7 @@ public class UIHandler implements Initializable {
         for (Person p : arrayOfPerson) {
             gc.setFill(Color.BLACK);
             double radius = p.getRadius();
-            gc.fillOval(p.getCurrentPosition().getX(), 1000 - p.getCurrentPosition().getY(), 5, 5);
+            gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5, 5);
         }
     }
 
