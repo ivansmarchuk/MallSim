@@ -5,6 +5,7 @@ import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import jdk.internal.util.xml.impl.Input;
 import org.w3c.dom.Document;
@@ -185,7 +186,8 @@ public class FileHandler {
 
 
         //ERROR - convertion, but there are only Strings in here
-        //tempStore.setColor(color);
+
+        tempStore.setColor(Color.web(color));
 
 
         tempStore.setPeopleCounter(Integer.parseInt(maxVisitors));

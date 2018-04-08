@@ -260,7 +260,7 @@ public class UIHandler implements Initializable {
      */
     private void drawStores(GraphicsContext gc, ArrayList<Store> arrayOfStores) {
         for (Store store : arrayOfStores) {
-            gc.setFill(Color.DARKMAGENTA);
+            gc.setFill(store.getColor());
             gc.fillRect(store.getPosition()[0], store.getPosition()[1],
                     store.getPosition()[2] - store.getPosition()[0],
                     store.getPosition()[3] - store.getPosition()[1]);
