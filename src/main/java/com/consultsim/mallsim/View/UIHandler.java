@@ -218,8 +218,8 @@ public class UIHandler implements Initializable {
     private void generatePerson(double numberOfPerson, double dayTime) {
         int maxX = 500;
         int minX = 480;
-        int maxY = 990;
-        int minY = 970;
+        int maxY = 70;
+        int minY = 40;
         Random rand = new Random();
         //System.out.println("DayTime: " + Math.round(dayTime)/60);
         if (Math.round(dayTime)/60 - dayHours > 10){

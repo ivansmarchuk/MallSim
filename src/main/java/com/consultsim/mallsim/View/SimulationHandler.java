@@ -34,10 +34,10 @@ public class SimulationHandler{
 
 
     public void fillCrashMapWithStoresAndObjects(){
-            int xPosLeftDown= 0;
-            int yPosLeftDown = 0;
-            int xPosUpRight = 0;
-            int yPosUpRight = 0;
+            int xPosLeftUpper= 0;
+            int yPosLeftUpper = 0;
+            int xPosDownRight = 0;
+            int yPosDownRight = 0;
 
             for(int i = 0; i < 100; i++){
                 for(int a = 0; a < 100; a++){
@@ -46,13 +46,13 @@ public class SimulationHandler{
             }
 
             for(Store s : arrayOfStores){
-                xPosLeftDown = s.getPosition()[0];
-                yPosLeftDown = s.getPosition()[1];
-                xPosUpRight = s.getPosition()[2];
-                yPosUpRight = s.getPosition()[3];
+                xPosLeftUpper= s.getPosition()[0];
+                yPosLeftUpper = s.getPosition()[1];
+                xPosDownRight = s.getPosition()[2];
+                yPosDownRight = s.getPosition()[3];
 
-                for(int y = yPosUpRight; y < yPosLeftDown; y++){
-                    for(int x = xPosLeftDown; x < xPosUpRight; x++){
+                for(int y = yPosLeftUpper; y < yPosDownRight; y++){
+                    for(int x = xPosLeftUpper; x < xPosDownRight; x++){
                         crashMap[y][x] = 10;
                     }
                 }
@@ -60,13 +60,13 @@ public class SimulationHandler{
 
 
             for(Objects s : arrayOfObjects){
-                xPosLeftDown = s.getPosition()[0];
-                yPosLeftDown = s.getPosition()[1];
-                xPosUpRight = s.getPosition()[2];
-                yPosUpRight = s.getPosition()[3];
+                xPosLeftUpper= s.getPosition()[0];
+                yPosLeftUpper = s.getPosition()[1];
+                xPosDownRight = s.getPosition()[2];
+                yPosDownRight = s.getPosition()[3];
 
-                for(int y = yPosUpRight; y < yPosLeftDown; y++){
-                    for(int x = xPosLeftDown; x < xPosUpRight; x++){
+                for(int y = yPosLeftUpper; y < yPosDownRight; y++){
+                    for(int x = xPosLeftUpper; x < xPosDownRight; x++){
                         crashMap[y][x] = 10;
                     }
                 }
