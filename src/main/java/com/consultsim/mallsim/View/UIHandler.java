@@ -23,6 +23,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
@@ -311,6 +312,11 @@ public class UIHandler implements Initializable {
             gc.fillRect(store.getPosition()[0], store.getPosition()[1],
                     store.getPosition()[2] - store.getPosition()[0],
                     store.getPosition()[3] - store.getPosition()[1]);
+            gc.save();
+            gc.setFill(Color.BLACK);
+            gc.fillText(store.getLabel(), store.getPosition()[0]+10, store.getPosition()[1]+50);
+
+            gc.restore();
             //System.out.println(store.getId());
         }
     }
@@ -337,11 +343,12 @@ public class UIHandler implements Initializable {
     private void drawHotColdSpots(GraphicsContext gc, ArrayList<Spot> arrayOfSpots) {
         for (Spot spot : arrayOfSpots) {
             if (spot.getSemaphor() == 1) {
-                gc.setFill(Color.rgb(255, 64, 64, 0.5));
+                gc.setFill(Color.rgb(255, 64, 64, 0.2));
             } else if (spot.getSemaphor() == 2) {
-                gc.setFill(Color.rgb(0, 0, 139, 0.5));
+                gc.setFill(Color.rgb(0, 0, 139, 0.2));
             }
             //gc.fillRect(0,0, 50,50);
+            gc.getCanvas().setLayoutX(10);
             gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
         }
         //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
@@ -368,10 +375,12 @@ public class UIHandler implements Initializable {
         canvas.setHeight(1000);
         canvas.setWidth(1000);
         graphicsContext = canvas.getGraphicsContext2D();
-        canvas.setLayoutY(-20);
-        canvas.setLayoutX(-10);
+        graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), 13.0));
+        canvas.setLayoutY(1);
+        canvas.setLayoutX(1);
         canvas.setScaleX(1);
-        canvas.setScaleY(-1);
+        canvas.setScaleY(1);
+
     }
 
 

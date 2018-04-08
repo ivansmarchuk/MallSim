@@ -209,8 +209,6 @@ public class Person {
                                 simulationHandler.crashMap[tempy][tempx] = 1;
                             }
                         }
-
-
                     }
                 }
                 break;
@@ -412,7 +410,6 @@ public class Person {
             }
 
         }
-
         else{
             nextDirection = 4;
         }
