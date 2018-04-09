@@ -21,13 +21,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -40,10 +36,8 @@ import java.util.concurrent.TimeUnit;
 public class UIHandler implements Initializable {
 
 
-
     private int speedOfSim;
     private int speedDayOfSim;
-    public int counterTotalPersons = StatisticHandler.getCounterTotalPersons();
     @FXML
     public Label lblCountPerson;
     @FXML
@@ -72,10 +66,9 @@ public class UIHandler implements Initializable {
     private Canvas canvas;
 
     private Timeline simulationLoop;
-    public ArrayList<Person> arrayOfPerson;
-    public ArrayList<Spot> arrayOfSpots;
-    public static StatisticHandler stat;
-    public SimulationHandler simulationHandler;
+    private ArrayList<Person> arrayOfPerson;
+    private ArrayList<Spot> arrayOfSpots;
+    private SimulationHandler simulationHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
     private double dayHours = 540;
@@ -102,8 +95,8 @@ public class UIHandler implements Initializable {
 
     private void initializeSimHandler() {
         //simulationHandler = new SimulationHandler();
-        arrayOfPerson = new ArrayList<Person>();
-        arrayOfSpots = new ArrayList<Spot>();
+        arrayOfPerson = new ArrayList<>();
+        arrayOfSpots = new ArrayList<>();
         // Here are initialized persons
         simulationHandler.initializePersons();
         arrayOfPerson = simulationHandler.getArrayOfPersons();
@@ -114,6 +107,7 @@ public class UIHandler implements Initializable {
 
     /**
      * If Button LoadFromFile was pressed
+     *
      * @param actionEvent Load from File was pressed
      */
     public void loadLayoutFromFile(ActionEvent actionEvent) {
@@ -142,7 +136,7 @@ public class UIHandler implements Initializable {
 
             drawLayoutFromXMLFile();
             buildSimulationStart(this.speedOfSim);
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -158,6 +152,7 @@ public class UIHandler implements Initializable {
 
     /**
      * Initializes the simulation loop
+     *
      * @param speedOfSim fps
      */
     private void buildSimulationStart(int speedOfSim) {
@@ -170,6 +165,7 @@ public class UIHandler implements Initializable {
 
     /**
      * additional function that initializes all the changes that are necessary for changing a single frame
+     *
      * @param duration duration of time
      * @return new {@link KeyFrame}
      */
@@ -182,13 +178,13 @@ public class UIHandler implements Initializable {
             drawHotColdSpots(graphicsContext, arrayOfSpots);
 
             double dayTime = sliderDayTime.getValue();
-            double newDayTime = dayTime + duration.toSeconds()*sliderSpeedDayOfSim.getValue();
+            double newDayTime = dayTime + duration.toSeconds() * sliderSpeedDayOfSim.getValue();
             sliderDayTime.setValue(newDayTime);
-            if(sliderDayTime.getValue() != sliderDayTime.getMax()){
+            if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons();
-            }else{
+            } else {
                 simulationLoop.stop();
             }
         });
@@ -196,7 +192,8 @@ public class UIHandler implements Initializable {
 
     /**
      * called when the button 'Start' is pressed
-     * @param event
+     *
+     * @param event press on start button
      */
     @FXML
     public void pauseStartSim(ActionEvent event) {
@@ -222,22 +219,23 @@ public class UIHandler implements Initializable {
         int minY = 40;
         Random rand = new Random();
         //System.out.println("DayTime: " + Math.round(dayTime)/60);
-        if (Math.round(dayTime)/60 - dayHours > 10){
-            for (int i = 0; i < (int)numberOfPerson; i++) {
+        if (Math.round(dayTime) / 60 - dayHours > 10) {
+            for (int i = 0; i < (int) numberOfPerson; i++) {
                 int x = rand.nextInt((maxX - minX) + 1) + minX;
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
-                arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler ));
+                arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler));
 
             }
-            dayHours = Math.round(dayTime)/60;
+            dayHours = Math.round(dayTime) / 60;
         }
 
     }
 
     /**
      * called when the button 'Next Step' is pressed
-     * @param event
+     *
+     * @param event press on nex next step button
      */
     @FXML
     public void getNextStep(ActionEvent event) {
@@ -282,6 +280,7 @@ public class UIHandler implements Initializable {
                 long remainingMinutes = minutes - TimeUnit.HOURS.toMinutes(hour);
                 return String.format("%02d", hour) + ":" + String.format("%02d", remainingMinutes);
             }
+
             @Override
             public Double fromString(String string) {
                 return null;
@@ -314,7 +313,7 @@ public class UIHandler implements Initializable {
                     store.getPosition()[3] - store.getPosition()[1]);
             gc.save();
             gc.setFill(Color.BLACK);
-            gc.fillText(store.getLabel(), store.getPosition()[0]+10, store.getPosition()[1]+50);
+            gc.fillText(store.getLabel(), store.getPosition()[0] + 10, store.getPosition()[1] + 50);
 
             gc.restore();
             //System.out.println(store.getId());
@@ -327,9 +326,9 @@ public class UIHandler implements Initializable {
      */
     private void drawObjects(GraphicsContext gc, ArrayList<Objects> arrayOfObjects) {
         for (Objects obj : arrayOfObjects) {
-            if(obj.getLabel().contains("plant")){
+            if (obj.getLabel().contains("plant")) {
                 gc.setFill(Color.GREEN);
-            }else if(obj.getLabel().contains("trash bin")){
+            } else if (obj.getLabel().contains("trash bin")) {
                 gc.setFill(Color.BROWN);
             }
             gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
@@ -361,15 +360,10 @@ public class UIHandler implements Initializable {
     private void drawPersons(GraphicsContext gc, ArrayList<Person> arrayOfPerson) {
         for (Person p : arrayOfPerson) {
             gc.setFill(Color.BLACK);
-            double radius = p.getRadius();
             gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5, 5);
         }
     }
 
-    private void drawStuff(GraphicsContext gc) {
-        gc.setFill(Color.YELLOW);
-        gc.fillOval(0, 0, 40, 40);
-    }
 
     private void initializeCanvas() {
         canvas.setHeight(1000);
@@ -416,6 +410,7 @@ public class UIHandler implements Initializable {
 
     /**
      * Clears the content
+     *
      * @param gc is the {@link GraphicsContext} that needs to be cleared
      */
     private void clearCanvas(GraphicsContext gc) {
@@ -425,7 +420,8 @@ public class UIHandler implements Initializable {
 
     /**
      * to reset and new start of simulation
-     * @param event
+     *
+     * @param event press on reset button
      */
     public void resetSim(ActionEvent event) {
         Parent root = null;

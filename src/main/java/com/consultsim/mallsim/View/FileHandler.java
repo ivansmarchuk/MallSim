@@ -6,8 +6,7 @@ import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
-import jdk.internal.util.xml.impl.Input;
+import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,12 +27,28 @@ import java.util.ArrayList;
 
 public class FileHandler {
 
-    ArrayList<Store> arrayOfStores;
-    ArrayList<Objects> arrarOfObjects;
-    File inputFile;
-    Store tempStore;
-    Objects tempObject;
-    Mall mall;
+    private ArrayList<Store> arrayOfStores;
+    private ArrayList<Objects> arrarOfObjects;
+
+    FileHandler() {
+        arrayOfStores = new ArrayList<>();
+        arrarOfObjects = new ArrayList<>();
+    }
+
+    private static boolean validateAgainstXSD(InputStream xml, InputStream xsd) {
+        try {
+            SchemaFactory factory =
+                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new StreamSource(xsd));
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(xml));
+            System.out.println("Valid XML");
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 
     public ArrayList<Store> getArrayOfStores() {
         return arrayOfStores;
@@ -43,22 +58,15 @@ public class FileHandler {
         return arrarOfObjects;
     }
 
-    public FileHandler() {
-        arrayOfStores = new ArrayList<Store>();
-        arrarOfObjects = new ArrayList<Objects>();
-    }
-
-
-
     public void readFile(String fileName) throws FileNotFoundException {
         InputStream xmlFile = new FileInputStream("InputMallSim.xml");
-        InputStream xsdFile = new FileInputStream( "xsd.xsd");
+        InputStream xsdFile = new FileInputStream("xsd.xsd");
         validateAgainstXSD(xmlFile, xsdFile);
 
 
         try {
 
-            inputFile = new File(fileName);
+            File inputFile = new File(fileName);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
@@ -72,14 +80,19 @@ public class FileHandler {
 
 
             for (int i = 0; i < node1.getLength(); i++) {
-                if (node1.item(i).getNodeName() == "store") {
-                    handleStore(node1.item(i));
-                } else if (node1.item(i).getNodeName() == "object") {
-                    handleObject(node1.item(i));
-                } else if (node1.item(i).getNodeName() == "generalInfo") {
-                    handleGeneralInfo(node1.item(i));
-                } else if(node1.item(i).getNodeName() == "entranceDoor"){
-                    handleEntranceDoor(node1.item(i));
+                switch (node1.item(i).getNodeName()) {
+                    case "store":
+                        handleStore(node1.item(i));
+                        break;
+                    case "object":
+                        handleObject(node1.item(i));
+                        break;
+                    case "generalInfo":
+                        handleGeneralInfo(node1.item(i));
+                        break;
+                    case "entranceDoor":
+                        handleEntranceDoor(node1.item(i));
+                        break;
                 }
             }
 
@@ -89,36 +102,14 @@ public class FileHandler {
 
     }
 
-    static boolean validateAgainstXSD(InputStream xml, InputStream xsd)
-    {
-        try
-        {
-            SchemaFactory factory =
-                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new StreamSource(xsd));
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(xml));
-            System.out.println("Valid XML");
-            return true;
-        }
-        catch(Exception ex)
-        {
-            System.out.println(ex);
-            return false;
-        }
-    }
-
-    public void handleEntranceDoor(Node n){
-        Element element = (Element) n;
-
-
+    private void handleEntranceDoor(Node n) {
 
     }
 
-    public void handleGeneralInfo(Node n) {
+    private void handleGeneralInfo(Node n) {
 
         Element element = (Element) n;
-        mall = new Mall();
+        Mall mall = new Mall();
 
         String xSize = element.getElementsByTagName("xSize").item(0).getChildNodes().item(0).getNodeValue();
         String ySize = element.getElementsByTagName("ySize").item(0).getChildNodes().item(0).getNodeValue();
@@ -140,7 +131,7 @@ public class FileHandler {
 
     }
 
-    public void handleStore(Node n) {
+    private void handleStore(Node n) {
         Element element = (Element) n;
 
         int id = Integer.parseInt(element.getAttribute("id"));
@@ -176,7 +167,7 @@ public class FileHandler {
         System.out.println(color);
 
 
-        tempStore = new Store();
+        Store tempStore = new Store();
         tempStore.setDoorPosition(new int[]{Integer.parseInt(xPosDoorLeftUpper), Integer.parseInt(yPosDoorLeftUpper), Integer.parseInt(xPosDoorDownRight), Integer.parseInt(yPosDoorDownRight)});
         tempStore.setPosition(new int[]{Integer.parseInt(xPosLeftUpper), Integer.parseInt(yPosLeftUpper), Integer.parseInt(xPosDownRight), Integer.parseInt(yPosDownRight)});
 
@@ -203,7 +194,7 @@ public class FileHandler {
 
     }
 
-    public void handleObject(Node n) {
+    private void handleObject(Node n) {
         Element element = (Element) n;
 
 
@@ -218,7 +209,7 @@ public class FileHandler {
 
         String type = element.getElementsByTagName("type").item(0).getChildNodes().item(0).getNodeValue();
 
-        tempObject = new Objects();
+        Objects tempObject = new Objects();
         tempObject.setPosition(new int[]{Integer.parseInt(xPosLeftUpper), Integer.parseInt(yPosLeftUpper), Integer.parseInt(xPosDownRight), Integer.parseInt(yPosDownRight)});
         tempObject.setLabel(type);
         tempObject.setId(id);
@@ -227,7 +218,7 @@ public class FileHandler {
     }
 
 
-    public boolean checkIfAttributesAreValid(Store newStore) {
+    private boolean checkIfAttributesAreValid(Store newStore) {
 
         int newStorePos[] = newStore.getPosition();
 
@@ -257,7 +248,7 @@ public class FileHandler {
         return true;
     }
 
-    public boolean overlaps(Rectangle old, Rectangle ne) {
+    private boolean overlaps(Rectangle old, Rectangle ne) {
         return ne.getX() < old.getX() + old.getWidth()
                 && ne.getWidth() + ne.getWidth() > old.getX()
                 && ne.getY() < old.getY() + old.getHeight()
