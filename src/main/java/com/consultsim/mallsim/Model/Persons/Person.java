@@ -31,8 +31,8 @@ public class Person {
     int timeInShop;
     boolean inShop;
     int timeSearching;
-    private int detourX;
-    private int detourY;
+    private boolean detourX;
+    private boolean detourY;
 
     //Variables for the maze solving algorithm
     //Es wird sinnvoll sein, das Maze auszulagern, wegen Speicherplatz
@@ -52,18 +52,23 @@ public class Person {
         this.id = Person.nextID++;
         this.movedSince = 0;
         //this.interestedIn = generateInterest();
-        this.interestedIn = "nothing";
-        inShop = false;
-        timeInShop = 0;
-        timeSearching = 0;
-        detourX = 0;
-        detourY = 0;
+        this.interestedIn = "no";
+        //inShop = false;
+        //timeInShop = 0;
+        //timeSearching = 0;
+        detourX = false;
+        detourY = false;
 
-        if (interestedIn != "nothing") {
-            int[] goal = getGoalCoordinates();
-            goalX = goal[0];
-            goalY = goal[1];
+        if (!(interestedIn.equals("nothing"))) {
+            //int[] goal = getGoalCoordinates();
+            //goalX = goal[0];
+            //goalY = goal[1];
+
+            //int currentX = currentPosition.getX();
+            //int currentY = currentPosition.getY();
+
             //findCompleteWayWithGoalMaze(currentX, currentY);
+            //test
         }
         else{
             goalX = -1;
@@ -88,6 +93,8 @@ public class Person {
         int currentY = this.currentPosition.getY();
         int nextX = currentX;
         int nextY = currentY;
+        goalX = 990;
+        goalY = 20;
 
 
         //System.out.println("Rand: " + direction);
@@ -103,8 +110,8 @@ public class Person {
         }
 
         else{
-            //direction = findDirectionWithGoal(goalX, goalY, currentX, currentY);
-            direction = findPathfromMaze(currentX, currentY);
+            direction = findDirectionWithGoal(goalX, goalY, currentX, currentY);
+            //direction = findPathfromMaze(currentX, currentY);
         }
 
 
@@ -115,7 +122,7 @@ public class Person {
            nextX = movePerson(direction, currentX, currentY)[0];
            nextY = movePerson(direction, currentX, currentY)[1];
 
-            if (interestedIn != "nothing" &&(nextX == goalX && nextY == goalY)){
+            if (!(interestedIn.equals("nothing")) &&(nextX == goalX && nextY == goalY)){
                 inShop = true;
                 goalX = -1;
                 goalY = -1;
@@ -329,7 +336,7 @@ public class Person {
 
     public int[] movePerson(int direction, int currentX, int currentY){
 
-        int nextStep = 4;
+        int nextStep = 1;
         int[] newPosition = {currentX, currentY};
 
         switch (direction) {
@@ -371,84 +378,88 @@ public class Person {
 
     public int findDirectionWithGoal(int goalX, int goalY, int currentX, int currentY){
 
+
         int temp = (int) random.nextInt(2);
-        int nextDirection;
+        System.out.println("temp" + temp + "goal" + goalX + " " + goalY + "current" + currentX + " " + currentY);
+        int nextDirection = 4;
 
-        if (detourX != 0){
-            goalX = - goalX;
-            currentX = - currentX;
-        }
-        if (detourY != 0){
-            goalY = - goalY;
-            currentY = - currentY;
+        if ((currentX == goalX)&& (currentY == goalY)){
+            System.out.println("Goal reached");
+            return 4;
         }
 
-        if(goalX < currentX){
-            //move left
-            nextDirection = 2;
+        System.out.println(detourX);
+        System.out.println(detourY);
+        if ((detourX && detourY)|| (detourX && (currentY == goalY))|| (detourY &&(currentX == goalX))){
+            goalX = -goalX;
+            currentX = -currentX;
+            goalY = -goalY;
+            currentY = -currentY;
+            return (int) random.nextInt(4);
+        }
+        else if (detourX){
+            temp = 1;
+        }
+        else if (detourY){
+            temp = 0;
+        }
 
-            if (simulationHandler.crashMap[movePerson(2, currentX, currentY)[0]][currentY] == 10){
-                for (int i = currentX; i < 1000 ;i++){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
-                    if (simulationHandler.crashMap[i][currentY] == 10){
-                        detourX = currentX - i;
-                        break;
-                    }
+        if (temp == 0) {
+            if (goalX < currentX) {
+                //move left
+                nextDirection = 2;
+                int o = movePerson(2, Math.abs(currentX), Math.abs(currentY))[0];
+                System.out.println("things" + o);
+
+                if (simulationHandler.crashMap[Math.abs(currentY)][movePerson(2, Math.abs(currentX), Math.abs(currentY))[0]] == 10) {
+                    detourX = true;
                 }
+                    /*
+                    for (int i = currentX; i < 1000; i++) {  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
+                        if (simulationHandler.crashMap[i][currentY] == 10) {
+                            detourX = currentX - i;
+                            break;
+                        }
+                    }
+                    *//*
+                }*/
+
+            }
+            else if (goalX > currentX) {
+                //move right
+                int p = movePerson(0, Math.abs(currentX), Math.abs(currentY))[0];
+                System.out.println("things2" + p);
+                if (simulationHandler.crashMap[Math.abs(currentY)][movePerson(0, Math.abs(currentX), Math.abs(currentY))[0]] == 10) {
+                    System.out.println("if true");
+                    detourX = true;
+                }
+                nextDirection = 0;
             }
         }
-
-        else if(goalX > currentX){
-            //move right
-            nextDirection = 0;
-            if (simulationHandler.crashMap[movePerson(0, currentX, currentY)[0]][currentY] == 10){
-                for (int i = currentX; i >= 0 ;i--){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
-                    if (simulationHandler.crashMap[i][currentY] == 10){
-                        detourX = currentX - i;
-                        break;
-                    }
+        else {
+            if (goalY > currentY) {
+                //move down
+                nextDirection = 1;
+                if (simulationHandler.crashMap[movePerson(1, Math.abs(currentX), Math.abs(currentY))[1]][Math.abs(currentX)] == 10) {
+                    detourY = true;
                 }
             }
-
-        }
-        else{
-            nextDirection = 4;
-        }
-
-
-        if(goalY > currentY){
-            //move down
-            nextDirection = 1;
-            if (simulationHandler.crashMap[currentX][movePerson(1, currentX, currentY)[1]] == 10){
-                for (int i = currentX; i < 1000 ;i++){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
-                    if (simulationHandler.crashMap[currentX][i] == 10){
-                        detourY = currentY - i;
-                        break;
-                    }
+            else if (goalY < currentY) {
+                //move up
+                nextDirection = 3;
+                if (simulationHandler.crashMap[movePerson(3, Math.abs(currentX), Math.abs(currentY))[1]][Math.abs(currentX)] == 10) {
+                    detourY =true;
                 }
             }
-        }
-
-        else if(goalY < currentY){
-            //move up
-            nextDirection = 3;
-            if (simulationHandler.crashMap[currentX][movePerson(1, currentX, currentY)[1]] == 10){
-                for (int i = currentX; i >= 0 ;i--){  //1000 als Grenze des Kaufhauses, hier noch mal nach Variable schauen
-                    if (simulationHandler.crashMap[currentX][i] == 10){
-                        detourY = currentY - i;
-                        break;
-                    }
-                }
+            else {
+                nextDirection = 4;
             }
         }
-        else{
-            nextDirection = 4;
-        }
+        //TODO: check if  detour still applies
 
-        //TO DO: check if  detour still applies
+        // simulationHandler.crashMap[movePerson(nextDirection[temp], currentX, currentY)[0]][movePerson(nextDirection[temp], currentX, currentY)[1]]
 
-       // simulationHandler.crashMap[movePerson(nextDirection[temp], currentX, currentY)[0]][movePerson(nextDirection[temp], currentX, currentY)[1]]
-
-return nextDirection;
+        return nextDirection;
     }
 
     public void findCompleteWayWithGoalMaze(int currentX, int currentY){
