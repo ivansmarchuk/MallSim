@@ -8,6 +8,7 @@ import com.consultsim.mallsim.Model.Store;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class SimulationHandler {
 
     public static int crashMap[][];
@@ -38,21 +39,55 @@ public class SimulationHandler {
         int xPosDownRight = 0;
         int yPosDownRight = 0;
 
-        for (int i = 0; i < 100; i++) {
-            for (int a = 0; a < 100; a++) {
-                crashMap[i][a] = 10;
-            }
-        }
 
+        /**
+         * example:
+         * 0 0 0 0 0 0
+         * 0 x x x x 0
+         * 0 x 0 0 x 0
+         * 0 x 0 0 x 0
+         * 0 x 0 x x 0
+         * 0 0 0 0 0 0
+         * where x - wall, 0- free place
+         *
+         */
         for (Store s : arrayOfStores) {
             xPosLeftUpper = s.getPosition()[0];
             yPosLeftUpper = s.getPosition()[1];
             xPosDownRight = s.getPosition()[2];
             yPosDownRight = s.getPosition()[3];
 
+            //fill crashmap only an border with 10
             for (int y = yPosLeftUpper; y < yPosDownRight; y++) {
                 for (int x = xPosLeftUpper; x < xPosDownRight; x++) {
-                    crashMap[y][x] = 10;
+                    if (y == yPosLeftUpper || y == yPosDownRight -1) {
+                        crashMap[y][x] = 10;
+                    }
+                    else if (x==xPosLeftUpper || x == xPosDownRight -1){
+                        crashMap[y][x] = 10;
+                    }
+                }
+            }
+            // clear a border where is a door
+            if(s.getDoorPosition()[1] == s.getDoorPosition()[3]){
+                if (s.getDoorPosition()[1] == s.getPosition()[1]){
+                    for (int x = s.getDoorPosition()[0]; x < s.getDoorPosition()[2]; x++) {
+                        crashMap[s.getDoorPosition()[1]][x] = 1;
+                    }
+                }else {
+                    for (int x = s.getDoorPosition()[0]; x < s.getDoorPosition()[2]; x++) {
+                        crashMap[s.getDoorPosition()[1]-1][x] = 1;
+                    }
+                }
+            }else{
+                if (s.getDoorPosition()[0] == s.getPosition()[0]){
+                    for (int y = s.getDoorPosition()[1]; y < s.getDoorPosition()[3]; y++) {
+                        crashMap[y][s.getDoorPosition()[0]] = 1;
+                    }
+                }else {
+                    for (int y = s.getDoorPosition()[1]; y < s.getDoorPosition()[3]; y++) {
+                        crashMap[y][s.getDoorPosition()[0]-1] = 1;
+                    }
                 }
             }
         }
@@ -76,8 +111,6 @@ public class SimulationHandler {
     public void initializePersons() {
         fillCrashMapWithStoresAndObjects();
         Random random = new Random();
-        int x;
-        int y;
 
         /*
         for (int i = 0; i < 1; i++) {
@@ -88,7 +121,6 @@ public class SimulationHandler {
                 //System.out.println("x: " + x + " y: " + y);
                 crashMap[y][x] = 1;
             }
-
         }
 */
         int m[][] = stat.recognizeHCSpots(1000, 1000, 100, 100, arrayOfPersons);

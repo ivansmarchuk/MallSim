@@ -306,6 +306,7 @@ public class UIHandler implements Initializable {
      * @param arrayOfStores array of stores from XML temmplate
      */
     private void drawStores(GraphicsContext gc, ArrayList<Store> arrayOfStores) {
+        gc.setStroke(Color.BLACK);
         for (Store store : arrayOfStores) {
             gc.setFill(store.getColor());
             gc.fillRect(store.getPosition()[0], store.getPosition()[1],
@@ -313,9 +314,10 @@ public class UIHandler implements Initializable {
                     store.getPosition()[3] - store.getPosition()[1]);
             gc.save();
             gc.setFill(Color.BLACK);
-            gc.fillText(store.getLabel(), store.getPosition()[0] + 10, store.getPosition()[1] + 50);
-
+            gc.fillText(store.getLabel(), store.getPosition()[0] + 5,
+                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2);
             gc.restore();
+            gc.strokeLine(store.getDoorPosition()[0], store.getDoorPosition()[1], store.getDoorPosition()[2], store.getDoorPosition()[3]);
             //System.out.println(store.getId());
         }
     }
@@ -340,6 +342,7 @@ public class UIHandler implements Initializable {
     }
 
     private void drawHotColdSpots(GraphicsContext gc, ArrayList<Spot> arrayOfSpots) {
+
         for (Spot spot : arrayOfSpots) {
             if (spot.getSemaphor() == 1) {
                 gc.setFill(Color.rgb(255, 64, 64, 0.2));
@@ -349,6 +352,7 @@ public class UIHandler implements Initializable {
             //gc.fillRect(0,0, 50,50);
             gc.getCanvas().setLayoutX(10);
             gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
+
         }
         //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
     }
@@ -428,6 +432,7 @@ public class UIHandler implements Initializable {
         try {
             root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
             simulationLoop.stop();
+            Thread.currentThread().interrupt();
         } catch (IOException e) {
             e.printStackTrace();
         }
