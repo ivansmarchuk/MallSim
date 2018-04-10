@@ -119,14 +119,11 @@
 
   </store>
 
-
-
-
   <store id="003">
     <color>pink</color>
     <position>
       <leftupperCorner>
-        <xPos>601</xPos>
+        <xPos>600</xPos>
         <yPos>0</yPos>
       </leftupperCorner>
 
@@ -137,13 +134,13 @@
 
       <door>
         <leftupperCorner>
-          <xPos>690</xPos>
-          <yPos>170</yPos>
+          <xPos>600</xPos>
+          <yPos>50</yPos>
         </leftupperCorner>
 
         <downrightCorner>
-          <xPos>740</xPos>
-          <yPos>170</yPos>
+          <xPos>600</xPos>
+          <yPos>100</yPos>
         </downrightCorner>
       </door>
     </position>
@@ -168,6 +165,8 @@
     </specialOffer>
 
   </store>
+
+
 
 
   <store id="004">
@@ -307,100 +306,6 @@
     <specialOffer>
       <startTime>15:00:00</startTime>
       <endTime>16:00:00</endTime>
-    </specialOffer>
-
-  </store>
-
-  <store id="007">
-    <color>brown</color>
-    <position>
-      <leftupperCorner>
-        <xPos>500</xPos>
-        <yPos>770</yPos>
-      </leftupperCorner>
-
-      <downrightCorner>
-        <xPos>600</xPos>
-        <yPos>870</yPos>
-      </downrightCorner>
-
-      <door>
-        <leftupperCorner>
-          <xPos>500</xPos>
-          <yPos>800</yPos>
-        </leftupperCorner>
-
-        <downrightCorner>
-          <xPos>500</xPos>
-          <yPos>830</yPos>
-        </downrightCorner>
-      </door>
-    </position>
-
-    <name>Super Sweets</name>
-
-    <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
-    </description>
-
-    <maxVisitors>50</maxVisitors>
-
-    <openingHours>
-      <openTime>09:00:00</openTime>
-      <closeTime>19:00:00</closeTime>
-    </openingHours>
-
-    <specialOffer>
-      <startTime>9:00:00</startTime>
-      <endTime>12:00:00</endTime>
-    </specialOffer>
-
-  </store>
-
-  <store id="008">
-    <color>#E5B509</color>
-    <position>
-      <leftupperCorner>
-        <xPos>500</xPos>
-        <yPos>770</yPos>
-      </leftupperCorner>
-
-      <downrightCorner>
-        <xPos>600</xPos>
-        <yPos>870</yPos>
-      </downrightCorner>
-
-      <door>
-        <leftupperCorner>
-          <xPos>500</xPos>
-          <yPos>800</yPos>
-        </leftupperCorner>
-
-        <downrightCorner>
-          <xPos>500</xPos>
-          <yPos>830</yPos>
-        </downrightCorner>
-      </door>
-    </position>
-
-    <name>Super Sweets</name>
-
-    <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
-    </description>
-
-    <maxVisitors>50</maxVisitors>
-
-    <openingHours>
-      <openTime>09:00:00</openTime>
-      <closeTime>19:00:00</closeTime>
-    </openingHours>
-
-    <specialOffer>
-      <startTime>9:00:00</startTime>
-      <endTime>12:00:00</endTime>
     </specialOffer>
 
   </store>
@@ -783,51 +688,51 @@
   </store>
 
   <store id="015">
-  <color>green</color>
-  <position>
-    <leftupperCorner>
-      <xPos>360</xPos>
-      <yPos>340</yPos>
-    </leftupperCorner>
-
-    <downrightCorner>
-      <xPos>500</xPos>
-      <yPos>500</yPos>
-    </downrightCorner>
-
-    <door>
+    <color>green</color>
+    <position>
       <leftupperCorner>
-        <xPos>400</xPos>
+        <xPos>360</xPos>
         <yPos>340</yPos>
       </leftupperCorner>
 
       <downrightCorner>
-        <xPos>430</xPos>
-        <yPos>340</yPos>
+        <xPos>500</xPos>
+        <yPos>500</yPos>
       </downrightCorner>
-    </door>
-  </position>
 
-  <name>General store</name>
+      <door>
+        <leftupperCorner>
+          <xPos>400</xPos>
+          <yPos>340</yPos>
+        </leftupperCorner>
 
-  <description>
-    <info>HP</info>
-    <info>Coldmirror</info>
-  </description>
+        <downrightCorner>
+          <xPos>430</xPos>
+          <yPos>340</yPos>
+        </downrightCorner>
+      </door>
+    </position>
 
-  <maxVisitors>50</maxVisitors>
+    <name>General store</name>
 
-  <openingHours>
-    <openTime>09:00:00</openTime>
-    <closeTime>19:00:00</closeTime>
-  </openingHours>
+    <description>
+      <info>HP</info>
+      <info>Coldmirror</info>
+    </description>
 
-  <specialOffer>
-    <startTime>15:00:00</startTime>
-    <endTime>17:00:00</endTime>
-  </specialOffer>
+    <maxVisitors>50</maxVisitors>
 
-</store>
+    <openingHours>
+      <openTime>09:00:00</openTime>
+      <closeTime>19:00:00</closeTime>
+    </openingHours>
+
+    <specialOffer>
+      <startTime>15:00:00</startTime>
+      <endTime>17:00:00</endTime>
+    </specialOffer>
+
+  </store>
 
   <store id="016">
     <color>crimson</color>
@@ -974,17 +879,17 @@
 
   <object id="019">
 
-  <leftDownCorner>
-  <xPos>455</xPos>
-  <yPos>800</yPos>
-  </leftDownCorner>
+    <leftDownCorner>
+      <xPos>455</xPos>
+      <yPos>800</yPos>
+    </leftDownCorner>
 
-  <uprightCorner>
-  <xPos>465</xPos>
-  <yPos>830</yPos>
-  </uprightCorner>
+    <uprightCorner>
+      <xPos>465</xPos>
+      <yPos>830</yPos>
+    </uprightCorner>
 
-  <type>bench</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
+    <type>bench</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
 
   </object>
 
@@ -1035,7 +940,7 @@
 
     <type>plant</type>
 
- </object>
+  </object>
 
 
 
