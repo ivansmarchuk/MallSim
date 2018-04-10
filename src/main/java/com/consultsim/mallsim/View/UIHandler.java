@@ -99,10 +99,26 @@ public class UIHandler implements Initializable {
         arrayOfSpots = new ArrayList<>();
         // Here are initialized persons
         simulationHandler.initializePersons();
+        drawCrashMap(graphicsContext, SimulationHandler.crashMap);
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
+    }
+    
+    private void drawCrashMap(GraphicsContext gc, int[][] crashMap) {
+        gc.setFill(Color.AQUA);
+        gc.setLineWidth(0.5);
+        for (int y = 0; y < 1000; y++) {
+            for (int x = 0; x < 1000; x++) {
+                if (crashMap[y][x] == 10){
+                    gc.strokeOval(x, y, 1, 1);
+                    //gc.fillOval(x, y, 1, 1);
+                }
+                //System.out.print(crashMap[y][x]+ " ");
+            }
+           // System.out.println();
+        }
     }
 
     /**
@@ -174,8 +190,8 @@ public class UIHandler implements Initializable {
             simulationHandler.clearEverything();
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
-            drawPersons(graphicsContext, arrayOfPerson);
             drawHotColdSpots(graphicsContext, arrayOfSpots);
+            drawPersons(graphicsContext, arrayOfPerson);
 
             double dayTime = sliderDayTime.getValue();
             double newDayTime = dayTime + duration.toSeconds() * sliderSpeedDayOfSim.getValue();
@@ -184,6 +200,7 @@ public class UIHandler implements Initializable {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons();
+                drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 simulationLoop.stop();
             }
