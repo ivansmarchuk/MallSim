@@ -55,20 +55,40 @@ public class StatisticHandler {
         StatisticHandler.arrayOfPerson = arrayOfPerson;
     }
 
-    public static void start() {
-        int[][][] y = {{{1, 1, 0}, {1, 1, 2}}, {{1, 2, 1}, {1, 1, 0}}};
-        int out = countHotColdSpots(y)[0];
-        int out2 = countHotColdSpots(y)[1];
-        System.out.println(out);
-        System.out.println(out2);
-    }
+//    public static void start() {
+//        int[][][] y = {{{1, 1, 0}, {1, 1, 2}}, {{1, 2, 1}, {1, 1, 0}}};
+//        int out = countHotColdSpots(y)[0];
+//        int out2 = countHotColdSpots(y)[1];
+//        System.out.println(out);
+//        System.out.println(out2);
+//    }
 
     //die Funktion updateHotColdSpots wird während des Schleifendurchlaufs im Simulationhandler aufgerufen und liefert Momentaufnahmen der Hot/Coldspots
     public static void updateHotColdSpots(int[][] spotArray) {
         spotArrayList.add(spotArray);
 
     }
+    public static int[] countCurrentHotColdSpots(int[][] spotArray) {
+        int currentHotSpots = 0;
+        int currentColdSpots = 0;
 
+        for (int[] y : spotArray) {
+            for (int z : y) {
+                switch (z) {
+                    case 1:
+                        currentHotSpots += 1;
+                        break;
+                    case -1:
+                        currentColdSpots += 1;
+                        break;
+                }
+            }
+
+        }
+        int[] tmp = {currentHotSpots,currentColdSpots};
+        return tmp;
+
+    }
     // 0 = kein Spot; 1 = HotSpot; -1 = ColdSpot
     // Wird am Ende der Simulation aufgerufen
     public static int[] countHotColdSpots(int[][][] spotArrayList) {
