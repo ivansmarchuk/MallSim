@@ -19,16 +19,26 @@ public class StController implements Initializable{
     public Label lblCountHotSpots;
     @FXML
     public Label lblCountPersons;
+    @FXML
+    public Label lblTest;
+
+    @FXML
+    public Label lblCountAllPeople;
 
 
     public void initialize(URL location, ResourceBundle resources) {
+
         StatisticHandler stat = StatisticHandler.getStatisticInstance();
         SimulationHandler simulationHandler = SimulationHandler.getSimulationInstance();
 
+
+
         lblTitle.setFont(new Font(Configuration.MAX_FONT_SIZE));
+
         lblCountHoldSpots.setText(Integer.toString(stat.getCounterColdSpots()));
         lblCountHotSpots.setText(Integer.toString(stat.getCounterHotSpots()));
         lblCountPersons.setText(Integer.toString(simulationHandler.getArrayOfPersons().size()));
+        lblCountAllPeople.setText(Integer.toString(stat.getCountOfPersons()));
 
     }
 }

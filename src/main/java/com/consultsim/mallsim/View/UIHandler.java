@@ -79,13 +79,15 @@ public class UIHandler implements Initializable {
     private ArrayList<Person> arrayOfPerson;
     private ArrayList<Spot> arrayOfSpots;
     private SimulationHandler simulationHandler;
+    private StatisticHandler statisticHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
     private double dayHours = 540;
 
+    private int countPersons  = 0;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         initializeCanvas();
         speedOfSim = Configuration.INITIAL_SPEED;
         speedDayOfSim = Configuration.INITIAL_DAY_SPEED;
@@ -105,6 +107,8 @@ public class UIHandler implements Initializable {
         basePane.setPrefHeight(600);
         basePane.setPrefWidth(600);
         showStatistics.setOnAction(event -> showSimStatistic());
+
+
 
     }
 
@@ -143,7 +147,7 @@ public class UIHandler implements Initializable {
      */
     public void loadLayoutFromFile(ActionEvent actionEvent) {
         simulationHandler = SimulationHandler.getSimulationInstance();
-
+        statisticHandler = StatisticHandler.getStatisticInstance();
 
         //for load from File
         //final FileChooser fileChooser = new FileChooser();
@@ -267,6 +271,8 @@ public class UIHandler implements Initializable {
         int minX = 480;
         int maxY = 70;
         int minY = 40;
+
+
         Random rand = new Random();
         //System.out.println("DayTime: " + Math.round(dayTime)/60);
         if (Math.round(dayTime) / 60 - dayHours > 10) {
@@ -275,8 +281,10 @@ public class UIHandler implements Initializable {
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
                 arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler));
-
+                countPersons++;
+                statisticHandler.setCountOfPersons(countPersons);
             }
+            arrayOfPerson.remove(arrayOfPerson.size()-1);
             dayHours = Math.round(dayTime) / 60;
         }
 

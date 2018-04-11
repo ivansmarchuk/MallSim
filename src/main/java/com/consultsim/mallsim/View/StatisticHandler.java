@@ -200,7 +200,7 @@ public class StatisticHandler {
 
         //iterate through matrix and compute the Hot- and Coldspots given on the highest value
         for (int y = 0; y < divisorheigth; y++) {
-            System.out.println();
+            //System.out.println();
             for (int x = 0; x < divisorwidth; x++) {
                 if (matrix[y][x] < borderLower) {
                     hcmatrix[y][x] = -1;
@@ -210,9 +210,11 @@ public class StatisticHandler {
                 } else {
                     hcmatrix[y][x] = 1;
                     counterHotSpots++;
+
                 }
             }
         }
+
 
 
         //Print out matrices

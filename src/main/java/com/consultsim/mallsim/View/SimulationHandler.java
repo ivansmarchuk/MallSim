@@ -18,9 +18,21 @@ public class SimulationHandler {
     ArrayList<Objects> arrayOfObjects;
     private static SimulationHandler simulationInstance = null;
 
+    public int getCountOfPersons() {
+        return countOfPersons;
+    }
+
+    public void setCountOfPersons(int countOfPersons) {
+        this.countOfPersons = countOfPersons;
+    }
+
+    private int countOfPersons = 0;
+
     //Initialize values
     public SimulationHandler() {
+
         stat = StatisticHandler.getStatisticInstance();
+
         arrayOfPersons = new ArrayList<Person>();
         arrayOfStores = new ArrayList<Store>();
         arrayOfObjects = new ArrayList<Objects>();
@@ -152,6 +164,7 @@ public class SimulationHandler {
 
     public void computeNextPositionOfPersons() {
         for (Person p : arrayOfPersons) {
+
             p.computeNext();
         }
 
