@@ -152,7 +152,7 @@ public class FileHandler {
         String name = element.getElementsByTagName("name").item(0).getChildNodes().item(0).getNodeValue();
 
         String infoOne = element.getElementsByTagName("info").item(0).getChildNodes().item(0).getNodeValue();
-        String infoTwo = element.getElementsByTagName("info").item(1).getChildNodes().item(0).getNodeValue();
+        //String infoTwo = element.getElementsByTagName("info").item(1).getChildNodes().item(0).getNodeValue();
 
         String maxVisitors = element.getElementsByTagName("maxVisitors").item(0).getChildNodes().item(0).getNodeValue();
 
@@ -172,7 +172,7 @@ public class FileHandler {
         tempStore.setPosition(new int[]{Integer.parseInt(xPosLeftUpper), Integer.parseInt(yPosLeftUpper), Integer.parseInt(xPosDownRight), Integer.parseInt(yPosDownRight)});
 
 
-        tempStore.setInterestingFor(new String[]{infoOne, infoTwo});
+        tempStore.setInterestingFor(new String[]{infoOne});
         tempStore.setLabel(name);
 
 

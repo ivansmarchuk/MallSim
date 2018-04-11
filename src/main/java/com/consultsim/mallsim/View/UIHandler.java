@@ -99,7 +99,7 @@ public class UIHandler implements Initializable {
         arrayOfSpots = new ArrayList<>();
         // Here are initialized persons
         simulationHandler.initializePersons();
-        drawCrashMap(graphicsContext, SimulationHandler.crashMap);
+        //drawCrashMap(graphicsContext, SimulationHandler.crashMap);
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
@@ -200,7 +200,7 @@ public class UIHandler implements Initializable {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons();
-                drawCrashMap(graphicsContext, SimulationHandler.crashMap);
+               // drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 simulationLoop.stop();
             }

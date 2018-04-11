@@ -53,8 +53,7 @@
     <name>Woods Sooper Dooper Shop</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>other</info> <!-- other/food/clothing/toys/general/tech/sport-->
     </description>
 
     <maxVisitors>150</maxVisitors>
@@ -101,8 +100,7 @@
     <name>Cheap chinese clothing</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>clothing</info>
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -148,8 +146,7 @@
     <name>Jupiter tech shop</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>tech</info>
     </description>
 
     <maxVisitors>150</maxVisitors>
@@ -198,8 +195,7 @@
     <name>A und C</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>clothing</info>
     </description>
 
     <maxVisitors>150</maxVisitors>
@@ -245,8 +241,7 @@
     <name>Tooooooyyyss</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>toys</info>
     </description>
 
     <maxVisitors>150</maxVisitors>
@@ -292,8 +287,7 @@
     <name>Mini IKEA</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>other</info>
     </description>
 
     <maxVisitors>200</maxVisitors>
@@ -339,8 +333,7 @@
     <name>Super Sweets</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -386,8 +379,7 @@
     <name>Better Super Sweets</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
     </description>
 
     <maxVisitors>80</maxVisitors>
@@ -433,8 +425,7 @@
     <name>Aldi West</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>general</info>
     </description>
 
     <maxVisitors>200</maxVisitors>
@@ -480,8 +471,8 @@
     <name>Burger Queen</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -527,8 +518,8 @@
     <name>Legos Pizza</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -574,8 +565,8 @@
     <name>Döner</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -622,8 +613,8 @@
     <name>Vegan and Gluten free stuff</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -669,8 +660,8 @@
     <name>Schnitzel</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -716,8 +707,8 @@
     <name>General store</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>general</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -763,8 +754,8 @@
     <name>Frozen yoghurt</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>50</maxVisitors>
@@ -811,8 +802,8 @@
     <name>Donuts</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>food</info>
+
     </description>
 
     <maxVisitors>80</maxVisitors>
@@ -858,8 +849,8 @@
     <name>Sport stuff</name>
 
     <description>
-      <info>HP</info>
-      <info>Coldmirror</info>
+      <info>sport</info>
+
     </description>
 
     <maxVisitors>100</maxVisitors>
