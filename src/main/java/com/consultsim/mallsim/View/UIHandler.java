@@ -15,13 +15,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import java.io.FileNotFoundException;
@@ -36,8 +41,11 @@ import java.util.concurrent.TimeUnit;
 public class UIHandler implements Initializable {
 
 
+
     private int speedOfSim;
     private int speedDayOfSim;
+    @FXML
+    public Button showStatistics;
     @FXML
     public Label lblCountPerson;
     @FXML
@@ -64,6 +72,8 @@ public class UIHandler implements Initializable {
     private GraphicsContext graphicsContext;
     @FXML
     private Canvas canvas;
+    @FXML
+    private AnchorPane basePane;
 
     private Timeline simulationLoop;
     private ArrayList<Person> arrayOfPerson;
@@ -90,6 +100,11 @@ public class UIHandler implements Initializable {
         initializeSliderSpeedOfSim();
         initializeSliderSpeedDayOfSim();
         //initializeSimHandler();
+
+
+        basePane.setPrefHeight(600);
+        basePane.setPrefWidth(600);
+        showStatistics.setOnAction(event -> showSimStatistic());
 
     }
 
@@ -127,7 +142,7 @@ public class UIHandler implements Initializable {
      * @param actionEvent Load from File was pressed
      */
     public void loadLayoutFromFile(ActionEvent actionEvent) {
-        simulationHandler = new SimulationHandler();
+        simulationHandler = SimulationHandler.getSimulationInstance();
 
 
         //for load from File
@@ -202,9 +217,27 @@ public class UIHandler implements Initializable {
                 computeNextPositionOfPersons();
                // drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
+                showSimStatistic();
                 simulationLoop.stop();
             }
         });
+    }
+
+    private void showSimStatistic() {
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("Statistic.fxml"));
+            AnchorPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.initOwner(this.basePane.getScene().getWindow());
+            dialogStage.setTitle("Statistics");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            dialogStage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**

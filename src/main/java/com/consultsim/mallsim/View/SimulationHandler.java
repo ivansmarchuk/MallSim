@@ -16,10 +16,11 @@ public class SimulationHandler {
     ArrayList<Person> arrayOfPersons;
     ArrayList<Store> arrayOfStores;
     ArrayList<Objects> arrayOfObjects;
+    private static SimulationHandler simulationInstance = null;
 
     //Initialize values
     public SimulationHandler() {
-        stat = new StatisticHandler();
+        stat = StatisticHandler.getStatisticInstance();
         arrayOfPersons = new ArrayList<Person>();
         arrayOfStores = new ArrayList<Store>();
         arrayOfObjects = new ArrayList<Objects>();
@@ -30,6 +31,17 @@ public class SimulationHandler {
             }
         }
         fillCrashMapWithStoresAndObjects();
+    }
+
+    /**
+     *Singleton pattern
+     * @return only one instance
+     */
+    public static SimulationHandler getSimulationInstance() {
+        if (simulationInstance == null) {
+            simulationInstance = new SimulationHandler();
+        }
+        return simulationInstance;
     }
 
 

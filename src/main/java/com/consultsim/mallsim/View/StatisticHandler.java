@@ -10,7 +10,7 @@ import java.util.Random;
 public class StatisticHandler {
 
     //VARIABLES
-
+    private static StatisticHandler statisticInstance = null;
     static ArrayList<int[][]> spotArrayList = new ArrayList<int[][]>();
     private static ArrayList<Person> arrayOfPerson;
     public ArrayList<Spot> hotColdSpots;
@@ -18,6 +18,16 @@ public class StatisticHandler {
     private int hcmatrix[][];
     private int counterHotSpots;
     private int counterColdSpots;
+
+    public int getCountOfPersons() {
+        return countOfPersons;
+    }
+
+    public void setCountOfPersons(int countOfPersons) {
+        this.countOfPersons = countOfPersons;
+    }
+
+    private int countOfPersons;
     //METHODS
 
 
@@ -25,6 +35,16 @@ public class StatisticHandler {
         this.counterHotSpots = 0;
         this.counterColdSpots = 0;
         this.hotColdSpots = new ArrayList<Spot>();
+    }
+    /**
+     *Singleton pattern
+     * @return only one instance
+     */
+    public static StatisticHandler getStatisticInstance() {
+        if (statisticInstance == null) {
+            statisticInstance = new StatisticHandler();
+        }
+        return statisticInstance;
     }
 
     public static ArrayList<Person> getArrayOfPerson() {
@@ -85,6 +105,8 @@ public class StatisticHandler {
     public ArrayList<Spot> getHotColdSpots() {
         return hotColdSpots;
     }
+
+
 
     public void createSpotObjects(int height, int width, int divisorheigth, int divisorwidth, int[][] hctemp) {
         int divheight = height / divisorheigth;
