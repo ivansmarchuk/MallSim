@@ -2,7 +2,7 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="layout">
     <xs:complexType>
-      <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:sequence>
         <xs:element name="generalInfo">
           <xs:complexType>
             <xs:sequence>
@@ -21,7 +21,7 @@
                       <xs:complexType>
                         <xs:sequence>
                           <xs:element type="xs:short" name="xPos"/>
-                          <xs:element type="xs:short" name="yPos"/>
+                          <xs:element type="xs:byte" name="yPos"/>
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
@@ -29,7 +29,7 @@
                       <xs:complexType>
                         <xs:sequence>
                           <xs:element type="xs:short" name="xPos"/>
-                          <xs:element type="xs:short" name="yPos"/>
+                          <xs:element type="xs:byte" name="yPos"/>
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
@@ -68,7 +68,7 @@
                           <xs:element name="leftupperCorner">
                             <xs:complexType>
                               <xs:sequence>
-                                <xs:element type="xs:byte" name="xPos"/>
+                                <xs:element type="xs:short" name="xPos"/>
                                 <xs:element type="xs:short" name="yPos"/>
                               </xs:sequence>
                             </xs:complexType>
@@ -76,7 +76,7 @@
                           <xs:element name="downrightCorner">
                             <xs:complexType>
                               <xs:sequence>
-                                <xs:element type="xs:byte" name="xPos"/>
+                                <xs:element type="xs:short" name="xPos"/>
                                 <xs:element type="xs:short" name="yPos"/>
                               </xs:sequence>
                             </xs:complexType>
@@ -93,7 +93,7 @@
                     <xs:element name="leftupperCorner">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element type="xs:byte" name="xPos"/>
+                          <xs:element type="xs:short" name="xPos"/>
                           <xs:element type="xs:short" name="yPos"/>
                         </xs:sequence>
                       </xs:complexType>
@@ -101,7 +101,7 @@
                     <xs:element name="downrightCorner">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element type="xs:byte" name="xPos"/>
+                          <xs:element type="xs:short" name="xPos"/>
                           <xs:element type="xs:short" name="yPos"/>
                         </xs:sequence>
                       </xs:complexType>
@@ -111,9 +111,12 @@
               </xs:element>
               <xs:element type="xs:string" name="name"/>
               <xs:element name="description">
+                <xs:annotation>
+                  <xs:documentation>other/food/clothing/toys/general/tech/sport</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element type="xs:string" name="info" maxOccurs="unbounded" minOccurs="0"/>
+                    <xs:element type="xs:string" name="info"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -129,8 +132,8 @@
               <xs:element name="specialOffer">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element type="xs:time" name="startTime"/>
-                    <xs:element type="xs:time" name="endTime"/>
+                    <xs:element type="xs:string" name="startTime"/>
+                    <xs:element type="xs:string" name="endTime"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -140,11 +143,11 @@
         </xs:element>
         <xs:element name="object" maxOccurs="unbounded" minOccurs="0">
           <xs:annotation>
-            <xs:documentation>�plant� oder �bench� oder �trash bin� �plant� oder �bench� oder �trash bin�</xs:documentation>
+            <xs:documentation>“plant” oder “bench” oder “trash bin” “plant” oder “bench” oder “trash bin”</xs:documentation>
           </xs:annotation>
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="leftDownCorner" minOccurs="0">
+              <xs:element name="leftDownCorner">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element type="xs:short" name="xPos"/>
@@ -152,7 +155,7 @@
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="uprightCorner" minOccurs="0">
+              <xs:element name="uprightCorner">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element type="xs:short" name="xPos"/>
@@ -160,98 +163,12 @@
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="leftupperCorner" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element type="xs:byte" name="xPos"/>
-                    <xs:element type="xs:short" name="yPos"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="downrightCorner" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element type="xs:short" name="xPos"/>
-                    <xs:element type="xs:short" name="yPos"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element type="xs:string" name="type" minOccurs="0"/>
-              <xs:element type="xs:string" name="color" minOccurs="0"/>
-              <xs:element name="position" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="leftupperCorner">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element type="xs:byte" name="xPos"/>
-                          <xs:element type="xs:short" name="yPos"/>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                    <xs:element name="downrightCorner">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element type="xs:byte" name="xPos"/>
-                          <xs:element type="xs:short" name="yPos"/>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                    <xs:element name="door">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element name="leftupperCorner">
-                            <xs:complexType>
-                              <xs:sequence>
-                                <xs:element type="xs:byte" name="xPos"/>
-                                <xs:element type="xs:short" name="yPos"/>
-                              </xs:sequence>
-                            </xs:complexType>
-                          </xs:element>
-                          <xs:element name="downrightCorner">
-                            <xs:complexType>
-                              <xs:sequence>
-                                <xs:element type="xs:byte" name="xPos"/>
-                                <xs:element type="xs:short" name="yPos"/>
-                              </xs:sequence>
-                            </xs:complexType>
-                          </xs:element>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element type="xs:string" name="name" minOccurs="0"/>
-              <xs:element name="description" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element type="xs:string" name="info" maxOccurs="unbounded" minOccurs="0"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element type="xs:short" name="maxVisitors" minOccurs="0"/>
-              <xs:element name="openingHours" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element type="xs:time" name="openTime"/>
-                    <xs:element type="xs:time" name="closeTime"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="specialOffer" minOccurs="0">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element type="xs:time" name="startTime"/>
-                    <xs:element type="xs:time" name="endTime"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
+              <xs:element type="xs:string" name="type"/>
             </xs:sequence>
             <xs:attribute type="xs:byte" name="id" use="optional"/>
           </xs:complexType>
         </xs:element>
-      </xs:choice>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>
