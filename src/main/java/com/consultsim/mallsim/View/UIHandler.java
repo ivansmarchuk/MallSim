@@ -24,10 +24,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +42,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
-
 
 
     private int speedOfSim;
@@ -74,7 +76,7 @@ public class UIHandler implements Initializable {
     private Canvas canvas;
     @FXML
     private AnchorPane basePane;
-
+    private Stage primaryStage;
     private Timeline simulationLoop;
     private ArrayList<Person> arrayOfPerson;
     private ArrayList<Spot> arrayOfSpots;
@@ -85,7 +87,7 @@ public class UIHandler implements Initializable {
     private double dayMinutes = 540;
     private double daySeconds;
     int randomNum = 1;
-    private int countPersons  = 0;
+    private int countPersons = 0;
     private DrawFeatures drawFeatures = DrawFeatures.getDrawInstance();
 
     @Override
@@ -111,7 +113,6 @@ public class UIHandler implements Initializable {
         showStatistics.setOnAction(event -> showSimStatistic());
 
 
-
     }
 
     private void initializeSimHandler() {
@@ -126,7 +127,6 @@ public class UIHandler implements Initializable {
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
     }
-    
 
 
     /**
@@ -139,19 +139,23 @@ public class UIHandler implements Initializable {
         statisticHandler = StatisticHandler.getStatisticInstance();
 
         //for load from File
-        //final FileChooser fileChooser = new FileChooser();
-        // File file = fileChooser.showOpenDialog(primaryStage);
-        //fileHandler.readFile(file.getAbsolutePath());
+
 
         //load from file in root directory
         try {
             btnStartPause.setDisable(false);
             btnNextStep.setDisable(false);
             graphicsContext = canvas.getGraphicsContext2D();
-
+            /*
+            final FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(primaryStage);
             FileHandler fileHandler = new FileHandler();
-
+            System.out.println();
+            fileHandler.readFile(file.getAbsolutePath());
+              */
+            FileHandler fileHandler = new FileHandler();
             fileHandler.readFile("InputMallSim.xml");
+
             arrayOfStores = fileHandler.getArrayOfStores();
             arrayOfObjects = fileHandler.getArrarOfObjects();
             simulationHandler.setArrayOfObjects(arrayOfObjects);
@@ -165,6 +169,7 @@ public class UIHandler implements Initializable {
         }
 
     }
+
     private void computeNextPositionOfPersons(double dayTime) {
 
         if (Math.round(dayTime) - daySeconds > 5) {
@@ -213,7 +218,7 @@ public class UIHandler implements Initializable {
                 generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons(sliderDayTime.getValue());
 
-               //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
+                //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 showSimStatistic();
                 simulationLoop.stop();
@@ -224,9 +229,8 @@ public class UIHandler implements Initializable {
     }
 
 
-
     private void showSimStatistic() {
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("StatisticTemplate.fxml"));
             AnchorPane page = loader.load();
@@ -237,7 +241,7 @@ public class UIHandler implements Initializable {
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
