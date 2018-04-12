@@ -224,16 +224,15 @@ public class StatisticHandler {
             for (int x = 0; x < divisorwidth; x++) {
                 if (matrix[y][x] < borderLower) {
                     hcmatrix[y][x] = -1;
-                    counterColdSpots++;
                 } else if (matrix[y][x] < borderHigher) {
                     hcmatrix[y][x] = 0;
                 } else {
                     hcmatrix[y][x] = 1;
-                    counterHotSpots++;
-
                 }
             }
         }
+        counterHotSpots = countCurrentHotColdSpots(hcmatrix)[0];
+        counterColdSpots = countCurrentHotColdSpots(hcmatrix)[1];
 
 
 
