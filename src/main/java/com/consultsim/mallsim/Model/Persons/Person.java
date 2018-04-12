@@ -34,6 +34,7 @@ public class Person {
     private boolean detourX;
     private boolean detourY;
     private int detourNeeded;
+    private Person collidedWithPerson;
 
     //Variables for the maze solving algorithm
     //Es wird sinnvoll sein, das Maze auszulagern, wegen Speicherplatz
@@ -132,20 +133,25 @@ public class Person {
             }
 
                 //check if valid move
-                //if condition here 
-                if(isValidMove(nextX, nextY)){
+                //if condition here
+                int typeOfCollision = isValidMove(nextX, nextY);
+                if(typeOfCollision == 1){
                     //System.out.println("true");
                     this.currentPosition.setX(nextX);
                     this.currentPosition.setY(nextY);
                     //System.out.println("nexty: " + nextY + " nextx: " + nextX);
                     simulationHandler.crashMap[nextY][nextX] = 1;
                     simulationHandler.crashMap[currentY][currentX] = 0;
-                }else{
+                }else if(typeOfCollision == 2 || typeOfCollision == 3 || typeOfCollision == 0){
                     simulationHandler.crashMap[currentY][currentX]++;
                 }
 
                 if(simulationHandler.crashMap[currentY][currentX] == 4){
-                    nextPosition = handleCollision(nextX, nextY, currentX, currentY);
+                    if(typeOfCollision == 2){
+                        nextPosition = handleCollision(nextX, nextY, currentX, currentY, 5);
+                    }else if(typeOfCollision == 3){
+                        nextPosition = handleCollision(nextX, nextY, currentX, currentY, 1);
+                    }
                     simulationHandler.crashMap[nextPosition.getY()][nextPosition.getX()] = 1;
                     simulationHandler.crashMap[currentY][currentX] = 0;
                     movedSince = 0;
@@ -159,96 +165,130 @@ public class Person {
 
     }
 
-    private Position handleCollision(int nextX, int nextY, int currentX, int currentY){
+    private boolean isWallInBetween(int currentY, int currentX, Position p){
+        System.out.println("Arrived");
+        int lowerY = (currentY<p.getY() ? currentY : p.getY());
+        int higherY = (currentY>p.getY() ? currentY : p.getY());
+        int lowerX = (currentX<p.getX() ? currentX : p.getX());
+        int higherX = (currentX>p.getX() ? currentX : p.getX());
+
+        for(int y = lowerY; y < higherY; y++){
+            for(int x = lowerX; x < higherX; x++){
+                if(simulationHandler.crashMap[y][x] == 10){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Position handleCollision(int nextX, int nextY, int currentX, int currentY, int viewableRadius){
         int tempx;
         int tempy;
+
         Position tempPos = new Position(currentX, currentY);
 
         int chooseDirection = (int) random.nextInt(4);
-        System.out.println("chooseDir: " + chooseDirection);
-        switch (chooseDirection){
-            case 0: {
-                for(int y = -10 ; y < 10; y++){
-                    for(int x = -10; x < 10; x++){
-                        tempy = currentY + y;
-                        tempx = currentX + x;
-                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
-                            if((simulationHandler.crashMap[tempy][tempx] == 0)){
-                                tempPos = new Position(tempx, tempy);
-                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
-                                simulationHandler.crashMap[tempy][tempx] = 1;
+        int found = 0;
+
+
+            switch (chooseDirection) {
+                case 0: {
+                    for (int y = -viewableRadius; y < viewableRadius; y++) {
+                        for (int x = -viewableRadius; x < viewableRadius; x++) {
+                            tempy = currentY + y;
+                            tempx = currentX + x;
+                            if (tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000) {
+                                if ((simulationHandler.crashMap[tempy][tempx] == 0)) {
+                                  tempPos.setY(tempy);
+                                  tempPos.setX(tempx);
+
+
+                                } else if ((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)) {
+                                    simulationHandler.crashMap[tempy][tempx] = 1;
+                                }
+                            }
+
+
+                        }
+                    }
+                    break;
+                }
+                case 1:
+                    for (int y = viewableRadius; y < -viewableRadius; y--) {
+                        for (int x = viewableRadius; x < -viewableRadius; x--) {
+                            tempy = currentY + y;
+                            tempx = currentX + x;
+                            if (tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000) {
+                                if ((simulationHandler.crashMap[tempy][tempx] == 0)) {
+                                    tempPos.setY(tempy);
+                                    tempPos.setX(tempx);
+
+                                } else if ((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)) {
+                                    simulationHandler.crashMap[tempy][tempx] = 1;
+                                }
+                            }
+
+
+                        }
+                    }
+                    break;
+
+                case 2:
+                    for (int y = -viewableRadius; y < viewableRadius; y++) {
+                        for (int x = viewableRadius; x < -viewableRadius; x--) {
+                            tempy = currentY + y;
+                            tempx = currentX + x;
+                            if (tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000) {
+                                if ((simulationHandler.crashMap[tempy][tempx] == 0)) {
+                                    tempPos.setY(tempy);
+                                    tempPos.setX(tempx);
+
+                                } else if ((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)) {
+                                    simulationHandler.crashMap[tempy][tempx] = 1;
+                                }
                             }
                         }
-
-
                     }
-                }
-                break;
+                    break;
+
+                case 3:
+                    for (int y = viewableRadius; y < -viewableRadius; y--) {
+                        for (int x = -viewableRadius; x < viewableRadius; x++) {
+                            tempy = currentY + y;
+                            tempx = currentX + x;
+                            if (tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000) {
+                                if ((simulationHandler.crashMap[tempy][tempx] == 0)) {
+                                    tempPos.setY(tempy);
+                                    tempPos.setX(tempx);
+
+                                } else if ((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)) {
+                                    simulationHandler.crashMap[tempy][tempx] = 1;
+                                }
+                            }
+
+
+                        }
+                    }
+                    break;
+
             }
-            case 1:
-                for(int y = 10 ; y < -10; y--){
-                    for(int x = 10; x < -10; x--){
-                        tempy = currentY + y;
-                        tempx = currentX + x;
-                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
-                            if((simulationHandler.crashMap[tempy][tempx] == 0)){
-                                tempPos = new Position(tempx, tempy);
-                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
-                                simulationHandler.crashMap[tempy][tempx] = 1;
-                            }
-                        }
 
 
-                    }
-                }
-                break;
-
-            case 2:
-                for(int y = -10 ; y < 10; y++){
-                    for(int x = 10; x < -10; x--){
-                        tempy = currentY + y;
-                        tempx = currentX + x;
-                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
-                            if((simulationHandler.crashMap[tempy][tempx] == 0)){
-                                tempPos = new Position(tempx, tempy);
-                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
-                                simulationHandler.crashMap[tempy][tempx] = 1;
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 3:
-                for(int y = 10 ; y < -10; y--){
-                    for(int x = -10; x < 10; x++){
-                        tempy = currentY + y;
-                        tempx = currentX + x;
-                        if(tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000){
-                            if((simulationHandler.crashMap[tempy][tempx] == 0)){
-                                tempPos = new Position(tempx, tempy);
-                            }else if((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)){
-                                simulationHandler.crashMap[tempy][tempx] = 1;
-                            }
-                        }
-
-
-                    }
-                }
-                break;
-
+        if(!isWallInBetween(currentY, currentX, tempPos)) {
+            return tempPos;
+        }else{
+                tempPos.setX(currentX);
+            tempPos.setY(currentY);
         }
-
-
-
-
         return tempPos;
+
     }
 
     //check, if the next position is a valid one
-    public boolean isValidMove(int nextX, int nextY){
+    public int isValidMove(int nextX, int nextY){
         if(nextX < 0 || nextY < 0 || nextX > 999 || nextY > 999){
-            return false;
+            return 0;
         }
             for(Person p: simulationHandler.getArrayOfPersons()){
                 int x = p.getCurrentPosition().getX() - nextX;
@@ -257,14 +297,14 @@ public class Person {
                 //System.out.println("Dist: " + distance);
 
                 if((distance < 11) && (p.id != this.id)){
-                    return false;
+                    return 2;
                 }
 
                 if(simulationHandler.crashMap[nextY][nextX] == 10){
-                    return false;
+                    return 3;
                 }
             }
-            return true;
+            return 1;
         }
 
     public String generateInterest(){
