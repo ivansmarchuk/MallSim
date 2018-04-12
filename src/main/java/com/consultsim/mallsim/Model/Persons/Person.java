@@ -35,6 +35,7 @@ public class Person {
     private boolean detourY;
     private int detourNeeded;
     private Person collidedWithPerson;
+    private int waitedSince = 0;
 
     //Variables for the maze solving algorithm
     //Es wird sinnvoll sein, das Maze auszulagern, wegen Speicherplatz
@@ -61,6 +62,7 @@ public class Person {
         detourX = false;
         detourY = false;
         detourNeeded = 4;
+        waitedSince = 0;
 
 
         if (!(interestedIn.equals("nothing"))) {
@@ -144,13 +146,14 @@ public class Person {
                     simulationHandler.crashMap[currentY][currentX] = 0;
                 }else if(typeOfCollision == 2 || typeOfCollision == 3 || typeOfCollision == 0){
                     simulationHandler.crashMap[currentY][currentX]++;
+                    waitedSince++;
                 }
 
                 if(simulationHandler.crashMap[currentY][currentX] == 4){
                     if(typeOfCollision == 2){
-                        nextPosition = handleCollision(nextX, nextY, currentX, currentY, 5);
+                        nextPosition = handleCollision(nextX, nextY, currentX, currentY, 3);
                     }else if(typeOfCollision == 3){
-                        nextPosition = handleCollision(nextX, nextY, currentX, currentY, 1);
+                        nextPosition = handleCollision(nextX, nextY, currentX, currentY, 3);
                     }
                     simulationHandler.crashMap[nextPosition.getY()][nextPosition.getX()] = 1;
                     simulationHandler.crashMap[currentY][currentX] = 0;
@@ -276,10 +279,16 @@ public class Person {
 
 
         if(!isWallInBetween(currentY, currentX, tempPos)) {
+                waitedSince = 0;
             return tempPos;
         }else{
                 tempPos.setX(currentX);
-            tempPos.setY(currentY);
+                tempPos.setY(currentY);
+                waitedSince++;
+        }
+
+        if(waitedSince > 15){
+                simulationHandler.getArrayOfPersons().remove(this);
         }
         return tempPos;
 
