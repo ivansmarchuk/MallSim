@@ -7,6 +7,7 @@ import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
+import com.consultsim.mallsim.View.CanvasFeatures.DrawFeatures;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,10 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
@@ -36,6 +35,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
@@ -82,9 +82,11 @@ public class UIHandler implements Initializable {
     private StatisticHandler statisticHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
-    private double dayHours = 540;
-
+    private double dayMinutes = 540;
+    private double daySeconds;
+    int randomNum = 1;
     private int countPersons  = 0;
+    private DrawFeatures drawFeatures = DrawFeatures.getDrawInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -118,27 +120,14 @@ public class UIHandler implements Initializable {
         arrayOfSpots = new ArrayList<>();
         // Here are initialized persons
         simulationHandler.initializePersons();
-        //drawCrashMap(graphicsContext, SimulationHandler.crashMap);
+        //drawFeature.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
 
     }
     
-    private void drawCrashMap(GraphicsContext gc, int[][] crashMap) {
-        gc.setFill(Color.AQUA);
-        gc.setLineWidth(0.5);
-        for (int y = 0; y < 1000; y++) {
-            for (int x = 0; x < 1000; x++) {
-                if (crashMap[y][x] == 10){
-                    gc.strokeOval(x, y, 1, 1);
-                    //gc.fillOval(x, y, 1, 1);
-                }
-                //System.out.print(crashMap[y][x]+ " ");
-            }
-           // System.out.println();
-        }
-    }
+
 
     /**
      * If Button LoadFromFile was pressed
@@ -176,14 +165,20 @@ public class UIHandler implements Initializable {
         }
 
     }
+    private void computeNextPositionOfPersons(double dayTime) {
 
-    private void computeNextPositionOfPersons() {
-
-        //generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
-        simulationHandler.computeNextPositionOfPersons();
+        if (Math.round(dayTime) - daySeconds > 5) {
+            simulationHandler.computeNextPositionOfPersons();
+            daySeconds = Math.round(dayTime);
+        }
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         arrayOfSpots = simulationHandler.stat.getHotColdSpots();
     }
+    /*
+    private void computeNextPositionOfPersons() {
+
+
+    }*/
 
     /**
      * Initializes the simulation loop
@@ -209,28 +204,31 @@ public class UIHandler implements Initializable {
             simulationHandler.clearEverything();
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
-            drawHotColdSpots(graphicsContext, arrayOfSpots);
-            drawPersons(graphicsContext, arrayOfPerson);
-
-            double dayTime = sliderDayTime.getValue();
-            double newDayTime = dayTime + duration.toSeconds() * sliderSpeedDayOfSim.getValue();
+            drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, 0.2);
+            drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
+            double newDayTime = sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * 25;
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
-                computeNextPositionOfPersons();
-               // drawCrashMap(graphicsContext, SimulationHandler.crashMap);
+                computeNextPositionOfPersons(sliderDayTime.getValue());
+
+               //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 showSimStatistic();
                 simulationLoop.stop();
+                clearCanvas(graphicsContext);
+                simulationHandler.arrayOfPersons = new ArrayList<>();
             }
         });
     }
 
+
+
     private void showSimStatistic() {
         try{
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("Statistic.fxml"));
+            loader.setLocation(getClass().getResource("StatisticTemplate.fxml"));
             AnchorPane page = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.initOwner(this.basePane.getScene().getWindow());
@@ -275,17 +273,17 @@ public class UIHandler implements Initializable {
 
         Random rand = new Random();
         //System.out.println("DayTime: " + Math.round(dayTime)/60);
-        if (Math.round(dayTime) / 60 - dayHours > 10) {
+        if (Math.round(dayTime) / 60 - dayMinutes > randomNum) {
             for (int i = 0; i < (int) numberOfPerson; i++) {
                 int x = rand.nextInt((maxX - minX) + 1) + minX;
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
                 arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler));
-                countPersons++;
-                statisticHandler.setCountOfPersons(countPersons);
+                statisticHandler.setCountOfPersons(countPersons++);
             }
-            arrayOfPerson.remove(arrayOfPerson.size()-1);
-            dayHours = Math.round(dayTime) / 60;
+            randomNum = ThreadLocalRandom.current().nextInt(1, 10);
+            //arrayOfPerson.remove(arrayOfPerson.size()-1);
+            dayMinutes = Math.round(dayTime) / 60;
         }
 
     }
@@ -348,6 +346,7 @@ public class UIHandler implements Initializable {
         sliderDayTime.setLabelFormatter(stringConverter);
         sliderDayTime.valueProperty().addListener((observable, oldValue, newValue) ->
                 labelDayTime.setText(stringConverter.toString(newValue.doubleValue())));
+        daySeconds = sliderDayTime.getMin();
 
     }
 
@@ -355,77 +354,9 @@ public class UIHandler implements Initializable {
      * Draws stores and other objects on canvas
      */
     private void drawLayoutFromXMLFile() {
-        drawStores(graphicsContext, arrayOfStores);
-        drawObjects(graphicsContext, arrayOfObjects);
+        drawFeatures.drawStores(graphicsContext, arrayOfStores);
+        drawFeatures.drawObjects(graphicsContext, arrayOfObjects);
     }
-
-    /**
-     * @param gc            GraphicsContext
-     * @param arrayOfStores array of stores from XML temmplate
-     */
-    private void drawStores(GraphicsContext gc, ArrayList<Store> arrayOfStores) {
-        gc.setStroke(Color.BLACK);
-        for (Store store : arrayOfStores) {
-            gc.setFill(store.getColor());
-            gc.fillRect(store.getPosition()[0], store.getPosition()[1],
-                    store.getPosition()[2] - store.getPosition()[0],
-                    store.getPosition()[3] - store.getPosition()[1]);
-            gc.save();
-            gc.setFill(Color.BLACK);
-            gc.fillText(store.getLabel(), store.getPosition()[0] + 5,
-                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2);
-            gc.restore();
-            gc.strokeLine(store.getDoorPosition()[0], store.getDoorPosition()[1], store.getDoorPosition()[2], store.getDoorPosition()[3]);
-            //System.out.println(store.getId());
-        }
-    }
-
-    /**
-     * @param gc             GraphicsContext
-     * @param arrayOfObjects array of objects from XML temmplate
-     */
-    private void drawObjects(GraphicsContext gc, ArrayList<Objects> arrayOfObjects) {
-        for (Objects obj : arrayOfObjects) {
-            if (obj.getLabel().contains("plant")) {
-                gc.setFill(Color.GREEN);
-            } else if (obj.getLabel().contains("trash bin")) {
-                gc.setFill(Color.BROWN);
-            }
-            gc.fillRect(obj.getPosition()[0], obj.getPosition()[1],
-                    obj.getPosition()[2] - obj.getPosition()[0],
-                    obj.getPosition()[3] - obj.getPosition()[1]);
-            //System.out.println("Object " + obj.getId());
-        }
-
-    }
-
-    private void drawHotColdSpots(GraphicsContext gc, ArrayList<Spot> arrayOfSpots) {
-
-        for (Spot spot : arrayOfSpots) {
-            if (spot.getSemaphor() == 1) {
-                gc.setFill(Color.rgb(255, 64, 64, 0.2));
-            } else if (spot.getSemaphor() == 2) {
-                gc.setFill(Color.rgb(0, 0, 139, 0.2));
-            }
-            //gc.fillRect(0,0, 50,50);
-            gc.getCanvas().setLayoutX(10);
-            gc.fillRect(spot.getX(), spot.getY(), spot.getWidth(), spot.getHeigth());
-
-        }
-        //System.out.println("H/C " + s.getX() + " " + s.getY() + " " + s.getWidth() + " " + s.getHeigth());
-    }
-
-    /**
-     * @param gc            GraphicsContext
-     * @param arrayOfPerson array of Person
-     */
-    private void drawPersons(GraphicsContext gc, ArrayList<Person> arrayOfPerson) {
-        for (Person p : arrayOfPerson) {
-            gc.setFill(Color.BLACK);
-            gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5, 5);
-        }
-    }
-
 
     private void initializeCanvas() {
         canvas.setHeight(1000);
@@ -490,7 +421,8 @@ public class UIHandler implements Initializable {
         try {
             root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
             simulationLoop.stop();
-            Thread.currentThread().interrupt();
+            simulationHandler.arrayOfPersons = new ArrayList<>();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
