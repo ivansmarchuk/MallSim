@@ -41,7 +41,6 @@ public class StatisticTemplateHandler implements Initializable{
 
         initializeCanvas();
 
-
         lblTitle.setFont(new Font(Configuration.MAX_FONT_SIZE));
 
         lblCountHoldSpots.setText(Integer.toString(statisticHandler.getCounterColdSpots()));
@@ -71,4 +70,6 @@ public class StatisticTemplateHandler implements Initializable{
         canvas.setScaleY(1);
 
     }
+
+
 }

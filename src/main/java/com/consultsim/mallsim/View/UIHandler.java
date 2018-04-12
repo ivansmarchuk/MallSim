@@ -422,6 +422,10 @@ public class UIHandler implements Initializable {
             root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
             simulationLoop.stop();
             simulationHandler.arrayOfPersons = new ArrayList<>();
+            simulationHandler.arrayOfObjects = new ArrayList<>();
+            statisticHandler.hotColdSpots = new ArrayList<>();
+            simulationHandler.arrayOfStores = new ArrayList<>();
+
 
         } catch (IOException e) {
             e.printStackTrace();
