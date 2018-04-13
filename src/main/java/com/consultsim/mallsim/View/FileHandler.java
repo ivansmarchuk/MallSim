@@ -109,7 +109,7 @@ public class FileHandler {
     private void handleGeneralInfo(Node n) {
 
         Element element = (Element) n;
-        Mall mall = new Mall();
+        Mall mall = Mall.getMallInstance();
 
         String xSize = element.getElementsByTagName("xSize").item(0).getChildNodes().item(0).getNodeValue();
         String ySize = element.getElementsByTagName("ySize").item(0).getChildNodes().item(0).getNodeValue();

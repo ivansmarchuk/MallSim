@@ -3,11 +3,19 @@ package com.consultsim.mallsim.Model.StaticObjects;
 import com.consultsim.mallsim.Model.Position;
 
 public class Mall {
+    private static Mall mallInstance = null;
 
     private Position doorLeftUpper;
     private Position doorDownRight;
     private int ySize;
     private int xSize;
+
+    public static Mall getMallInstance() {
+        if (mallInstance == null) {
+            mallInstance = new Mall();
+        }
+        return mallInstance;
+    }
 
     public Position getDoorLeftUpper() {
         return doorLeftUpper;

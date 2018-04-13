@@ -12,12 +12,12 @@
 
       <leftupperCorner>
         <xPos>420</xPos>
-        <yPos>0</yPos>
+        <yPos>1</yPos>
       </leftupperCorner>
 
       <downrightCorner>
         <xPos>600</xPos>
-        <yPos>0</yPos>
+        <yPos>3</yPos>
       </downrightCorner>
 
     </entranceDoor>

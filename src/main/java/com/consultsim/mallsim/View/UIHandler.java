@@ -24,13 +24,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -86,8 +84,7 @@ public class UIHandler implements Initializable {
     private ArrayList<Objects> arrayOfObjects;
     private double dayMinutes = 540;
     private double daySeconds;
-    int randomNum = 1;
-    private int countPersons = 0;
+
     private DrawFeatures drawFeatures = DrawFeatures.getDrawInstance();
 
     @Override
@@ -124,7 +121,7 @@ public class UIHandler implements Initializable {
         //drawFeature.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
         arrayOfPerson = simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
-        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
+        arrayOfSpots = simulationHandler.statisticHandler.getHotColdSpots();
 
     }
 
@@ -177,7 +174,7 @@ public class UIHandler implements Initializable {
             daySeconds = Math.round(dayTime);
         }
         arrayOfPerson = simulationHandler.getArrayOfPersons();
-        arrayOfSpots = simulationHandler.stat.getHotColdSpots();
+        arrayOfSpots = simulationHandler.statisticHandler.getHotColdSpots();
     }
     /*
     private void computeNextPositionOfPersons() {
@@ -215,7 +212,7 @@ public class UIHandler implements Initializable {
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
-                generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
+                simulationHandler.generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 computeNextPositionOfPersons(sliderDayTime.getValue());
 
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
@@ -268,29 +265,6 @@ public class UIHandler implements Initializable {
         }
     }
 
-    private void generatePerson(double numberOfPerson, double dayTime) {
-        int maxX = 500;
-        int minX = 480;
-        int maxY = 70;
-        int minY = 40;
-
-
-        Random rand = new Random();
-        //System.out.println("DayTime: " + Math.round(dayTime)/60);
-        if (Math.round(dayTime) / 60 - dayMinutes > randomNum) {
-            for (int i = 0; i < (int) numberOfPerson; i++) {
-                int x = rand.nextInt((maxX - minX) + 1) + minX;
-                int y = rand.nextInt((maxY - minY) + 1) + minY;
-
-                arrayOfPerson.add(new Person(new Position(x, y), 10, simulationHandler));
-                statisticHandler.setCountOfPersons(countPersons++);
-            }
-            randomNum = ThreadLocalRandom.current().nextInt(1, 10);
-            //arrayOfPerson.remove(arrayOfPerson.size()-1);
-            dayMinutes = Math.round(dayTime) / 60;
-        }
-
-    }
 
     /**
      * called when the button 'Next Step' is pressed

@@ -3,16 +3,24 @@ package com.consultsim.mallsim.View;
 
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.Model.Position;
+import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class SimulationHandler {
 
+    double dayTimeInMinutes = 540;
+    double randomNum =  1.0;
+    private int countPersons = 0;
+    private Mall mall;
+
     public static int crashMap[][];
-    public StatisticHandler stat;
+    public StatisticHandler statisticHandler;
     ArrayList<Person> arrayOfPersons;
     ArrayList<Store> arrayOfStores;
     ArrayList<Objects> arrayOfObjects;
@@ -31,7 +39,8 @@ public class SimulationHandler {
     //Initialize values
     public SimulationHandler() {
 
-        stat = StatisticHandler.getStatisticInstance();
+        statisticHandler = StatisticHandler.getStatisticInstance();
+        mall = Mall.getMallInstance();
 
         arrayOfPersons = new ArrayList<Person>();
         arrayOfStores = new ArrayList<Store>();
@@ -147,18 +156,18 @@ public class SimulationHandler {
             }
         }
 */
-        int m[][] = stat.recognizeHCSpots(1000, 1000, 100, 100, arrayOfPersons);
-        stat.createSpotObjects(1000, 1000, 100, 100, m);
+        int m[][] = statisticHandler.recognizeHCSpots(1000, 1000, 100, 100, arrayOfPersons);
+        statisticHandler.createSpotObjects(1000, 1000, 100, 100, m);
     }
 
     //deletes content of hotcoldspots and computes them new, so only a momentary picture is shown
     public void clearEverything() {
         //this.arrayOfPersons.clear();
-        this.stat.hotColdSpots.clear();
+        this.statisticHandler.hotColdSpots.clear();
 
 
-        int m[][] = stat.recognizeHCSpots(1000, 1000, 100, 100, arrayOfPersons);
-        this.stat.createSpotObjects(1000, 1000, 100, 100, m);
+        int m[][] = statisticHandler.recognizeHCSpots(1000, 1000, 100, 100, arrayOfPersons);
+        this.statisticHandler.createSpotObjects(1000, 1000, 100, 100, m);
     }
 
 
@@ -204,5 +213,30 @@ public class SimulationHandler {
 
     public void setArrayOfObjects(ArrayList<Objects> arrayOfObjects) {
         this.arrayOfObjects = arrayOfObjects;
+    }
+
+    public void generatePerson(double numberOfPerson, double dayTime) {
+
+        int minX = mall.getDoorLeftUpper().getX();
+        int maxX = mall.getDoorDownRight().getX();
+        int minY = mall.getDoorLeftUpper().getY();
+        int maxY = mall.getDoorDownRight().getY();
+
+        Random rand = new Random();
+        //System.out.println("DayTime: " + Math.round(dayTime)/60);
+        if (Math.round(dayTime) / 60 - dayTimeInMinutes > randomNum) {
+            for (int i = 0; i < (int) numberOfPerson; i++) {
+                int x = rand.nextInt((maxX - minX) + 1) + minX;
+                int y = rand.nextInt((maxY - minY) + 1) + minY;
+
+                arrayOfPersons.add(new Person(new Position(x, y), 10, SimulationHandler.getSimulationInstance()));
+                statisticHandler.setCountOfPersons(countPersons++);
+            }
+
+            randomNum = ThreadLocalRandom.current().nextInt(1, 10);
+            //arrayOfPerson.remove(arrayOfPerson.size()-1);
+            dayTimeInMinutes = Math.round(dayTime) / 60;
+        }
+
     }
 }
