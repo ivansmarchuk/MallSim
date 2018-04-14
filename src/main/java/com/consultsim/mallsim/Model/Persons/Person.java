@@ -286,7 +286,7 @@ public class Person {
         }
 
         if (waitedSince > 15) {
-            simulationHandler.getArrayOfPersons().remove(this);
+            //simulationHandler.getArrayOfPersons().remove(this);
         }
         return tempPos;
 

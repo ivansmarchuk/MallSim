@@ -52,14 +52,14 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#loadLayoutFromFile" prefWidth="90.0" text="Load File..." />
+                                <Button mnemonicParsing="false" onAction="#loadLayoutFromFile" prefWidth="120.0" text="Layout hochladen" />
                             </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" spacing="5.0">
                             <children>
-                                <Button fx:id="btnStartPause" disable="true" mnemonicParsing="false" onAction="#pauseStartSim" prefWidth="75.0" text="Start/Pause" />
+                                <Button fx:id="btnStartPause" disable="true" mnemonicParsing="false" onAction="#pauseStartSim" prefWidth="90.0" text="Start/Pause" />
 
-                                <Button fx:id="btnNextStep" disable="true" mnemonicParsing="false" onAction="#getNextStep" prefWidth="75.0" text="Next Step" />
+                                <Button fx:id="btnNextStep" disable="true" mnemonicParsing="false" onAction="#getNextStep" prefWidth="90.0" text="Nächste Schritte" />
                                 <Button mnemonicParsing="false" onAction="#resetSim" prefWidth="75.0" text="Reset" />
                             </children>
                             <VBox.margin>
