@@ -95,14 +95,14 @@ public class SimulationHandler {
             //fill crashmap only an border with 10
             for (int y = yPosLeftUpper; y < yPosDownRight; y++) {
                 for (int x = xPosLeftUpper; x < xPosDownRight; x++) {
-                    /*
+
                     if (y == yPosLeftUpper || y == yPosDownRight - 1) {
                         crashMap[y][x] = 10;
                     } else if (x == xPosLeftUpper || x == xPosDownRight - 1) {
                         crashMap[y][x] = 10;
                     }
-                    */
-                    crashMap[y][x] = 10;
+
+                    //crashMap[y][x] = 10;
 
                 }
             }
