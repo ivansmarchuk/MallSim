@@ -90,7 +90,7 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Tamplate">
+          <Tab text="Supermarket Plan mit Hot/Cold Spots">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

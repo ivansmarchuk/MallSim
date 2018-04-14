@@ -8,32 +8,26 @@ import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class SimulationHandler {
 
-    double dayTimeInMinutes = 540;
-    double randomNum =  1.0;
-    private int countPersons = 0;
-    private Mall mall;
-
     public static int crashMap[][];
+    private static SimulationHandler simulationInstance;
     public StatisticHandler statisticHandler;
+    double dayTimeInMinutes = 540;
+    double randomNum = 1.0;
     ArrayList<Person> arrayOfPersons;
     ArrayList<Store> arrayOfStores;
+    private Store goalStore;
+
     ArrayList<Objects> arrayOfObjects;
-    private static SimulationHandler simulationInstance = null;
-
-    public int getCountOfPersons() {
-        return countOfPersons;
-    }
-
-    public void setCountOfPersons(int countOfPersons) {
-        this.countOfPersons = countOfPersons;
-    }
-
+    private int countPersons = 0;
+    private Mall mall;
     private int countOfPersons = 0;
 
     //Initialize values
@@ -55,7 +49,8 @@ public class SimulationHandler {
     }
 
     /**
-     *Singleton pattern
+     * Singleton pattern
+     *
      * @return only one instance
      */
     public static SimulationHandler getSimulationInstance() {
@@ -65,6 +60,13 @@ public class SimulationHandler {
         return simulationInstance;
     }
 
+    public int getCountOfPersons() {
+        return countOfPersons;
+    }
+
+    public void setCountOfPersons(int countOfPersons) {
+        this.countOfPersons = countOfPersons;
+    }
 
     public void fillCrashMapWithStoresAndObjects() {
         int xPosLeftUpper = 0;
@@ -93,36 +95,42 @@ public class SimulationHandler {
             //fill crashmap only an border with 10
             for (int y = yPosLeftUpper; y < yPosDownRight; y++) {
                 for (int x = xPosLeftUpper; x < xPosDownRight; x++) {
-                    if (y == yPosLeftUpper || y == yPosDownRight -1) {
+                    /*
+                    if (y == yPosLeftUpper || y == yPosDownRight - 1) {
+                        crashMap[y][x] = 10;
+                    } else if (x == xPosLeftUpper || x == xPosDownRight - 1) {
                         crashMap[y][x] = 10;
                     }
-                    else if (x==xPosLeftUpper || x == xPosDownRight -1){
-                        crashMap[y][x] = 10;
-                    }
+                    */
+                    crashMap[y][x] = 10;
+
                 }
             }
             // clear a border where is a door
-            if(s.getDoorPosition()[1] == s.getDoorPosition()[3]){
-                if (s.getDoorPosition()[1] == s.getPosition()[1]){
+
+            if (s.getDoorPosition()[1] == s.getDoorPosition()[3]) {
+                if (s.getDoorPosition()[1] == s.getPosition()[1]) {
                     for (int x = s.getDoorPosition()[0]; x < s.getDoorPosition()[2]; x++) {
                         crashMap[s.getDoorPosition()[1]][x] = 1;
                     }
-                }else {
+                } else {
                     for (int x = s.getDoorPosition()[0]; x < s.getDoorPosition()[2]; x++) {
-                        crashMap[s.getDoorPosition()[1]-1][x] = 1;
+                        crashMap[s.getDoorPosition()[1] - 1][x] = 1;
                     }
                 }
-            }else{
-                if (s.getDoorPosition()[0] == s.getPosition()[0]){
+            } else {
+                if (s.getDoorPosition()[0] == s.getPosition()[0]) {
                     for (int y = s.getDoorPosition()[1]; y < s.getDoorPosition()[3]; y++) {
                         crashMap[y][s.getDoorPosition()[0]] = 1;
                     }
-                }else {
+                } else {
                     for (int y = s.getDoorPosition()[1]; y < s.getDoorPosition()[3]; y++) {
-                        crashMap[y][s.getDoorPosition()[0]-1] = 1;
+                        crashMap[y][s.getDoorPosition()[0] - 1] = 1;
                     }
                 }
             }
+
+
         }
 
 
@@ -142,7 +150,9 @@ public class SimulationHandler {
 
     //Test function, adds specific amount of persons
     public void initializePersons() {
+
         fillCrashMapWithStoresAndObjects();
+
         Random random = new Random();
 
         /*
@@ -173,8 +183,7 @@ public class SimulationHandler {
 
     public void computeNextPositionOfPersons() {
         for (Person p : arrayOfPersons) {
-
-            p.computeNext();
+           p.computeNext();
         }
 
     }
@@ -215,6 +224,13 @@ public class SimulationHandler {
         this.arrayOfObjects = arrayOfObjects;
     }
 
+
+    /**
+     * Generation of new people depending on settings and day time
+     *
+     * @param numberOfPerson amount of person that should be generated
+     * @param dayTime        the period of day time
+     */
     public void generatePerson(double numberOfPerson, double dayTime) {
 
         int minX = mall.getDoorLeftUpper().getX();
@@ -229,14 +245,28 @@ public class SimulationHandler {
                 int x = rand.nextInt((maxX - minX) + 1) + minX;
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
-                arrayOfPersons.add(new Person(new Position(x, y), 10, SimulationHandler.getSimulationInstance()));
+                goalStore = getRandomItem(arrayOfStores);
+                System.out.println(goalStore.getLabel());
+                arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStore));
                 statisticHandler.setCountOfPersons(countPersons++);
             }
-
             randomNum = ThreadLocalRandom.current().nextInt(1, 10);
-            //arrayOfPerson.remove(arrayOfPerson.size()-1);
             dayTimeInMinutes = Math.round(dayTime) / 60;
         }
 
+    }
+
+    /**
+     * get a rantom element from any lists
+     *
+     * @param list list where should be found a random element
+     * @param <T>  type of list
+     * @return random element from a list
+     */
+    private <T> T getRandomItem(List<T> list) {
+        Random random = new Random();
+        int listSize = list.size();
+        int randomIndex = random.nextInt(listSize);
+        return list.get(randomIndex);
     }
 }

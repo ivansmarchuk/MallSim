@@ -87,23 +87,6 @@
                                 <Insets top="10.0" />
                             </VBox.margin>
                         </HBox>
-                        <VBox alignment="TOP_LEFT">
-                            <children>
-                                <HBox spacing="10.0">
-                                    <VBox.margin>
-                                        <Insets top="20.0" />
-                                    </VBox.margin>
-                                    <children>
-                                        <Label alignment="TOP_LEFT" maxHeight="25.0" prefHeight="25.0" text="Frame" />
-                                        <Label fx:id="lblSpeedValue" text="labelSpeedValue" />
-                                    </children>
-                                </HBox>
-                                <Slider fx:id="sliderSpeedOfSim" blockIncrement="5.0" layoutX="0.0" layoutY="280.0" max="200.0" min="5.0" prefHeight="25.0" prefWidth="300.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
-                            </children>
-                            <VBox.margin>
-                                <Insets right="5.0" />
-                            </VBox.margin>
-                        </VBox>
                   <VBox>
                      <children>
                         <HBox spacing="5.0">
@@ -136,6 +119,9 @@
                            </VBox.margin>
                         </HBox>
                      </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
                   </VBox>
                   <HBox alignment="CENTER" prefHeight="30.0" prefWidth="295.0">
                      <children>

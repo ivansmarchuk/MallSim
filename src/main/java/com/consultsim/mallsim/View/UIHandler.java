@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 public class UIHandler implements Initializable {
 
 
-    private int speedOfSim;
+
     private int speedDayOfSim;
     @FXML
     public Button showStatistics;
@@ -53,11 +53,7 @@ public class UIHandler implements Initializable {
     @FXML
     public Button btnNextStep;
     @FXML
-    public Slider sliderSpeedOfSim;
-    @FXML
     public Label lblSpeedDayValue;
-    @FXML
-    public Label lblSpeedValue;
     @FXML
     public Button btnStartPause;
     @FXML
@@ -90,17 +86,12 @@ public class UIHandler implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeCanvas();
-        speedOfSim = Configuration.INITIAL_SPEED;
         speedDayOfSim = Configuration.INITIAL_DAY_SPEED;
         lblSpeedDayValue.setText(String.format("%d", this.speedDayOfSim));
-        sliderSpeedOfSim.setValue(this.speedDayOfSim);
         btnStartPause.setText("Start");
-        lblSpeedValue.setText(String.format("%d", this.speedOfSim));
-        sliderSpeedOfSim.setValue(this.speedOfSim);
 
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
-        initializeSliderSpeedOfSim();
         initializeSliderSpeedDayOfSim();
         //initializeSimHandler();
 
@@ -158,37 +149,21 @@ public class UIHandler implements Initializable {
             simulationHandler.setArrayOfObjects(arrayOfObjects);
             simulationHandler.setArrayOfStores(arrayOfStores);
             initializeSimHandler();
-
             drawLayoutFromXMLFile();
-            buildSimulationStart(this.speedOfSim);
+            buildSimulationStart(this.speedDayOfSim);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void computeNextPositionOfPersons(double dayTime) {
-
-        if (Math.round(dayTime) - daySeconds > 5) {
-            simulationHandler.computeNextPositionOfPersons();
-            daySeconds = Math.round(dayTime);
-        }
-        arrayOfPerson = simulationHandler.getArrayOfPersons();
-        arrayOfSpots = simulationHandler.statisticHandler.getHotColdSpots();
-    }
-    /*
-    private void computeNextPositionOfPersons() {
-
-
-    }*/
-
     /**
      * Initializes the simulation loop
      *
-     * @param speedOfSim fps
+     * @param speedDayOfSim fps
      */
-    private void buildSimulationStart(int speedOfSim) {
-        Duration duration = Duration.millis(1000 / (float) speedOfSim);
+    private void buildSimulationStart(int speedDayOfSim) {
+        Duration duration = Duration.millis(1000/(float) (speedDayOfSim * 10));
         KeyFrame frame = getToNextFrame(duration);
         simulationLoop = new Timeline();
         simulationLoop.setCycleCount(Timeline.INDEFINITE);
@@ -208,13 +183,13 @@ public class UIHandler implements Initializable {
             drawLayoutFromXMLFile();
             drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, 0.2);
             drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
-            double newDayTime = sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * 25;
+            double newDayTime = sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * 50;
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
+                //generation new persons
                 simulationHandler.generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
-                computeNextPositionOfPersons(sliderDayTime.getValue());
-
+                simulationHandler.computeNextPositionOfPersons();
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 showSimStatistic();
@@ -273,7 +248,7 @@ public class UIHandler implements Initializable {
      */
     @FXML
     public void getNextStep(ActionEvent event) {
-        Duration duration = Duration.millis(1000 / (float) speedOfSim);
+        Duration duration = Duration.millis(1000 / (float) (speedDayOfSim * 10));
         KeyFrame frame = getToNextFrame(duration);
         simulationLoop = new Timeline();
         simulationLoop.setCycleCount(1);
@@ -352,28 +327,21 @@ public class UIHandler implements Initializable {
     /**
      * Event handling for slider  'Geschwindigkeit'
      */
-    private void initializeSliderSpeedOfSim() {
-        sliderSpeedOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
-            sliderSpeedOfSim.setValue(newValue.intValue());
-            lblSpeedValue.setText(String.format("%d", newValue.intValue()));
-            speedOfSim = (int) sliderSpeedOfSim.getValue();
-            changeFrame(speedOfSim);
-        });
-    }
 
     private void initializeSliderSpeedDayOfSim() {
         sliderSpeedDayOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
             sliderSpeedDayOfSim.setValue(newValue.intValue());
             lblSpeedDayValue.setText(String.format("%d", newValue.intValue()));
             speedDayOfSim = (int) sliderSpeedDayOfSim.getValue();
+            changeFrame(speedDayOfSim);
         });
     }
 
-    private void changeFrame(int speedOfSim) {
+    private void changeFrame(int speedDayOfSim) {
         Animation.Status status = simulationLoop.getStatus();
         simulationLoop.stop();
         simulationLoop.getKeyFrames().clear();
-        buildSimulationStart(speedOfSim);
+        buildSimulationStart(speedDayOfSim);
         if (status == Animation.Status.RUNNING) {
             simulationLoop.play();
         }
