@@ -38,9 +38,17 @@ public class DrawFeatures {
                     store.getPosition()[3] - store.getPosition()[1]);
             gc.save();
             gc.setFill(Color.BLACK);
-            gc.fillText(store.getLabel(), store.getPosition()[0] + 5,
+            gc.setFont(new Font(gc.getFont().getName(), 13.0));
+            gc.fillText(store.getLabel() + "\n", store.getPosition()[0] + 5,
                     store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2);
+
+            gc.save();
+            gc.setFill(Color.DARKGRAY);
+            gc.setFont(new Font(gc.getFont().getName(), 10.0));
+            gc.fillText("(Kapazität: "+ store.getPeopleCounter() + " max)", store.getPosition()[0] + 5,
+                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2 + 15);
             gc.restore();
+
             gc.strokeLine(store.getDoorPosition()[0], store.getDoorPosition()[1], store.getDoorPosition()[2], store.getDoorPosition()[3]);
             //System.out.println(store.getId());
         }
