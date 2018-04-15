@@ -24,11 +24,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -134,22 +136,40 @@ public class UIHandler implements Initializable {
             btnStartPause.setDisable(false);
             btnNextStep.setDisable(false);
             graphicsContext = canvas.getGraphicsContext2D();
-            /*
-            final FileChooser fileChooser = new FileChooser();
-            File file = fileChooser.showOpenDialog(primaryStage);
-            FileHandler fileHandler = new FileHandler();
-            System.out.println();
-            fileHandler.readFile(file.getAbsolutePath());
-              */
-            FileHandler fileHandler = new FileHandler();
-            fileHandler.readFile("InputMallSim.xml");
 
-            arrayOfStores = fileHandler.getArrayOfStores();
-            arrayOfObjects = fileHandler.getArrarOfObjects();
-            simulationHandler.setArrayOfObjects(arrayOfObjects);
-            simulationHandler.setArrayOfStores(arrayOfStores);
-            initializeSimHandler();
-            drawLayoutFromXMLFile();
+            final FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+            fileChooser.getExtensionFilters().add(extentionFilter);
+
+            String userDirectoryString = System.getProperty("user.dir");
+            File userDirectory = new File(userDirectoryString);
+            if(!userDirectory.canRead()) {
+                userDirectory = new File("c:/");
+            }
+            fileChooser.setInitialDirectory(userDirectory);
+            //Choose the file
+            File chosenFile = fileChooser.showOpenDialog(null);
+            //Make sure a file was selected, if not return default
+            String path;
+            if(chosenFile != null) {
+
+                path = chosenFile.getPath();
+                FileHandler fileHandler = new FileHandler();
+                System.out.println();
+                fileHandler.readFile(path);
+                arrayOfStores = fileHandler.getArrayOfStores();
+                arrayOfObjects = fileHandler.getArrarOfObjects();
+                simulationHandler.setArrayOfObjects(arrayOfObjects);
+                simulationHandler.setArrayOfStores(arrayOfStores);
+                initializeSimHandler();
+                drawLayoutFromXMLFile();
+            } else {
+                //default return value
+                path = null;
+            }
+
+            //FileHandler fileHandler = new FileHandler();
+            //fileHandler.readFile("InputMallSim.xml");
             buildSimulationStart(this.speedDayOfSim);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
