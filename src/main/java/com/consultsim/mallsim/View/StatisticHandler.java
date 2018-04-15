@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class StatisticHandler {
 
-    //VARIABLES
     private static StatisticHandler statisticInstance = null;
     static ArrayList<int[][]> spotArrayList = new ArrayList<int[][]>();
     private static ArrayList<Person> arrayOfPerson;
@@ -20,18 +19,24 @@ public class StatisticHandler {
     private int counterColdSpots;
     private int countOfPersons;
 
+    /**
+     * return countOfPersons
+     * @return
+     */
     public int getCountOfPersons() {
         return countOfPersons;
     }
 
+    /**
+     * Sets countOfPersons
+     */
     public void setCountOfPersons(int countOfPersons) {
         this.countOfPersons = countOfPersons;
     }
 
-
-    //METHODS
-
-
+    /**
+     * Konstructor
+     */
     public StatisticHandler() {
         this.counterHotSpots = 0;
         this.counterColdSpots = 0;
@@ -48,10 +53,18 @@ public class StatisticHandler {
         return statisticInstance;
     }
 
+    /**
+     * Return ArrayList of Persons
+     * @return
+     */
     public static ArrayList<Person> getArrayOfPerson() {
         return arrayOfPerson;
     }
 
+    /**
+     * Sets ArrayList of Persons
+     * @param arrayOfPerson
+     */
     public static void setArrayOfPerson(ArrayList<Person> arrayOfPerson) {
         StatisticHandler.arrayOfPerson = arrayOfPerson;
     }
@@ -64,11 +77,21 @@ public class StatisticHandler {
 //        System.out.println(out2);
 //    }
 
-    //die Funktion updateHotColdSpots wird während des Schleifendurchlaufs im Simulationhandler aufgerufen und liefert Momentaufnahmen der Hot/Coldspots
+    /**
+     * Function is called while iterating through the loop in the simulation handler and returns momentarely captures of the Hot-/and Coldspots
+     * die Funktion updateHotColdSpots wird während des Schleifendurchlaufs im Simulationhandler aufgerufen und liefert Momentaufnahmen der Hot/Coldspots
+     * @param spotArray
+     */
     public static void updateHotColdSpots(int[][] spotArray) {
         spotArrayList.add(spotArray);
 
     }
+
+    /**
+     * Counts current Hotspots
+     * @param spotArray Array which contains the Hot/-and Coldspots (Hot = 1, Cold = -1, 0: None)
+     * @return
+     */
     public static int[] countCurrentHotColdSpots(int[][] spotArray) {
         int currentHotSpots = 0;
         int currentColdSpots = 0;
@@ -90,8 +113,13 @@ public class StatisticHandler {
         return tmp;
 
     }
-    // 0 = kein Spot; 1 = HotSpot; -1 = ColdSpot
-    // Wird am Ende der Simulation aufgerufen
+
+    /**
+     * 0 = kein Spot; 1 = HotSpot; -1 = ColdSpot
+     * Is being called at the end of the Simulation
+     * @param spotArrayList
+     * @return
+     */
     public static int[] countHotColdSpots(int[][][] spotArrayList) {
         int hotSpots = 0;
         int coldSpots = 0;
@@ -123,12 +151,23 @@ public class StatisticHandler {
         return klrf;
     }
 
+    /**
+     * returns Hot-/and Coldspots
+     * @return
+     */
     public ArrayList<Spot> getHotColdSpots() {
         return hotColdSpots;
     }
 
 
-
+    /**
+     * Fills collection with Hot-/and Colspots so they can later be represented visually on the GUI
+     * @param height
+     * @param width
+     * @param divisorheigth
+     * @param divisorwidth
+     * @param hctemp
+     */
     public void createSpotObjects(int height, int width, int divisorheigth, int divisorwidth, int[][] hctemp) {
         int divheight = height / divisorheigth;
         int divwidth = width / divisorwidth;
@@ -147,7 +186,9 @@ public class StatisticHandler {
         }
     }
 
-    //test purposes
+    /**
+     * Test purposes
+     */
     public void testHotColdSpots() {
         hotColdSpots.clear();
         arrayOfPerson = new ArrayList<Person>();
@@ -161,15 +202,28 @@ public class StatisticHandler {
 
     }
 
+    /**
+     * returns counterHotSpots
+     * @return
+     */
     public int getCounterHotSpots() {
         return counterHotSpots;
     }
+
+    /**
+     * returns counterColdSpots
+     * @return
+     */
 
     public int getCounterColdSpots() {
         return counterColdSpots;
     }
 
-    //Ungetestet
+    /**
+     * Untested
+     * @param spotArrayList
+     * @return
+     */
     public int[][] hottestColdestSpots(int[][][] spotArrayList) {
         int[][] hottestColdestSpotsMatrix = new int[10 + 1][10 + 1];
         //fill with 0 MUSS GEÄNDERT WERDEN FALLS HEIGHT/WIDTH ZU GLOBALE VARIABLE WIRD
@@ -189,9 +243,20 @@ public class StatisticHandler {
         return hottestColdestSpotsMatrix;
     }
 
-//the width and heigth must be divisible by lengthwidth and lengthheigth with a rest of 0
+    //the width and heigth must be divisible by lengthwidth and lengthheigth with a rest of 0
 
-
+    /**
+     * Counts the persons in the separate areas of the simulation field and assignes them to a specific
+     * area
+     * After that, the highest person count in an area is searched. Based on this, the Hot-/and Coldspots are being
+     * computed
+     * @param width
+     * @param heigth
+     * @param lengthwidth
+     * @param lengthheigth
+     * @param arrayOfPersons
+     * @return
+     */
     public int[][] recognizeHCSpots(int width, int heigth, int lengthwidth, int lengthheigth, ArrayList<Person> arrayOfPersons) {
         int divisorheigth = heigth / lengthheigth;
         int divisorwidth = width / lengthwidth;
@@ -268,7 +333,12 @@ public class StatisticHandler {
         return hcmatrix;
     }
 
-    //searches the matrix for highest value (so it can later compute the borders to classify Hot- and Coldspots
+    /**
+     * searches the matrix for highest value (so it can later compute the borders to classify Hot- and Coldspots
+     * @param divisorheigth
+     * @param divisorwidth
+     * @return
+     */
     private int searchForHighestValue(int divisorheigth, int divisorwidth) {
 
         int highest = 0;

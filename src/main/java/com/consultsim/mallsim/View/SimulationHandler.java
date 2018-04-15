@@ -19,13 +19,13 @@ public class SimulationHandler {
     public static int crashMap[][];
     private static SimulationHandler simulationInstance;
     public StatisticHandler statisticHandler;
-    double dayTimeInMinutes = 540;
+    private double dayTimeInMinutes = 540;
     double randomNum = 1.0;
-    ArrayList<Person> arrayOfPersons;
-    ArrayList<Store> arrayOfStores;
+    public ArrayList<Person> arrayOfPersons;
+    public ArrayList<Store> arrayOfStores;
     private Store goalStore;
 
-    ArrayList<Objects> arrayOfObjects;
+    public ArrayList<Objects> arrayOfObjects;
     private int countPersons = 0;
     private Mall mall;
     private int countOfPersons = 0;
@@ -60,14 +60,25 @@ public class SimulationHandler {
         return simulationInstance;
     }
 
+    /**
+     * Getter of setter
+     * @return
+     */
     public int getCountOfPersons() {
         return countOfPersons;
     }
 
+    /**
+     * Getter of setter
+     * @param countOfPersons
+     */
     public void setCountOfPersons(int countOfPersons) {
         this.countOfPersons = countOfPersons;
     }
 
+    /**
+     * inserts the stores and objects people cannot walk through into the crashmap (sets values to)
+     */
     public void fillCrashMapWithStoresAndObjects() {
         int xPosLeftUpper = 0;
         int yPosLeftUpper = 0;
@@ -148,7 +159,9 @@ public class SimulationHandler {
         }
     }
 
-    //Test function, adds specific amount of persons
+    /**
+     * Test function, adds specific amount of persons
+     */
     public void initializePersons() {
 
         fillCrashMapWithStoresAndObjects();
@@ -170,7 +183,9 @@ public class SimulationHandler {
         statisticHandler.createSpotObjects(1000, 1000, 100, 100, m);
     }
 
-    //deletes content of hotcoldspots and computes them new, so only a momentary picture is shown
+    /**
+     * deletes content of hotcoldspots and computes them new, so only a momentary picture is shown
+     */
     public void clearEverything() {
         //this.arrayOfPersons.clear();
         this.statisticHandler.hotColdSpots.clear();
@@ -180,7 +195,9 @@ public class SimulationHandler {
         this.statisticHandler.createSpotObjects(1000, 1000, 100, 100, m);
     }
 
-
+    /**
+     * computes next position of people
+     */
     public void computeNextPositionOfPersons() {
         for (Person p : arrayOfPersons) {
            p.computeNext();
@@ -188,6 +205,8 @@ public class SimulationHandler {
 
     }
 
+
+    //Empty methods, can be deleted at the end
     public void addPersons() {
 
     }
@@ -200,26 +219,50 @@ public class SimulationHandler {
 
     }
 
+    /**
+     * Getter or Setter
+     * @return
+     */
     public ArrayList<Person> getArrayOfPersons() {
         return arrayOfPersons;
     }
 
+    /**
+     * Getter or Setter
+     * @param arrayOfPersons
+     */
     public void setArrayOfPersons(ArrayList<Person> arrayOfPersons) {
         this.arrayOfPersons = arrayOfPersons;
     }
 
+    /**
+     * Getter or Setter
+     * @return
+     */
     public ArrayList<Store> getArrayOfStores() {
         return arrayOfStores;
     }
 
+    /**
+     * Getter or Setter
+     * @param arrayOfStores
+     */
     public void setArrayOfStores(ArrayList<Store> arrayOfStores) {
         this.arrayOfStores = arrayOfStores;
     }
 
+    /**
+     * Getter or Setter
+     * @return
+     */
     public ArrayList<Objects> getArrayOfObjects() {
         return arrayOfObjects;
     }
 
+    /**
+     * Getter or Setter
+     * @param arrayOfObjects
+     */
     public void setArrayOfObjects(ArrayList<Objects> arrayOfObjects) {
         this.arrayOfObjects = arrayOfObjects;
     }

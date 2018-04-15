@@ -31,12 +31,20 @@ public class FileHandler {
 
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrarOfObjects;
-
-    FileHandler() {
+/**
+ * Konstrukor
+ */
+    public FileHandler() {
         arrayOfStores=new ArrayList<>();
         arrarOfObjects=new ArrayList<>();
     }
 
+    /**
+     * Validates XML against the valid XSD
+     * @param xml
+     * @param xsd
+     * @return
+     */
     private static boolean validateAgainstXSD(InputStream xml, InputStream xsd) {
         try {
             SchemaFactory factory=
@@ -52,14 +60,27 @@ public class FileHandler {
         }
     }
 
+    /**
+     * returns arrayOfStores
+     * @return
+     */
     public ArrayList<Store> getArrayOfStores() {
         return arrayOfStores;
     }
 
+    /**
+     * returns ArrayOfObjects
+     * @return
+     */
     public ArrayList<Objects> getArrarOfObjects() {
         return arrarOfObjects;
     }
 
+    /**
+     * reads File and starts parsing it
+     * @param fileName
+     * @throws FileNotFoundException
+     */
     public void readFile(String fileName) throws FileNotFoundException {
         InputStream xmlFile=new FileInputStream("InputMallSim.xml");
         InputStream xsdFile=new FileInputStream("xsd.xsd");
@@ -120,10 +141,18 @@ public class FileHandler {
 
     }
 
+    /**
+     * Handles the values for the entrance door which is specified in the XML
+     * @param n
+     */
     private void handleEntranceDoor(Node n) {
 
     }
 
+    /**
+     * reads general Info about the simulation which is specified in the XML
+     * @param n
+     */
     private void handleGeneralInfo(Node n) {
 
         Element element=(Element) n;
@@ -149,6 +178,9 @@ public class FileHandler {
 
     }
 
+    /**
+     * reads Infos about the Stores from the XML
+     */
     private void handleStore(Node n) {
         Element element=(Element) n;
 
@@ -212,6 +244,10 @@ public class FileHandler {
 
     }
 
+    /**
+     * reads Infos about the Objects from the XML (Trash bins, plants)
+     * @param n
+     */
     private void handleObject(Node n) {
         Element element=(Element) n;
 
@@ -235,7 +271,12 @@ public class FileHandler {
 
     }
 
-
+    /**
+     * Checks, if the stores intersect, if they do, the latter one in the XML is not added to the
+     * Collection
+     * @param newStore
+     * @return
+     */
     private boolean checkIfAttributesAreValid(Store newStore) {
 
         int newStorePos[]=newStore.getPosition();
@@ -266,6 +307,12 @@ public class FileHandler {
         return true;
     }
 
+    /**
+     * Checks, if two rectangles overlap
+     * @param old
+     * @param ne
+     * @return
+     */
     private boolean overlaps(Rectangle old, Rectangle ne) {
         return ne.getX() < old.getX() + old.getWidth()
                 && ne.getWidth() + ne.getWidth() > old.getX()

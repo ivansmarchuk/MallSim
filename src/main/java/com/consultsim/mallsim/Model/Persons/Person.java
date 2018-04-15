@@ -43,7 +43,13 @@ public class Person {
     private int goalX;
     private int goalY;
 
-    //Konstruktor
+    /**
+     * Konstruktor
+     * @param pos Position of Person
+     * @param speed Speed of person
+     * @param simulationHandler Simulationhandler for access to maps
+     * @param goalStore Store which the person should walk to
+     */
     public Person(Position pos, double speed, SimulationHandler simulationHandler, Store goalStore) {
         //radius
         this.goalStore = goalStore;
@@ -79,15 +85,25 @@ public class Person {
 
     }
 
+    /**
+     * Gets value of how large a person is
+     * @return
+     */
     public double getRadius() {
         return radius;
     }
 
+    /**
+     * Changes radius of person
+     * @param radius
+     */
     public void setRadius(double radius) {
         this.radius = radius;
     }
 
-    //compute next position (simple and randomized)
+    /**
+     * Computes next position of person (simple and randomized)
+     */
     public void computeNext() {
 
         int direction;
@@ -162,8 +178,13 @@ public class Person {
 
     }
 
-
-    //Checks, if wall is in between new position or not, only called if person "jumps" to avoid being stuck
+    /**
+     * Checks, if wall is in between new position or not, only called if person "jumps" to avoid being stuck
+     * @param currentY Current Y Position
+     * @param currentX Current X Position
+     * @param p next Position to go to
+     * @return
+     */
     private boolean isWallInBetween(int currentY, int currentX, Position p) {
         System.out.println("Arrived");
         int lowerY = (currentY < p.getY() ? currentY : p.getY());
@@ -181,8 +202,15 @@ public class Person {
         return false;
     }
 
-
-    //only called, if collision is detected
+    /**
+     * only called, if collision between two people is detected
+     * @param nextX Next X Position
+     * @param nextY Next Y Position
+     * @param currentX Current X Position
+     * @param currentY Current Y Position
+     * @param viewableRadius Area to cover when searching for a way to avoid being stuck
+     * @return
+     */
     private Position handleCollision(int nextX, int nextY, int currentX, int currentY, int viewableRadius) {
         int tempx;
         int tempy;
@@ -192,6 +220,7 @@ public class Person {
         int chooseDirection = (int) random.nextInt(4);
         int found = 0;
 
+    //chooses the direction the person should "escape"
 
         switch (chooseDirection) {
             case 0: {
@@ -275,7 +304,7 @@ public class Person {
 
         }
 
-
+        //checks, if chosen position is a valid one (if no walls are in between)
         if (!isWallInBetween(currentY, currentX, tempPos)) {
             waitedSince = 0;
             return tempPos;
@@ -292,7 +321,12 @@ public class Person {
 
     }
 
-    //check, if the next position is a valid one
+    /**
+     * check, if the next position is a valid one -> if there already is another person, abort
+     * @param nextX next X Position
+     * @param nextY next Y Positon
+     * @return
+     */
     public int isValidMove(int nextX, int nextY) {
         if (nextX < 0 || nextY < 0 || nextX > 999 || nextY > 999) {
             return 0;
@@ -313,6 +347,7 @@ public class Person {
         }
         return 1;
     }
+
 
     public String generateInterest() {
         //choose what the person wants to buy
@@ -506,18 +541,34 @@ public class Person {
         return nextDirection;
     }
 
+    /**
+     * Gets speed of Person
+     * @return
+     */
     public double getSpeed() {
         return speed;
     }
 
+    /**
+     * Sets speed of person
+     * @param speed
+     */
     public void setSpeed(double speed) {
         this.speed = speed;
     }
 
+    /**
+     * Gets position of person
+     * @return
+     */
     public Position getCurrentPosition() {
         return currentPosition;
     }
 
+    /**
+     * Sets current position
+     * @param currentPosition
+     */
     public void setCurrentPosition(Position currentPosition) {
         this.currentPosition = currentPosition;
 
