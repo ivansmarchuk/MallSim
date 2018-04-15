@@ -203,7 +203,7 @@ public class Person {
     }
 
     /**
-     * only called, if collision between two people is detected
+     * only called, if collision between two people is detected and they don't move
      * @param nextX Next X Position
      * @param nextY Next Y Position
      * @param currentX Current X Position
