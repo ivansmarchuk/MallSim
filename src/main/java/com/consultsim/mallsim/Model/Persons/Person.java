@@ -16,9 +16,9 @@ public class Person {
 
     public static ArrayList<Store> arrayOfStores;
     private static int nextID = 0;
-    int timeInShop;
-    boolean inShop;
-    int timeSearching;
+    private int timeInShop;
+    private boolean inShop;
+    private int timeSearching;
     private Position currentPosition;
     private Position nextPosition;
     private Store goalStore;
@@ -43,6 +43,7 @@ public class Person {
     private int goalX;
     private int goalY;
 
+    //Konstruktor
     public Person(Position pos, double speed, SimulationHandler simulationHandler, Store goalStore) {
         //radius
         this.goalStore = goalStore;
@@ -56,15 +57,16 @@ public class Person {
         this.movedSince = 0;
         //this.interestedIn = generateInterest();
         this.interestedIn = "no";
+        this.detourX = false;
+        this.detourY = false;
+        this.detourNeeded = 4;
+        this.waitedSince = 0;
+        this.goalX = goalStore.getDoorPosition()[2];
+        this.goalY = goalStore.getDoorPosition()[3];
+
         //inShop = false;
         //timeInShop = 0;
         //timeSearching = 0;
-        detourX = false;
-        detourY = false;
-        detourNeeded = 4;
-        waitedSince = 0;
-        goalX = goalStore.getDoorPosition()[2];
-        goalY = goalStore.getDoorPosition()[3];
 
         if (!(interestedIn.equals("nothing"))) {
             //int[] goal = getGoalCoordinates();
@@ -95,12 +97,6 @@ public class Person {
         int nextY = currentY;
         //goalX = 400;
         //goalY = 700;
-
-
-        //System.out.println("Rand: " + direction);
-
-        //REBECCA: INSERT YOUR CODE HERE
-        //TO DO: Create Function to compute the position of the people
 
         if (interestedIn.equals("nothing")) {
             //System.out.println("No shop found or needed");
@@ -166,6 +162,8 @@ public class Person {
 
     }
 
+
+    //Checks, if wall is in between new position or not, only called if person "jumps" to avoid being stuck
     private boolean isWallInBetween(int currentY, int currentX, Position p) {
         System.out.println("Arrived");
         int lowerY = (currentY < p.getY() ? currentY : p.getY());
@@ -183,6 +181,8 @@ public class Person {
         return false;
     }
 
+
+    //only called, if collision is detected
     private Position handleCollision(int nextX, int nextY, int currentX, int currentY, int viewableRadius) {
         int tempx;
         int tempy;
