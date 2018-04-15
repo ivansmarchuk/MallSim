@@ -215,13 +215,13 @@ public class UIHandler implements Initializable {
                 simulationHandler.computeNextPositionOfPersons();
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
-
+                //TODO anders implementieren
                 btnStartPause.setText("Start");
                 btnStartPause.setDisable(true);
                 sliderDayTime.setValue(sliderDayTime.getMin());
                 showSimStatistic();
                 simulationLoop.stop();
-                //clearCanvas(graphicsContext);
+                clearCanvas(graphicsContext);
                 simulationHandler.arrayOfPersons = new ArrayList<>();
             }
         });
