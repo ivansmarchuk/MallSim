@@ -47,6 +47,8 @@ public class UIHandler implements Initializable {
 
     private int speedDayOfSim;
     @FXML
+    public Button btnResetSim;
+    @FXML
     public Button showStatistics;
     @FXML
     public Label lblCountPerson;
@@ -133,8 +135,6 @@ public class UIHandler implements Initializable {
 
         //load from file in root directory
         try {
-            btnStartPause.setDisable(false);
-            btnNextStep.setDisable(false);
             graphicsContext = canvas.getGraphicsContext2D();
 
             final FileChooser fileChooser = new FileChooser();
@@ -163,6 +163,9 @@ public class UIHandler implements Initializable {
                 simulationHandler.setArrayOfStores(arrayOfStores);
                 initializeSimHandler();
                 drawLayoutFromXMLFile();
+                btnStartPause.setDisable(false);
+                btnNextStep.setDisable(false);
+                btnResetSim.setDisable(false);
             } else {
                 //default return value
                 path = null;
@@ -212,9 +215,13 @@ public class UIHandler implements Initializable {
                 simulationHandler.computeNextPositionOfPersons();
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
+
+                btnStartPause.setText("Start");
+                btnStartPause.setDisable(true);
+                sliderDayTime.setValue(sliderDayTime.getMin());
                 showSimStatistic();
                 simulationLoop.stop();
-                clearCanvas(graphicsContext);
+                //clearCanvas(graphicsContext);
                 simulationHandler.arrayOfPersons = new ArrayList<>();
             }
         });
@@ -383,20 +390,27 @@ public class UIHandler implements Initializable {
      * @param event press on reset button
      */
     public void resetSim(ActionEvent event) {
+        resetSimulation();
+    }
+
+    private void resetSimulation() {
         Parent root = null;
         try {
             root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
-            simulationLoop.stop();
             simulationHandler.arrayOfPersons = new ArrayList<>();
             simulationHandler.arrayOfObjects = new ArrayList<>();
             statisticHandler.hotColdSpots = new ArrayList<>();
             simulationHandler.arrayOfStores = new ArrayList<>();
-
+            statisticHandler.setCountOfPersons(0);
+            simulationLoop.stop();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         btnStartPause.getScene().setRoot(root);
+        btnResetSim.setDisable(false);
+
+
     }
 
 }

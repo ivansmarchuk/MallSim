@@ -60,7 +60,7 @@
                                 <Button fx:id="btnStartPause" disable="true" mnemonicParsing="false" onAction="#pauseStartSim" prefWidth="90.0" text="Start/Pause" />
 
                                 <Button fx:id="btnNextStep" disable="true" mnemonicParsing="false" onAction="#getNextStep" prefWidth="90.0" text="Nächste Schritte" />
-                                <Button mnemonicParsing="false" onAction="#resetSim" prefWidth="75.0" text="Reset" />
+                                <Button fx:id="btnResetSim" disable="true" mnemonicParsing="false" onAction="#resetSim" prefWidth="75.0" text="Reset" />
                             </children>
                             <VBox.margin>
                                 <Insets />

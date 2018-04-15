@@ -18,6 +18,7 @@ public class StatisticHandler {
     private int hcmatrix[][];
     private int counterHotSpots;
     private int counterColdSpots;
+    private int countOfPersons;
 
     public int getCountOfPersons() {
         return countOfPersons;
@@ -27,7 +28,7 @@ public class StatisticHandler {
         this.countOfPersons = countOfPersons;
     }
 
-    private int countOfPersons;
+
     //METHODS
 
 
