@@ -35,11 +35,12 @@ public class Person {
     private int detourNeeded;
     private Person collidedWithPerson;
     private int waitedSince = 0;
+    private int goalID;
 
     //Variables for the maze solving algorithm
     //Es wird sinnvoll sein, das Maze auszulagern, wegen Speicherplatz
-    private boolean[][] wasHere = new boolean[1000][1000];
-    private boolean[][] correctPath = new boolean[1000][1000]; // The solution to the maze
+    //private boolean[][] wasHere = new boolean[1000][1000];
+    //private boolean[][] correctPath = new boolean[1000][1000]; // The solution to the maze
     private int goalX;
     private int goalY;
 
@@ -61,11 +62,11 @@ public class Person {
         this.simulationHandler = simulationHandler;
         this.id = Person.nextID++;
         this.movedSince = 0;
-        //this.interestedIn = generateInterest();
-        this.interestedIn = "no";
-        this.detourX = false;
-        this.detourY = false;
-        this.detourNeeded = 4;
+        this.interestedIn = generateInterest();
+        //this.interestedIn = "no";
+        //this.detourX = false;
+        //this.detourY = false;
+        //this.detourNeeded = 4;
         this.waitedSince = 0;
         this.goalX = goalStore.getDoorPosition()[2];
         this.goalY = goalStore.getDoorPosition()[3];
@@ -75,9 +76,11 @@ public class Person {
         //timeSearching = 0;
 
         if (!(interestedIn.equals("nothing"))) {
-            //int[] goal = getGoalCoordinates();
-            //goalX = goal[0];
-            //goalY = goal[1];
+            goalID = getGoalCoordinates();
+            if (goalID == -1) {
+                goalX = -1;
+                goalY = -1;
+            }
         } else {
             goalX = goalStore.getDoorPosition()[2];
             goalY = goalStore.getDoorPosition()[3];
@@ -120,7 +123,7 @@ public class Person {
             //compute next position (simple and randomized)
             direction = (int) random.nextInt(5);
         } else {
-            direction = findDirectionWithGoal(goalX, goalY, currentX, currentY);
+            direction = findDirectionWithHeatMap(currentX, currentY);
             if ((currentX == goalX) && (currentY == goalY)) {
                 System.out.println("Goal reached");
                 direction = 4;
@@ -371,22 +374,20 @@ public class Person {
 
     }
 
-    public int[] getGoalCoordinates() {
-        int goalX = -1;
-        int goalY = -1;
-        int interestingShops[] = new int[100];  //Ich weiß noch nicht wie viele Shops es gibt
+    public int getGoalCoordinates() {
+        //int goalX = -1;
+        //int goalY = -1;
+        int interestingShops[] = new int[20];  //Ich weiß noch nicht wie viele Shops es gibt
         int nrInterestingShops = 0;
         int temp;
-        int divisorForDoor;
-
+        //int divisorForDoor;
+        arrayOfStores = simulationHandler.getArrayOfStores();
 
         for (Store s : arrayOfStores) {
-            for (int i = 0; i < 2; i++) {
-                //condition: only 2 tags on each store
-                if (interestedIn == s.getInterestingFor()[i]) {
-                    interestingShops[nrInterestingShops] = s.getId();
-                    nrInterestingShops++;
-                }
+            //condition: only 1 info tag on each store
+            if (interestedIn.equals(s.getInterestingFor()[0])) {
+                interestingShops[nrInterestingShops] = s.getId();
+                nrInterestingShops++;
             }
         }
 
@@ -394,6 +395,7 @@ public class Person {
 
             temp = (int) random.nextInt(nrInterestingShops);
             //get shop by id
+            /*
             for (Store s : arrayOfStores) {
                 if (s.getId() == interestingShops[temp]) {
                     divisorForDoor = (int) random.nextInt(20);
@@ -409,9 +411,13 @@ public class Person {
                     break;
                 }
             }
+            */
+
+            return interestingShops[temp];
         }
-        int[] goal = {goalX, goalY};
-        return goal;
+
+        //int[] goal = {goalX, goalY};
+        return -1;
     }
 
     public int[] movePerson(int direction, int currentX, int currentY) {
@@ -456,6 +462,7 @@ public class Person {
         return newPosition;
     }
 
+    /*
     public int findDirectionWithGoal(int goalX, int goalY, int currentX, int currentY) {
 
 
@@ -539,6 +546,47 @@ public class Person {
         // simulationHandler.crashMap[movePerson(nextDirection[temp], currentX, currentY)[0]][movePerson(nextDirection[temp], currentX, currentY)[1]]
 
         return nextDirection;
+    }
+*/
+
+    public int findDirectionWithHeatMap(int currentX, int currentY) {
+        int direction[] = new int[4];
+        int temp = 0;
+        int currentValueHeatMap;
+        for (Store s : arrayOfStores) {
+            if (goalID == s.getId()) {
+                currentValueHeatMap= s.getHeatMapValue(currentX+1, currentY+1) -1;
+
+                if (s.getHeatMapValue(currentX + 2, currentY+1) == currentValueHeatMap){
+                    //move right
+                    direction[temp] = 0;
+                    temp++;
+                }
+                if (s.getHeatMapValue(currentX, currentY +1 ) == currentValueHeatMap){
+                    //move left
+                    direction[temp] = 2;
+                    temp++;
+                }
+                if (s.getHeatMapValue(currentX +1, currentY + 2) == currentValueHeatMap){
+                    //move down
+                    direction[temp] = 1;
+                    temp++;
+                }
+                if (s.getHeatMapValue(currentX +1, currentY) == currentValueHeatMap){
+                    //move up
+                    direction[temp] = 3;
+                    temp++;
+                }
+                if (temp == 0){
+                    return 4;
+                }
+                else{
+                    return direction[(int) random.nextInt(temp)];
+                }
+            }
+        }
+        System.out.println("No Store by this ID");
+        return 4;
     }
 
     /**

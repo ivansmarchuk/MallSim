@@ -162,6 +162,16 @@ public class UIHandler implements Initializable {
                 simulationHandler.setArrayOfObjects(arrayOfObjects);
                 simulationHandler.setArrayOfStores(arrayOfStores);
                 initializeSimHandler();
+
+                //Hier nun mein Test
+
+                simulationHandler.fillCrashMapWithStoresAndObjects();
+                for (Store s : arrayOfStores) {
+                    s.generateHeatMap(simulationHandler.crashMap);
+                    System.out.println("Heatmap done");
+                }
+                //und bis hier geht er
+
                 drawLayoutFromXMLFile();
                 btnStartPause.setDisable(false);
                 btnNextStep.setDisable(false);

@@ -45,7 +45,7 @@ public class SimulationHandler {
                 crashMap[i][a] = 0;
             }
         }
-        fillCrashMapWithStoresAndObjects();
+        //fillCrashMapWithStoresAndObjects();
     }
 
     /**
@@ -164,7 +164,7 @@ public class SimulationHandler {
      */
     public void initializePersons() {
 
-        fillCrashMapWithStoresAndObjects();
+        //fillCrashMapWithStoresAndObjects();
 
         Random random = new Random();
 
