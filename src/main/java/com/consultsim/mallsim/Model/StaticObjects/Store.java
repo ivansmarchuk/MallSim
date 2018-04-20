@@ -153,4 +153,6 @@ private int [][] crashMap = new int[1000][1000];
       return HeatMap[x][y];
   }
 
+    public void generateHeapMapForStories(double canvasWidthSize, double canvasHeightSize, int[][] crashMap) {
+    }
 }
