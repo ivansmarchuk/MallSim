@@ -40,11 +40,7 @@ public class SimulationHandler {
         arrayOfStores = new ArrayList<Store>();
         arrayOfObjects = new ArrayList<Objects>();
         crashMap = new int[1000][1000];
-        for (int i = 0; i < 1000; i++) {
-            for (int a = 0; a < 1000; a++) {
-                crashMap[i][a] = 0;
-            }
-        }
+
         //fillCrashMapWithStoresAndObjects();
     }
 
@@ -80,10 +76,10 @@ public class SimulationHandler {
      * inserts the stores and objects people cannot walk through into the crashmap (sets values to)
      */
     public void fillCrashMapWithStoresAndObjects() {
-        int xPosLeftUpper = 0;
-        int yPosLeftUpper = 0;
-        int xPosDownRight = 0;
-        int yPosDownRight = 0;
+        int xPosLeftUpper;
+        int yPosLeftUpper;
+        int xPosDownRight;
+        int yPosDownRight;
 
 
         /**
