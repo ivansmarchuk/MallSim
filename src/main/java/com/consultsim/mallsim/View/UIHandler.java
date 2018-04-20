@@ -168,6 +168,9 @@ public class UIHandler implements Initializable {
                 simulationHandler.fillCrashMapWithStoresAndObjects();
                 for (Store s : arrayOfStores) {
                     s.generateHeatMap(simulationHandler.crashMap);
+                   //
+                    // TODO;
+                    // s.generateHeapMapForStories()
                     System.out.println("Heatmap done");
                 }
                 //und bis hier geht er

@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SimulationHandler {
 
-    public static int crashMap[][];
+    public int crashMap[][];
     private static SimulationHandler simulationInstance;
     public StatisticHandler statisticHandler;
     private double dayTimeInMinutes = 540;
