@@ -44,6 +44,51 @@ public class Person {
     private int goalX;
     private int goalY;
 
+
+
+    //-----------------------------------------------------
+    private float xPos, yPos, xVel, yVel;
+
+    public Person(  float xPos, float yPos, float xVel, float yVel ){
+
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.xVel = xVel;
+        this.yVel = yVel;
+
+    }
+
+    public void setPerson(  float xPos, float yPos, float xVel, float yVel ){
+
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.xVel = xVel;
+        this.yVel = yVel;
+
+    }
+
+    public float getxPos(){
+        return xPos;
+    }
+
+    public float getyPos(){
+        return yPos;
+    }
+
+    public float getxVel(){
+        return xVel;
+    }
+
+    public float getyVel(){
+        return yVel;
+    }
+
+
+    //-----------------------------------------------------
+
+
+
+
     /**
      * Konstruktor
      * @param pos Position of Person

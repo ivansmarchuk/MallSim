@@ -285,8 +285,13 @@ public class SimulationHandler {
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
                 goalStore = getRandomItem(arrayOfStores);
+
                 System.out.println(goalStore.getLabel());
-                arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStore));
+                Person generatedPerson = new Person(new Position(x, y), 10, simulationInstance, goalStore);
+                goalStore.getHeatMap().getPersonsList().add(generatedPerson);
+
+                arrayOfPersons.add(generatedPerson);
+
                 statisticHandler.setCountOfPersons(countPersons++);
             }
             randomNum = ThreadLocalRandom.current().nextInt(1, 10);

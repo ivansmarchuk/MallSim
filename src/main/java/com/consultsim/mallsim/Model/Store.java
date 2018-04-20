@@ -1,9 +1,16 @@
 package com.consultsim.mallsim.Model;
 
 
+import com.consultsim.mallsim.Model.Persons.Person;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class Store {
+
+
+
+    ArrayList<Person> personsList;
 
 
     HeatMap heatMap;
@@ -22,7 +29,6 @@ public class Store {
         position=new int[4];
         doorPosition=new int[4];
         //generateHeatMap(simulationHandler);
-
 
 
         heatMap = new HeatMap(Configuration.CANVAS_WIDTH_SIZE, Configuration.CANVAS_HEIGHT_SIZE,(position[0]+position[2])/2, (position[1]+position[3])/2);
@@ -161,4 +167,17 @@ public class Store {
 
 
     }
+
+    public ArrayList<Person> getPersonsList() {
+        return personsList;
+    }
+
+    public void setPersonsList(ArrayList<Person> personsList) {
+        this.personsList=personsList;
+    }
+
+    public HeatMap getHeatMap() {
+        return heatMap;
+    }
+
 }
