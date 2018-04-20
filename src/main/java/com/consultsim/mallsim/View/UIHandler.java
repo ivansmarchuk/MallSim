@@ -100,8 +100,8 @@ public class UIHandler implements Initializable {
         //initializeSimHandler();
 
 
-        basePane.setPrefHeight(600);
-        basePane.setPrefWidth(600);
+        basePane.setPrefHeight(Configuration.STATISTIC_WINDOW_HEIGHT_SIZE);
+        basePane.setPrefWidth(Configuration.STATISTIC_WINDOW_WIDTH_SIZE);
         showStatistics.setOnAction(event -> showSimStatistic());
 
 
@@ -167,7 +167,7 @@ public class UIHandler implements Initializable {
 
                 simulationHandler.fillCrashMapWithStoresAndObjects();
                 for (Store s : arrayOfStores) {
-                    //s.generateHeatMap(simulationHandler.crashMap);
+                    s.generateHeatMap(simulationHandler.crashMap);
 
                     // TODO;
                      //s.generateHeapMapForStories()
@@ -219,7 +219,7 @@ public class UIHandler implements Initializable {
             drawLayoutFromXMLFile();
             drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, 0.2);
             drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
-            double newDayTime = sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * 50;
+            double newDayTime = sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * Configuration.SPEED_TIME_FACTOR;
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
@@ -355,7 +355,7 @@ public class UIHandler implements Initializable {
         canvas.setHeight(Configuration.CANVAS_HEIGHT_SIZE);
         canvas.setWidth(Configuration.CANVAS_WIDTH_SIZE);
         graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), 13.0));
+        graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
         canvas.setLayoutY(1);
         canvas.setLayoutX(1);
         canvas.setScaleX(1);

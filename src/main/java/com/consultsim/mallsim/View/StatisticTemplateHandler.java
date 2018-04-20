@@ -63,7 +63,7 @@ public class StatisticTemplateHandler implements Initializable{
         canvas.setHeight(Configuration.CANVAS_HEIGHT_SIZE);
         canvas.setWidth(Configuration.CANVAS_WIDTH_SIZE);
         graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), 13.0));
+        graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
 
 
     }

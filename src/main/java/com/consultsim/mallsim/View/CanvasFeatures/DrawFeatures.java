@@ -1,6 +1,7 @@
 package com.consultsim.mallsim.View.CanvasFeatures;
 
 
+import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
@@ -38,7 +39,7 @@ public class DrawFeatures {
                     store.getPosition()[3] - store.getPosition()[1]);
             gc.save();
             gc.setFill(Color.BLACK);
-            gc.setFont(new Font(gc.getFont().getName(), 13.0));
+            gc.setFont(new Font(gc.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
             gc.fillText(store.getLabel() + "\n", store.getPosition()[0] + 5,
                     store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2);
 
