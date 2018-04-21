@@ -7,6 +7,7 @@ import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.Store;
+import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.View.CanvasFeatures.DrawFeatures;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -82,6 +83,7 @@ public class UIHandler implements Initializable {
     private StatisticHandler statisticHandler;
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
+    private EntranceDoor entranceDoor;
     private double dayMinutes = 540;
     private double daySeconds;
 
@@ -159,8 +161,10 @@ public class UIHandler implements Initializable {
                 fileHandler.readFile(path);
                 arrayOfStores = fileHandler.getArrayOfStores();
                 arrayOfObjects = fileHandler.getArrarOfObjects();
+                entranceDoor = fileHandler.getEntranceDoor();
                 simulationHandler.setArrayOfObjects(arrayOfObjects);
                 simulationHandler.setArrayOfStores(arrayOfStores);
+                simulationHandler.setEntranceDoor(entranceDoor);
                 initializeSimHandler();
 
                 //Hier nun mein Test
@@ -172,7 +176,10 @@ public class UIHandler implements Initializable {
                     // TODO;
                      //s.generateHeapMapForStories()
                     System.out.println("Heatmap done");
+
                 }
+                //HeatMap door
+                entranceDoor.generateHeatMap(simulationHandler.crashMap);
                 //und bis hier geht er
 
                 drawLayoutFromXMLFile();
@@ -425,5 +432,7 @@ public class UIHandler implements Initializable {
 
 
     }
+
+
 
 }

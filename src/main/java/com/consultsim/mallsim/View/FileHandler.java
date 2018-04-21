@@ -3,6 +3,7 @@ package com.consultsim.mallsim.View;
 
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Position;
+import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 import javafx.scene.control.Alert;
@@ -31,6 +32,7 @@ public class FileHandler {
 
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrarOfObjects;
+    private EntranceDoor entranceDoor;
 /**
  * Konstrukor
  */
@@ -74,6 +76,14 @@ public class FileHandler {
      */
     public ArrayList<Objects> getArrarOfObjects() {
         return arrarOfObjects;
+    }
+
+    /**
+     * returns EntranceDoor
+     * @return
+     */
+    public EntranceDoor getEntranceDoor() {
+        return entranceDoor;
     }
 
     /**
@@ -172,6 +182,9 @@ public class FileHandler {
 
         mall.setDoorDownRight((new Position(Integer.parseInt(xPosDownRight), Integer.parseInt(yPosDownRight))));
         mall.setDoorLeftUpper((new Position(Integer.parseInt(xPosLeftUpper), Integer.parseInt(yPosLeftUpper))));
+
+        entranceDoor = new EntranceDoor(new int[]{Integer.parseInt(xPosLeftUpper), Integer.parseInt(yPosLeftUpper), Integer.parseInt(xPosDownRight), Integer.parseInt(yPosDownRight)});
+
 
         System.out.println("Door left upper: " + mall.getDoorLeftUpper().getX() + "::" + mall.getDoorLeftUpper().getY());
         System.out.println("Door down right: " + mall.getDoorDownRight().getX() + "::" + mall.getDoorDownRight().getY());

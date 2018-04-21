@@ -39,7 +39,7 @@
 
     <door>
       <leftupperCorner>
-        <xPos>210</xPos>
+        <xPos>200</xPos>
         <yPos>170</yPos>
       </leftupperCorner>
 
@@ -70,7 +70,7 @@
 
   </store>
 
-
+<!--
   <store id="002">
     <color>green</color>
     <position>
@@ -162,8 +162,6 @@
     </specialOffer>
 
   </store>
-
-
 
 
   <store id="004">
@@ -866,7 +864,7 @@
     </specialOffer>
 
   </store>
-
+-->
 
   <object id="019">
 

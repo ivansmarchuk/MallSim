@@ -4,6 +4,7 @@ package com.consultsim.mallsim.View;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
+import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 
@@ -24,6 +25,7 @@ public class SimulationHandler {
     public ArrayList<Person> arrayOfPersons;
     public ArrayList<Store> arrayOfStores;
     private Store goalStore;
+    public EntranceDoor entranceDoor;
 
     public ArrayList<Objects> arrayOfObjects;
     private int countPersons = 0;
@@ -247,6 +249,10 @@ public class SimulationHandler {
         this.arrayOfStores = arrayOfStores;
     }
 
+    public void setEntranceDoor(EntranceDoor entranceDoor){
+        this.entranceDoor = entranceDoor;
+    }
+
     /**
      * Getter or Setter
      * @return
@@ -285,7 +291,7 @@ public class SimulationHandler {
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
 
                 goalStore = getRandomItem(arrayOfStores);
-                System.out.println(goalStore.getLabel());
+                //System.out.println(goalStore.getLabel());
                 arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStore));
                 statisticHandler.setCountOfPersons(countPersons++);
             }
@@ -293,6 +299,10 @@ public class SimulationHandler {
             dayTimeInMinutes = Math.round(dayTime) / 60;
         }
 
+    }
+
+    public EntranceDoor getEntranceDoor(){
+        return entranceDoor;
     }
 
     /**

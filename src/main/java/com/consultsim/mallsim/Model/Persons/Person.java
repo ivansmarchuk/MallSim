@@ -3,6 +3,7 @@ package com.consultsim.mallsim.Model.Persons;
 
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Position;
+import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.Store;
 import com.consultsim.mallsim.View.SimulationHandler;
 
@@ -30,26 +31,20 @@ public class Person {
     private String interestedIn;    // hier könnte auch je nachdem ein StringArray hin
     private int movedSince;
     private double radius;
-    private boolean detourX;
-    private boolean detourY;
-    private int detourNeeded;
     private Person collidedWithPerson;
     private int waitedSince = 0;
-    private int goalID;
+    //private int goalID;
 
-    //Variables for the maze solving algorithm
-    //Es wird sinnvoll sein, das Maze auszulagern, wegen Speicherplatz
-    //private boolean[][] wasHere = new boolean[1000][1000];
-    //private boolean[][] correctPath = new boolean[1000][1000]; // The solution to the maze
     private int goalX;
     private int goalY;
 
     /**
      * Konstruktor
-     * @param pos Position of Person
-     * @param speed Speed of person
+     *
+     * @param pos               Position of Person
+     * @param speed             Speed of person
      * @param simulationHandler Simulationhandler for access to maps
-     * @param goalStore Store which the person should walk to
+     * @param goalStore         Store which the person should walk to
      */
     public Person(Position pos, double speed, SimulationHandler simulationHandler, Store goalStore) {
         //radius
@@ -62,34 +57,33 @@ public class Person {
         this.simulationHandler = simulationHandler;
         this.id = Person.nextID++;
         this.movedSince = 0;
-        this.interestedIn = generateInterest();
+        //this.interestedIn = generateInterest();
         //this.interestedIn = "no";
-        //this.detourX = false;
-        //this.detourY = false;
-        //this.detourNeeded = 4;
         this.waitedSince = 0;
-        this.goalX = goalStore.getDoorPosition()[2];
-        this.goalY = goalStore.getDoorPosition()[3];
+        //this.goalX = goalStore.getDoorPosition()[2];
+        //this.goalY = goalStore.getDoorPosition()[3];
 
         //inShop = false;
         //timeInShop = 0;
         //timeSearching = 0;
 
-        if (!(interestedIn.equals("nothing"))) {
-            goalID = getGoalCoordinates();
-            if (goalID == -1) {
-                goalX = -1;
-                goalY = -1;
-            }
-        } else {
-            goalX = goalStore.getDoorPosition()[2];
-            goalY = goalStore.getDoorPosition()[3];
-        }
+
+//        if (!(interestedIn.equals("nothing"))) {
+//         goalID = getGoalCoordinates();
+//         if (goalID == -1) {
+//         goalX = -1;
+//         goalY = -1;
+//         }
+//         } else {
+//         goalX = goalStore.getDoorPosition()[2];
+//         goalY = goalStore.getDoorPosition()[3];
+//         }
 
     }
 
     /**
      * Gets value of how large a person is
+     *
      * @return
      */
     public double getRadius() {
@@ -98,6 +92,7 @@ public class Person {
 
     /**
      * Changes radius of person
+     *
      * @param radius
      */
     public void setRadius(double radius) {
@@ -114,25 +109,34 @@ public class Person {
         int currentY = this.currentPosition.getY();
         int nextX = currentX;
         int nextY = currentY;
-        //goalX = 400;
-        //goalY = 700;
 
-        if (interestedIn.equals("nothing")) {
-            //System.out.println("No shop found or needed");
-            // Was passiert dann?
-            //compute next position (simple and randomized)
-            direction = (int) random.nextInt(5);
-        } else {
-            direction = findDirectionWithHeatMap(currentX, currentY);
-            if ((currentX == goalX) && (currentY == goalY)) {
-                System.out.println("Goal reached");
-                direction = 4;
-                goalX = -1;
-                goalY = -1;
-                interestedIn = "nothing";
-            }
+//        if (interestedIn.equals("nothing")) {
+//            //System.out.println("No shop found or needed");
+//            // Was passiert dann?
+//            //compute next position (simple and randomized)
+//            direction = (int) random.nextInt(5);
+//        } else {
+//            direction = findDirectionWithHeatMap(currentX, currentY);
+//            /** if ((currentX == goalX) && (currentY == goalY)) {
+//             System.out.println("Goal reached");
+//             direction = 4;
+//             goalX = -1;
+//             goalY = -1;
+//             interestedIn = "nothing";
+//             }*/
+//        }
+
+        //TODO Check if person is at entrance door and delete
+        if (goalStore.getHeatMapValue(currentX,currentY) == 1){
+            //goal reached
+            direction = 4;
+            System.out.println("Goal reached");
+            goalStore = simulationHandler.getEntranceDoor();
         }
-
+        else {
+            direction = findDirectionWithHeatMap(currentX, currentY);
+        }
+        //System.out.println(direction);
 
            /* if(inShop && (timeInShop < 20) ){
                 //TO DO: dont leave shop yet -> check if move is still in the shop
@@ -141,11 +145,6 @@ public class Person {
         nextX = movePerson(direction, currentX, currentY)[0];
         nextY = movePerson(direction, currentX, currentY)[1];
 
-        if (!(interestedIn.equals("nothing")) && (nextX == goalX && nextY == goalY)) {
-            inShop = true;
-            // goalX = -1;
-            // goalY = -1;
-        }
 
         //check if valid move
         //if condition here
@@ -183,9 +182,10 @@ public class Person {
 
     /**
      * Checks, if wall is in between new position or not, only called if person "jumps" to avoid being stuck
+     *
      * @param currentY Current Y Position
      * @param currentX Current X Position
-     * @param p next Position to go to
+     * @param p        next Position to go to
      * @return
      */
     private boolean isWallInBetween(int currentY, int currentX, Position p) {
@@ -207,10 +207,11 @@ public class Person {
 
     /**
      * only called, if collision between two people is detected and they don't move
-     * @param nextX Next X Position
-     * @param nextY Next Y Position
-     * @param currentX Current X Position
-     * @param currentY Current Y Position
+     *
+     * @param nextX          Next X Position
+     * @param nextY          Next Y Position
+     * @param currentX       Current X Position
+     * @param currentY       Current Y Position
      * @param viewableRadius Area to cover when searching for a way to avoid being stuck
      * @return
      */
@@ -223,7 +224,7 @@ public class Person {
         int chooseDirection = (int) random.nextInt(4);
         int found = 0;
 
-    //chooses the direction the person should "escape"
+        //chooses the direction the person should "escape"
 
         switch (chooseDirection) {
             case 0: {
@@ -326,6 +327,7 @@ public class Person {
 
     /**
      * check, if the next position is a valid one -> if there already is another person, abort
+     *
      * @param nextX next X Position
      * @param nextY next Y Positon
      * @return
@@ -351,74 +353,81 @@ public class Person {
         return 1;
     }
 
+//    public String generateInterest() {
+//        //choose what the person wants to buy
+//        //hier fehlen noch die richtigen Kategorien, die es dann auch für die Geschäfte geben muss
+//        int temp = (int) random.nextInt(8);
+//        switch (temp) {
+//            case 0:
+//                //random movement
+//                return "nothing";
+//            case 1:
+//                return "clothing";
+//            case 2:
+//                return "food";
+//            case 3:
+//                return "tech";
+//            case 4:
+//                return "sport";
+//            case 5:
+//                return "toys";
+//            case 6:
+//                return "general";
+//            case 7:
+//                return "other";
+//            default:
+//                return "error in generate interest()";
+//        }
+//
+//    }
 
-    public String generateInterest() {
-        //choose what the person wants to buy
-        //hier fehlen noch die richtigen Kategorien, die es dann auch für die Geschäfte geben muss
-        int temp = (int) random.nextInt(5);
-        switch (temp) {
-            case 0:
-                //random movement
-                return "nothing";
-            case 1:
-                return "clothing";
-            case 2:
-                return "food";
-            case 3:
-                return "book";
-            case 4:
-                return "other";
-            default:
-                return "error in generate interest()";
-        }
-
-    }
-
-    public int getGoalCoordinates() {
-        //int goalX = -1;
-        //int goalY = -1;
-        int interestingShops[] = new int[20];  //Ich weiß noch nicht wie viele Shops es gibt
-        int nrInterestingShops = 0;
-        int temp;
-        //int divisorForDoor;
-        arrayOfStores = simulationHandler.getArrayOfStores();
-
-        for (Store s : arrayOfStores) {
-            //condition: only 1 info tag on each store
-            if (interestedIn.equals(s.getInterestingFor()[0])) {
-                interestingShops[nrInterestingShops] = s.getId();
-                nrInterestingShops++;
-            }
-        }
-
-        if (nrInterestingShops != 0) {
-
-            temp = (int) random.nextInt(nrInterestingShops);
-            //get shop by id
-            /*
-            for (Store s : arrayOfStores) {
-                if (s.getId() == interestingShops[temp]) {
-                    divisorForDoor = (int) random.nextInt(20);
-                    //@param: divisorForDoor is used, so the customers will have different goals in the door,
-                    // and will not all head for the middle, which may cause collisions
-
-                    //condition: 0 is lower than 2
-                    //condition: 1 is lower than 3
-                    // by definition of the xml-File
-
-                    goalX = s.getDoorPosition()[0] + (int) Math.ceil(Math.abs(s.getDoorPosition()[2] - s.getDoorPosition()[0]) / 20 * divisorForDoor);
-                    goalY = s.getDoorPosition()[1] + (int) Math.ceil(Math.abs(s.getDoorPosition()[3] - s.getDoorPosition()[1]) / 20 * divisorForDoor);
-                    break;
-                }
-            }
-            */
-
-            return interestingShops[temp];
-        }
-
-        //int[] goal = {goalX, goalY};
-        return -1;
-    }
+    /**
+     * public int getGoalCoordinates() {
+     * //int goalX = -1;
+     * //int goalY = -1;
+     * int interestingShops[] = new int[20];  //Ich weiß noch nicht wie viele Shops es gibt
+     * int nrInterestingShops = 0;
+     * int temp;
+     * //int divisorForDoor;
+     * arrayOfStores = simulationHandler.getArrayOfStores();
+     * <p>
+     * for (Store s : arrayOfStores) {
+     * //condition: only 1 info tag on each store
+     * if (interestedIn.equals(s.getInterestingFor()[0])) {
+     * interestingShops[nrInterestingShops] = s.getId();
+     * nrInterestingShops++;
+     * }
+     * }
+     * <p>
+     * if (nrInterestingShops != 0) {
+     * <p>
+     * temp = (int) random.nextInt(nrInterestingShops);
+     * //get shop by id
+     * <p>
+     * //            for (Store s : arrayOfStores) {
+     * //                if (s.getId() == interestingShops[temp]) {
+     * //                    divisorForDoor = (int) random.nextInt(20);
+     * //                    //@param: divisorForDoor is used, so the customers will have different goals in the door,
+     * //                    // and will not all head for the middle, which may cause collisions
+     * //
+     * //                    //condition: 0 is lower than 2
+     * //                    //condition: 1 is lower than 3
+     * //                    // by definition of the xml-File
+     * //
+     * //                    goalX = s.getDoorPosition()[0] + (int) Math.ceil(Math.abs(s.getDoorPosition()[2] - s.getDoorPosition()[0]) / 20 * divisorForDoor);
+     * //                    goalY = s.getDoorPosition()[1] + (int) Math.ceil(Math.abs(s.getDoorPosition()[3] - s.getDoorPosition()[1]) / 20 * divisorForDoor);
+     * //                    break;
+     * //                }
+     * //            }
+     * <p>
+     * <p>
+     * return interestingShops[temp];
+     * }
+     * <p>
+     * //int[] goal = {goalX, goalY};
+     * return -1;
+     * }
+     */
 
     public int[] movePerson(int direction, int currentX, int currentY) {
 
@@ -462,135 +471,131 @@ public class Person {
         return newPosition;
     }
 
-    /*
-    public int findDirectionWithGoal(int goalX, int goalY, int currentX, int currentY) {
-
-
-        int temp = (int) random.nextInt(2);
-        System.out.println("temp" + temp + "goal" + goalX + " " + goalY + "current" + currentX + " " + currentY);
-        int nextDirection = 4;
-
-        if (detourNeeded != 4) {
-            if ((detourNeeded == 1 || detourNeeded == 3) && (simulationHandler.crashMap[Math.abs(currentY) - 1][Math.abs(currentX)] != 10) && (simulationHandler.crashMap[Math.abs(currentY) + 1][Math.abs(currentX)] != 10)) {
-                detourNeeded = 4;
-            }
-            if ((detourNeeded == 0 || detourNeeded == 2) && (simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) - 1] != 10) && (simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) + 1] != 10)) {
-                detourNeeded = 4;
-            }
-            return detourNeeded;
-        }
-
-        System.out.println(detourX);
-        System.out.println(detourY);
-
-        if (detourX) {
-            if (currentY == goalY) {
-                if (goalX > currentX) {
-                    detourNeeded = 0;
-                } else {
-                    detourNeeded = 2;
-                }
-            } else {
-                if ((simulationHandler.crashMap[Math.abs(currentY) + 1][Math.abs(currentX)] != 10) && (simulationHandler.crashMap[Math.abs(currentY) - 1][Math.abs(currentX)] != 10)) {
-                    detourX = false;
-                }
-            }
-        } else if (detourY) {
-            if (currentX == goalX) {
-                if (goalY > currentY) {
-                    detourNeeded = 1;
-                } else {
-                    detourNeeded = 3;
-                }
-            } else {
-                temp = 0;
-            }
-            if ((simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) + 1] != 10) && (simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) - 1] != 10)) {
-                detourY = false;
-            }
-        }
-
-        if (temp == 0) {
-            if (goalX < currentX) {
-                //move left
-                nextDirection = 2;
-
-                if (simulationHandler.crashMap[Math.abs(currentY)][movePerson(2, Math.abs(currentX), Math.abs(currentY))[0]] == 10) {
-                    detourX = true;
-                }
-
-            } else if (goalX > currentX) {
-                //move right
-                if (simulationHandler.crashMap[Math.abs(currentY)][movePerson(0, Math.abs(currentX), Math.abs(currentY))[0]] == 10) {
-                    detourX = true;
-                }
-                nextDirection = 0;
-            } else if ((goalX == currentX) && detourY) {
-            }
-        } else {
-            if (goalY > currentY) {
-                //move down
-                if (simulationHandler.crashMap[movePerson(1, Math.abs(currentX), Math.abs(currentY))[1]][Math.abs(currentX)] == 10) {
-                    detourY = true;
-                }
-                nextDirection = 1;
-            } else if (goalY < currentY) {
-                //move up
-                nextDirection = 3;
-                if (simulationHandler.crashMap[movePerson(3, Math.abs(currentX), Math.abs(currentY))[1]][Math.abs(currentX)] == 10) {
-                    detourY = true;
-                }
-            }
-        }
-
-        // simulationHandler.crashMap[movePerson(nextDirection[temp], currentX, currentY)[0]][movePerson(nextDirection[temp], currentX, currentY)[1]]
-
-        return nextDirection;
-    }
-*/
+    /**
+     * public int findDirectionWithGoal(int goalX, int goalY, int currentX, int currentY) {
+     * <p>
+     * <p>
+     * int temp = (int) random.nextInt(2);
+     * System.out.println("temp" + temp + "goal" + goalX + " " + goalY + "current" + currentX + " " + currentY);
+     * int nextDirection = 4;
+     * <p>
+     * if (detourNeeded != 4) {
+     * if ((detourNeeded == 1 || detourNeeded == 3) && (simulationHandler.crashMap[Math.abs(currentY) - 1][Math.abs(currentX)] != 10) && (simulationHandler.crashMap[Math.abs(currentY) + 1][Math.abs(currentX)] != 10)) {
+     * detourNeeded = 4;
+     * }
+     * if ((detourNeeded == 0 || detourNeeded == 2) && (simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) - 1] != 10) && (simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) + 1] != 10)) {
+     * detourNeeded = 4;
+     * }
+     * return detourNeeded;
+     * }
+     * <p>
+     * System.out.println(detourX);
+     * System.out.println(detourY);
+     * <p>
+     * if (detourX) {
+     * if (currentY == goalY) {
+     * if (goalX > currentX) {
+     * detourNeeded = 0;
+     * } else {
+     * detourNeeded = 2;
+     * }
+     * } else {
+     * if ((simulationHandler.crashMap[Math.abs(currentY) + 1][Math.abs(currentX)] != 10) && (simulationHandler.crashMap[Math.abs(currentY) - 1][Math.abs(currentX)] != 10)) {
+     * detourX = false;
+     * }
+     * }
+     * } else if (detourY) {
+     * if (currentX == goalX) {
+     * if (goalY > currentY) {
+     * detourNeeded = 1;
+     * } else {
+     * detourNeeded = 3;
+     * }
+     * } else {
+     * temp = 0;
+     * }
+     * if ((simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) + 1] != 10) && (simulationHandler.crashMap[Math.abs(currentY)][Math.abs(currentX) - 1] != 10)) {
+     * detourY = false;
+     * }
+     * }
+     * <p>
+     * if (temp == 0) {
+     * if (goalX < currentX) {
+     * //move left
+     * nextDirection = 2;
+     * <p>
+     * if (simulationHandler.crashMap[Math.abs(currentY)][movePerson(2, Math.abs(currentX), Math.abs(currentY))[0]] == 10) {
+     * detourX = true;
+     * }
+     * <p>
+     * } else if (goalX > currentX) {
+     * //move right
+     * if (simulationHandler.crashMap[Math.abs(currentY)][movePerson(0, Math.abs(currentX), Math.abs(currentY))[0]] == 10) {
+     * detourX = true;
+     * }
+     * nextDirection = 0;
+     * } else if ((goalX == currentX) && detourY) {
+     * }
+     * } else {
+     * if (goalY > currentY) {
+     * //move down
+     * if (simulationHandler.crashMap[movePerson(1, Math.abs(currentX), Math.abs(currentY))[1]][Math.abs(currentX)] == 10) {
+     * detourY = true;
+     * }
+     * nextDirection = 1;
+     * } else if (goalY < currentY) {
+     * //move up
+     * nextDirection = 3;
+     * if (simulationHandler.crashMap[movePerson(3, Math.abs(currentX), Math.abs(currentY))[1]][Math.abs(currentX)] == 10) {
+     * detourY = true;
+     * }
+     * }
+     * }
+     * <p>
+     * // simulationHandler.crashMap[movePerson(nextDirection[temp], currentX, currentY)[0]][movePerson(nextDirection[temp], currentX, currentY)[1]]
+     * <p>
+     * return nextDirection;
+     * }
+     */
 
     public int findDirectionWithHeatMap(int currentX, int currentY) {
         int direction[] = new int[4];
         int temp = 0;
-        int currentValueHeatMap;
-        for (Store s : arrayOfStores) {
-            if (goalID == s.getId()) {
-                currentValueHeatMap= s.getHeatMapValue(currentX+1, currentY+1) -1;
+        int nextValueHeatMap;
 
-                if (s.getHeatMapValue(currentX + 2, currentY+1) == currentValueHeatMap){
-                    //move right
-                    direction[temp] = 0;
-                    temp++;
-                }
-                if (s.getHeatMapValue(currentX, currentY +1 ) == currentValueHeatMap){
-                    //move left
-                    direction[temp] = 2;
-                    temp++;
-                }
-                if (s.getHeatMapValue(currentX +1, currentY + 2) == currentValueHeatMap){
-                    //move down
-                    direction[temp] = 1;
-                    temp++;
-                }
-                if (s.getHeatMapValue(currentX +1, currentY) == currentValueHeatMap){
-                    //move up
-                    direction[temp] = 3;
-                    temp++;
-                }
-                if (temp == 0){
-                    return 4;
-                }
-                else{
-                    return direction[(int) random.nextInt(temp)];
-                }
-            }
+        nextValueHeatMap = goalStore.getHeatMapValue(currentX, currentY) - 1;
+
+        if (goalStore.getHeatMapValue(currentX+1, currentY) == nextValueHeatMap) {
+            //move right
+            direction[temp] = 0;
+            temp++;
         }
-        System.out.println("No Store by this ID");
-        return 4;
+        if (goalStore.getHeatMapValue(currentX-1, currentY) == nextValueHeatMap) {
+            //move left
+            direction[temp] = 2;
+            temp++;
+        }
+        if (goalStore.getHeatMapValue(currentX, currentY+1) == nextValueHeatMap) {
+            //move down
+            direction[temp] = 1;
+            temp++;
+        }
+        if (goalStore.getHeatMapValue(currentX, currentY-1) == nextValueHeatMap) {
+            //move up
+            direction[temp] = 3;
+            temp++;
+        }
+        if (temp == 0) {
+            System.out.println("Strange");
+            return 4;
+        } else {
+            return direction[(int) random.nextInt(temp)];
+        }
     }
 
     /**
      * Gets speed of Person
+     *
      * @return
      */
     public double getSpeed() {
@@ -599,6 +604,7 @@ public class Person {
 
     /**
      * Sets speed of person
+     *
      * @param speed
      */
     public void setSpeed(double speed) {
@@ -607,6 +613,7 @@ public class Person {
 
     /**
      * Gets position of person
+     *
      * @return
      */
     public Position getCurrentPosition() {
@@ -615,6 +622,7 @@ public class Person {
 
     /**
      * Sets current position
+     *
      * @param currentPosition
      */
     public void setCurrentPosition(Position currentPosition) {
