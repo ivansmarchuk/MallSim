@@ -276,7 +276,7 @@ public class StatisticHandler {
         //Iterate through all persons and increase the counter of the field in which they currently are
         for (Person p : arrayOfPersons) {
             //System.out.println(p.x/lengthheigth + " "+ p.y/lengthwidth);
-            matrix[p.getCurrentPosition().getY() / lengthheigth][p.getCurrentPosition().getX() / lengthwidth] += 1;
+//            matrix[p.getCurrentPosition().getY() / lengthheigth][p.getCurrentPosition().getX() / lengthwidth] += 1;
         }
 
 

@@ -1,14 +1,17 @@
 package com.consultsim.mallsim.Model;
 
 import com.consultsim.mallsim.Model.Persons.Person;
+import com.consultsim.mallsim.View.SimulationHandler;
+import com.consultsim.mallsim.View.StatisticHandler;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class HeatMap {
-
-    private static final int TILE_SIZE = 64;
-    private static final int PARTICLE_SIZE = 32;
+    private SimulationHandler simulationHandler = SimulationHandler.getSimulationInstance();
+    private static final int TILE_SIZE = 10;
+    private static final int PARTICLE_SIZE = 5;
     private static int WIDTH;
     private static int HEIGHT;
     private static int TILE_COUNT_X;
@@ -21,7 +24,7 @@ public class HeatMap {
     private int goalX;
     private int goalY;
 
-    ArrayList<Person> personsAL;
+    ArrayList<Person> personsAL = new ArrayList<>();
 
     private int[] particleRaster;
 
@@ -29,9 +32,16 @@ public class HeatMap {
 
     private Random r = new Random();
 
+
     public HeatMap(int width, int height, int goalX, int goalY){
+        Person person =  new Person( 450, 2 , r.nextFloat()*10, r.nextFloat()*10 );
+        personsAL.add(person);
+        simulationHandler.arrayOfPersons.add(person);
+
+
         this.goalX = goalX;
         this.goalY = goalY;
+
 
         WIDTH = width;
         HEIGHT = height;
@@ -42,34 +52,44 @@ public class HeatMap {
         distance = new float[TILE_COUNT_X][TILE_COUNT_Y];
         densityArray = new int[WIDTH][HEIGHT];
 
-        generateHeatMap(450, 2);
+        generateHeatMap();
 
     }
 
-    private void generateHeatMap(float x, float y) {
+    private void generateHeatMap() {
 
         //TODO here schould be initialized crashmap
-        
+
         for(int xi = 0; xi < TILE_COUNT_X; xi++){
             for(int yi = 0; yi < TILE_COUNT_Y; yi++){
                 traversable[xi][yi] = true;
+
                 if( (xi == TILE_COUNT_X/3 || xi == TILE_COUNT_X*2/3 || xi == TILE_COUNT_X/2 ) && yi != TILE_COUNT_Y/3 /*&& yi != TILE_COUNT_Y*2/3*/ ){
-                    traversable[xi][yi] = false;
+                    //traversable[xi][yi] = false;
                 }
                 if(r.nextFloat() < .1f && yi != TILE_COUNT_Y/3){
-                    traversable[xi][yi] = false;
+                   // traversable[xi][yi] = false;
                 }
                 if(xi < 9 && yi < 5){
                     traversable[xi][yi] = true;
                 }
 
-            }
+              }
         }
         distance(TILE_COUNT_X/4,TILE_COUNT_Y/4);
-        if(traversable[(int)(x/TILE_SIZE)][(int)(y/TILE_SIZE)]){
 
-            //TODO GENERATE PERSON
-            //particleAL.add( new Particle( x, y , r.nextFloat()*10, r.nextFloat()*10 ));
+    }
+
+    public void addPersons(){
+        distance(TILE_COUNT_X/4,TILE_COUNT_Y/4);
+        for(int i = 0; i < 2; i++){
+            if(traversable[(int)(450/TILE_SIZE)][(int)(20/TILE_SIZE)]){
+
+                //TODO GENERATE PERSON
+
+
+
+            }
         }
     }
 
@@ -259,6 +279,8 @@ public class HeatMap {
 
             // I still simulate if in TILE (simulated) area, but can't draw unless in WIDTH (viewable)
             if(xPos < WIDTH - PARTICLE_SIZE && xPos > PARTICLE_SIZE && yPos < HEIGHT - PARTICLE_SIZE && yPos > PARTICLE_SIZE){ // draw on densityArray
+
+
 
                 for(int xi = 0; xi < PARTICLE_SIZE; xi++){
                     for(int yi = 0; yi < PARTICLE_SIZE; yi++){

@@ -196,7 +196,12 @@ public class SimulationHandler {
      */
     public void computeNextPositionOfPersons() {
         for (Person p : arrayOfPersons) {
-           p.computeNext();
+            if (p.getGoalStore()== null){
+                goalStore = getRandomItem(arrayOfStores);
+                p.setGoalStore(goalStore);
+
+            }
+           p.computeNextStep();
         }
 
     }
@@ -286,11 +291,19 @@ public class SimulationHandler {
 
                 goalStore = getRandomItem(arrayOfStores);
 
-                System.out.println(goalStore.getLabel());
-                Person generatedPerson = new Person(new Position(x, y), 10, simulationInstance, goalStore);
-                goalStore.getHeatMap().getPersonsList().add(generatedPerson);
 
-                arrayOfPersons.add(generatedPerson);
+
+                //Person generatedPerson = new Person(new Position(x, y), 10, simulationInstance, goalStore);
+
+              //  Person generatedPerson = new Person(x, y, rand.nextFloat()*10, rand.nextFloat()*10);
+              //  goalStore.getPersonsList().add(generatedPerson);
+               // goalStore.setPersonsListToHeap();
+
+                //System.out.println(goalStore.getLabel());
+
+                //goalStore.getHeatMap().getPersonsList().add(generatedPerson);
+
+                //arrayOfPersons.add(generatedPerson);
 
                 statisticHandler.setCountOfPersons(countPersons++);
             }

@@ -113,7 +113,8 @@ public class DrawFeatures {
     public void drawPersons(GraphicsContext gc, ArrayList<Person> arrayOfPerson) {
         for (Person p : arrayOfPerson) {
             gc.setFill(Color.BLACK);
-            gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5, 5);
+            //gc.fillOval(p.getCurrentPosition().getX(), p.getCurrentPosition().getY(), 5, 5);
+            gc.fillOval(p.getxPos(), p.getyPos(), 5, 5);
         }
     }
 

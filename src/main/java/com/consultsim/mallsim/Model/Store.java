@@ -10,10 +10,11 @@ public class Store {
 
 
 
-    ArrayList<Person> personsList;
+    public ArrayList<Person> personsList;
 
 
     HeatMap heatMap;
+
     private int id;
     private int position[];
     private int doorPosition[];
@@ -32,7 +33,17 @@ public class Store {
 
 
         heatMap = new HeatMap(Configuration.CANVAS_WIDTH_SIZE, Configuration.CANVAS_HEIGHT_SIZE,(position[0]+position[2])/2, (position[1]+position[3])/2);
+        heatMap.addPersons();
 
+    }
+
+    public void setPersonsListToHeap(){
+        heatMap.setPersonsList(personsList);
+    }
+
+
+    public void setDistance(int x, int y){
+        heatMap.distance(x, y);
     }
 
     public int getId() {

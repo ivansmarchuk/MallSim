@@ -21,6 +21,15 @@ public class Person {
     private int timeSearching;
     private Position currentPosition;
     private Position nextPosition;
+
+    public Store getGoalStore() {
+        return goalStore;
+    }
+
+    public void setGoalStore(Store goalStore) {
+        this.goalStore=goalStore;
+    }
+
     private Store goalStore;
     private double speed;
     private Random random;
@@ -49,12 +58,13 @@ public class Person {
     //-----------------------------------------------------
     private float xPos, yPos, xVel, yVel;
 
-    public Person(  float xPos, float yPos, float xVel, float yVel ){
+    public Person(  float xPos, float yPos, float xVel, float yVel){
 
         this.xPos = xPos;
         this.yPos = yPos;
         this.xVel = xVel;
         this.yVel = yVel;
+
 
     }
 
@@ -83,6 +93,11 @@ public class Person {
         return yVel;
     }
 
+    public void computeNextStep() {
+        goalStore.getHeatMap().tick();
+        goalStore.getHeatMap().distance((int)xPos/10, (int)yPos/10);
+        System.out.println("uhu");
+    }
 
     //-----------------------------------------------------
 
@@ -152,6 +167,8 @@ public class Person {
     /**
      * Computes next position of person (simple and randomized)
      */
+
+
     public void computeNext() {
 
         int direction;
