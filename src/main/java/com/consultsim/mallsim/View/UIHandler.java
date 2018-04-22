@@ -6,6 +6,7 @@ import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
+import com.consultsim.mallsim.Model.StaticObjects.StoreHeatMap;
 import com.consultsim.mallsim.Model.Store;
 import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.View.CanvasFeatures.DrawFeatures;
@@ -30,6 +31,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -167,20 +176,26 @@ public class UIHandler implements Initializable {
                 simulationHandler.setEntranceDoor(entranceDoor);
                 initializeSimHandler();
 
-                //Hier nun mein Test
 
                 simulationHandler.fillCrashMapWithStoresAndObjects();
-                for (Store s : arrayOfStores) {
-                    s.generateHeatMap(simulationHandler.crashMap);
 
-                    // TODO;
-                     //s.generateHeapMapForStories()
-                    System.out.println("Heatmap done");
+                StoreHeatMap[] nrTasks = new StoreHeatMap[arrayOfStores.size() +1];
+
+                for (Store s : arrayOfStores) {
+                    int id = s.getId() -1;
+                    nrTasks[id] = new StoreHeatMap();
+                    nrTasks[id].setCrashMap(simulationHandler.crashMap);
+                    nrTasks[id].setStore(s);
+                    Thread t = new Thread(nrTasks[id]);
+                    t.start();
+                    //s.generateHeatMap(simulationHandler.crashMap);
+                    //System.out.println("Heatmap done");
 
                 }
-                //HeatMap door
+
+                //HeatMap Entrance door
                 entranceDoor.generateHeatMap(simulationHandler.crashMap);
-                //und bis hier geht er
+
 
                 drawLayoutFromXMLFile();
                 btnStartPause.setDisable(false);

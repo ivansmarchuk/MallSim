@@ -12,12 +12,12 @@
 
       <leftupperCorner>
         <xPos>420</xPos>
-        <yPos>1</yPos>
+        <yPos>0</yPos>
       </leftupperCorner>
 
       <downrightCorner>
         <xPos>600</xPos>
-        <yPos>3</yPos>
+        <yPos>2</yPos>
       </downrightCorner>
 
     </entranceDoor>
@@ -53,7 +53,7 @@
     <name>Woods Sooper Dooper Shop</name>
 
     <description>
-      <info>other</info> <!-- other/food/clothing/toys/general/tech/sport-->
+      <info>other</info>  <!--other/food/clothing/toys/general/tech/sport-->
     </description>
 
     <maxVisitors>150</maxVisitors>
@@ -70,7 +70,6 @@
 
   </store>
 
-<!--
   <store id="002">
     <color>green</color>
     <position>
@@ -117,6 +116,7 @@
 
   </store>
 
+    <!--
   <store id="003">
     <color>pink</color>
     <position>
@@ -162,7 +162,7 @@
     </specialOffer>
 
   </store>
-
+  -->
 
   <store id="004">
     <color>orange</color>
@@ -581,7 +581,6 @@
 
   </store>
 
-
   <store id="013">
     <color>darkcyan</color>
     <position>
@@ -770,7 +769,6 @@
 
   </store>
 
-
   <store id="017">
     <color>chartreuse</color>
     <position>
@@ -864,7 +862,7 @@
     </specialOffer>
 
   </store>
--->
+
 
   <object id="019">
 
@@ -931,8 +929,6 @@
 
   </object>
 
-
-
   <object id="023">
 
     <leftDownCorner>
@@ -947,7 +943,6 @@
 
     <type>plant</type>
   </object>
-
 
   <object id="024">
 
@@ -981,8 +976,6 @@
 
   </object>
 
-
-
   <object id="026">
 
     <leftDownCorner>
@@ -998,7 +991,6 @@
     <type>plant</type>
 
   </object>
-
 
   <object id="027">
 
@@ -1016,7 +1008,6 @@
 
   </object>
 
-
   <object id="028">
 
     <leftDownCorner>
@@ -1032,8 +1023,6 @@
     <type>plant</type>
 
   </object>
-
-
 
   <object id="029">
 
@@ -1051,7 +1040,6 @@
 
   </object>
 
-
   <object id="030">
 
     <leftDownCorner>
@@ -1067,7 +1055,6 @@
     <type>trash bin</type>
 
   </object>
-
 
   <object id="031">
 
@@ -1085,7 +1072,6 @@
 
   </object>
 
-
   <object id="032">
 
     <leftDownCorner>
@@ -1100,8 +1086,6 @@
 
     <type>trash bin</type>
   </object>
-
-
 
   <object id="033">
 
@@ -1119,7 +1103,6 @@
 
   </object>
 
-
   <object id="034">
 
     <leftDownCorner>
@@ -1135,6 +1118,5 @@
     <type>trash bin</type>
 
   </object>
-
 
 </layout>

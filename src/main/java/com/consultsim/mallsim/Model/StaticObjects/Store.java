@@ -36,7 +36,7 @@ public class Store {
       //condition: 1 is lower than 3
       // by definition of the xml-File
       //Mitte des Stores
-
+      System.out.println("Heatmap called");
       int goalX = getPosition()[0] + (int) Math.ceil((getPosition()[2] - getPosition()[0]) / 2);
       int goalY = getPosition()[1] + (int) Math.ceil((getPosition()[3] - getPosition()[1]) / 2);
       //System.out.println(goalX + " " + goalY);
@@ -90,7 +90,7 @@ public class Store {
 //          }
 //          System.out.println("");
 //      }
-
+      System.out.println("Heatmap generated");
   }
 
   public int countPeopleInStore(){

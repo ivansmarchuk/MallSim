@@ -24,7 +24,7 @@ public class SimulationHandler {
     double randomNum = 1.0;
     public ArrayList<Person> arrayOfPersons;
     public ArrayList<Store> arrayOfStores;
-    private Store goalStore;
+    private Store goalStores[];
     public EntranceDoor entranceDoor;
 
     public ArrayList<Objects> arrayOfObjects;
@@ -289,11 +289,18 @@ public class SimulationHandler {
             for (int i = 0; i < (int) numberOfPerson; i++) {
                 int x = rand.nextInt((maxX - minX) + 1) + minX;
                 int y = rand.nextInt((maxY - minY) + 1) + minY;
+                //random number from 0 to 4
+                int nrGoalStores = (int )(Math.random() * 5);
+                goalStores = new Store[6];
+                //System.out.println(nrGoalStores);
 
-                goalStore = getRandomItem(arrayOfStores);
-                //System.out.println(goalStore.getLabel());
-                arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStore));
-                statisticHandler.setCountOfPersons(countPersons++);
+                for(int m = 0; m <= nrGoalStores; m++) {
+                    goalStores[m] = getRandomItem(arrayOfStores);
+                    //System.out.println(goalStore.getLabel());
+                    arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStores));
+                    statisticHandler.setCountOfPersons(countPersons++);
+                }
+                //System.out.println(goalStores[0] + " " + goalStores[1] + " " + goalStores[2] + " " + goalStores[3] + " " + goalStores[4] + " " + goalStores[5]);
             }
             randomNum = ThreadLocalRandom.current().nextInt(1, 10);
             dayTimeInMinutes = Math.round(dayTime) / 60;

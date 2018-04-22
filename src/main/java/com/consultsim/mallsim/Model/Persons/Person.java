@@ -3,7 +3,6 @@ package com.consultsim.mallsim.Model.Persons;
 
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Position;
-import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.Store;
 import com.consultsim.mallsim.View.SimulationHandler;
 
@@ -22,7 +21,9 @@ public class Person {
     private int timeSearching;
     private Position currentPosition;
     private Position nextPosition;
-    private Store goalStore;
+    private Store[] goalStores;
+    private Store currentGoalStore;
+    private int nrGoalStores;
     private double speed;
     private Random random;
     private SimulationHandler simulationHandler;
@@ -44,11 +45,13 @@ public class Person {
      * @param pos               Position of Person
      * @param speed             Speed of person
      * @param simulationHandler Simulationhandler for access to maps
-     * @param goalStore         Store which the person should walk to
+     * @param currentGoalStore        Store which the person should walk to
      */
-    public Person(Position pos, double speed, SimulationHandler simulationHandler, Store goalStore) {
+    public Person(Position pos, double speed, SimulationHandler simulationHandler, Store goalStores[]) {
         //radius
-        this.goalStore = goalStore;
+        nrGoalStores = 0;
+        this.goalStores = goalStores;
+        this.currentGoalStore = goalStores[nrGoalStores];
         this.radius = Configuration.PERSON_RADIUS;
         this.currentPosition = pos;
         this.nextPosition = pos;
@@ -127,11 +130,25 @@ public class Person {
 //        }
 
         //TODO Check if person is at entrance door and delete
-        if (goalStore.getHeatMapValue(currentX,currentY) == 1){
+        if (currentGoalStore.getHeatMapValue(currentX,currentY) == 1){
             //goal reached
+
+            if (currentGoalStore == simulationHandler.getEntranceDoor()){
+                /**
+                 * person leaves the mall
+                 * delete person
+                 */
+                simulationHandler.getArrayOfPersons().remove(this);
+
+            }
+
             direction = 4;
             System.out.println("Goal reached");
-            goalStore = simulationHandler.getEntranceDoor();
+            nrGoalStores++;
+            if (goalStores[nrGoalStores] == null) {
+                currentGoalStore = simulationHandler.getEntranceDoor();
+            }
+            else currentGoalStore = goalStores[nrGoalStores];
         }
         else {
             direction = findDirectionWithHeatMap(currentX, currentY);
@@ -189,7 +206,7 @@ public class Person {
      * @return
      */
     private boolean isWallInBetween(int currentY, int currentX, Position p) {
-        System.out.println("Arrived");
+        //System.out.println("Arrived");
         int lowerY = (currentY < p.getY() ? currentY : p.getY());
         int higherY = (currentY > p.getY() ? currentY : p.getY());
         int lowerX = (currentX < p.getX() ? currentX : p.getX());
@@ -563,24 +580,24 @@ public class Person {
         int temp = 0;
         int nextValueHeatMap;
 
-        nextValueHeatMap = goalStore.getHeatMapValue(currentX, currentY) - 1;
+        nextValueHeatMap = currentGoalStore.getHeatMapValue(currentX, currentY) - 1;
 
-        if (goalStore.getHeatMapValue(currentX+1, currentY) == nextValueHeatMap) {
+        if ( currentGoalStore.getHeatMapValue(currentX+1, currentY) == nextValueHeatMap) {
             //move right
             direction[temp] = 0;
             temp++;
         }
-        if (goalStore.getHeatMapValue(currentX-1, currentY) == nextValueHeatMap) {
+        if (currentGoalStore.getHeatMapValue(currentX-1, currentY) == nextValueHeatMap) {
             //move left
             direction[temp] = 2;
             temp++;
         }
-        if (goalStore.getHeatMapValue(currentX, currentY+1) == nextValueHeatMap) {
+        if (currentGoalStore.getHeatMapValue(currentX, currentY+1) == nextValueHeatMap) {
             //move down
             direction[temp] = 1;
             temp++;
         }
-        if (goalStore.getHeatMapValue(currentX, currentY-1) == nextValueHeatMap) {
+        if (currentGoalStore.getHeatMapValue(currentX, currentY-1) == nextValueHeatMap) {
             //move up
             direction[temp] = 3;
             temp++;
