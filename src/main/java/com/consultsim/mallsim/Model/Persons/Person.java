@@ -8,14 +8,15 @@ import com.consultsim.mallsim.View.SimulationHandler;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A presentation of a person in the simulation
  */
 public class Person {
-
     public static ArrayList<Store> arrayOfStores;
-    private static int nextID = 0;
+    private static int nextID=0;
+    boolean isGoalMallDoor=false;
     private int timeInShop;
     private boolean inShop;
     private int timeSearching;
@@ -33,7 +34,8 @@ public class Person {
     private int movedSince;
     private double radius;
     private Person collidedWithPerson;
-    private int waitedSince = 0;
+    private int waitedSince=0;
+    private ArrayList<Store> goalStoresList;
     //private int goalID;
 
     private int goalX;
@@ -45,24 +47,25 @@ public class Person {
      * @param pos               Position of Person
      * @param speed             Speed of person
      * @param simulationHandler Simulationhandler for access to maps
-     * @param currentGoalStore        Store which the person should walk to
+     * @param goalStoresList    Store which the person should walk to
      */
-    public Person(Position pos, double speed, SimulationHandler simulationHandler, Store goalStores[]) {
+    public Person(Position pos, double speed, SimulationHandler simulationHandler, ArrayList<Store> goalStoresList) {
         //radius
-        nrGoalStores = 0;
-        this.goalStores = goalStores;
-        this.currentGoalStore = goalStores[nrGoalStores];
-        this.radius = Configuration.PERSON_RADIUS;
-        this.currentPosition = pos;
-        this.nextPosition = pos;
-        this.speed = speed;
-        this.random = new Random();
-        this.simulationHandler = simulationHandler;
-        this.id = Person.nextID++;
-        this.movedSince = 0;
+        nrGoalStores=0;
+        //this.goalStores = goalStores;
+        this.currentGoalStore=goalStoresList.get(0);
+        this.radius=Configuration.PERSON_RADIUS;
+        this.currentPosition=pos;
+        this.nextPosition=pos;
+        this.speed=speed;
+        this.random=new Random();
+        this.simulationHandler=simulationHandler;
+        this.id=Person.nextID++;
+        this.movedSince=0;
         //this.interestedIn = generateInterest();
         //this.interestedIn = "no";
-        this.waitedSince = 0;
+        this.waitedSince=0;
+        this.goalStoresList=goalStoresList;
         //this.goalX = goalStore.getDoorPosition()[2];
         //this.goalY = goalStore.getDoorPosition()[3];
 
@@ -99,7 +102,7 @@ public class Person {
      * @param radius
      */
     public void setRadius(double radius) {
-        this.radius = radius;
+        this.radius=radius;
     }
 
     /**
@@ -108,10 +111,10 @@ public class Person {
     public void computeNext() {
 
         int direction;
-        int currentX = this.currentPosition.getX();
-        int currentY = this.currentPosition.getY();
-        int nextX = currentX;
-        int nextY = currentY;
+        int currentX=this.currentPosition.getX();
+        int currentY=this.currentPosition.getY();
+        int nextX=currentX;
+        int nextY=currentY;
 
 //        if (interestedIn.equals("nothing")) {
 //            //System.out.println("No shop found or needed");
@@ -130,28 +133,31 @@ public class Person {
 //        }
 
         //TODO Check if person is at entrance door and delete
-        if (currentGoalStore.getHeatMapValue(currentX,currentY) == 1){
+        if (currentGoalStore.getHeatMapValue(currentX, currentY) == 1) {
             //goal reached
-
-            if (currentGoalStore == simulationHandler.getEntranceDoor()){
+            if (currentGoalStore == simulationHandler.getEntranceDoor()) {
                 /**
                  * person leaves the mall
                  * delete person
                  */
-                simulationHandler.getArrayOfPersons().remove(this);
-
+                isGoalMallDoor=true;
+                direction=4;
+                //simulationHandler.getArrayOfPersons().remove(this);
+            } else {
+                direction=4;
+                System.out.println("Goal reached");
+                nrGoalStores++;
+                currentGoalStore=goalStoresList.get(nrGoalStores);
             }
 
-            direction = 4;
-            System.out.println("Goal reached");
-            nrGoalStores++;
+            /*
             if (goalStores[nrGoalStores] == null) {
                 currentGoalStore = simulationHandler.getEntranceDoor();
             }
             else currentGoalStore = goalStores[nrGoalStores];
-        }
-        else {
-            direction = findDirectionWithHeatMap(currentX, currentY);
+            */
+        } else {
+            direction=findDirectionWithHeatMap(currentX, currentY);
         }
         //System.out.println(direction);
 
@@ -159,20 +165,20 @@ public class Person {
                 //TO DO: dont leave shop yet -> check if move is still in the shop
             }*/
 
-        nextX = movePerson(direction, currentX, currentY)[0];
-        nextY = movePerson(direction, currentX, currentY)[1];
+        nextX=movePerson(direction, currentX, currentY)[0];
+        nextY=movePerson(direction, currentX, currentY)[1];
 
 
         //check if valid move
         //if condition here
-        int typeOfCollision = isValidMove(nextX, nextY);
+        int typeOfCollision=isValidMove(nextX, nextY);
         if (typeOfCollision == 1) {
             //System.out.println("true");
             this.currentPosition.setX(nextX);
             this.currentPosition.setY(nextY);
             //System.out.println("nexty: " + nextY + " nextx: " + nextX);
-            simulationHandler.crashMap[nextY][nextX] = 1;
-            simulationHandler.crashMap[currentY][currentX] = 0;
+            simulationHandler.crashMap[nextY][nextX]=1;
+            simulationHandler.crashMap[currentY][currentX]=0;
         } else if (typeOfCollision == 2 || typeOfCollision == 3 || typeOfCollision == 0) {
             simulationHandler.crashMap[currentY][currentX]++;
             waitedSince++;
@@ -180,13 +186,13 @@ public class Person {
 
         if (simulationHandler.crashMap[currentY][currentX] == 4) {
             if (typeOfCollision == 2) {
-                nextPosition = handleCollision(nextX, nextY, currentX, currentY, 3);
+                nextPosition=handleCollision(nextX, nextY, currentX, currentY, 3);
             } else if (typeOfCollision == 3) {
-                nextPosition = handleCollision(nextX, nextY, currentX, currentY, 3);
+                nextPosition=handleCollision(nextX, nextY, currentX, currentY, 3);
             }
-            simulationHandler.crashMap[nextPosition.getY()][nextPosition.getX()] = 1;
-            simulationHandler.crashMap[currentY][currentX] = 0;
-            movedSince = 0;
+            simulationHandler.crashMap[nextPosition.getY()][nextPosition.getX()]=1;
+            simulationHandler.crashMap[currentY][currentX]=0;
+            movedSince=0;
             this.currentPosition.setX(nextPosition.getX());
             this.currentPosition.setY(nextPosition.getY());
         }
@@ -207,13 +213,13 @@ public class Person {
      */
     private boolean isWallInBetween(int currentY, int currentX, Position p) {
         //System.out.println("Arrived");
-        int lowerY = (currentY < p.getY() ? currentY : p.getY());
-        int higherY = (currentY > p.getY() ? currentY : p.getY());
-        int lowerX = (currentX < p.getX() ? currentX : p.getX());
-        int higherX = (currentX > p.getX() ? currentX : p.getX());
+        int lowerY=(currentY < p.getY() ? currentY : p.getY());
+        int higherY=(currentY > p.getY() ? currentY : p.getY());
+        int lowerX=(currentX < p.getX() ? currentX : p.getX());
+        int higherX=(currentX > p.getX() ? currentX : p.getX());
 
-        for (int y = lowerY; y < higherY; y++) {
-            for (int x = lowerX; x < higherX; x++) {
+        for (int y=lowerY; y < higherY; y++) {
+            for (int x=lowerX; x < higherX; x++) {
                 if (simulationHandler.crashMap[y][x] == 10) {
                     return true;
                 }
@@ -236,13 +242,58 @@ public class Person {
         int tempx;
         int tempy;
 
-        Position tempPos = new Position(currentX, currentY);
+        Position tempPos=new Position(currentX, currentY);
 
-        int chooseDirection = (int) random.nextInt(4);
-        int found = 0;
+        //int chooseDirection = (int) random.nextInt(4);
+        //int found = 0;
 
         //chooses the direction the person should "escape"
+        //tempx = currentX + ThreadLocalRandom.current().nextInt(-viewableRadius, viewableRadius);
+        int chooseDirection = ThreadLocalRandom.current().nextInt(0, 4);
+        switch (chooseDirection) {
+            case 0: {
+                if (currentY < ThreadLocalRandom.current().nextInt(50, 300)){
+                    tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+                    tempx=currentX + ThreadLocalRandom.current().nextInt( 0, viewableRadius);
+                }else{
+                    tempy=currentY + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
+                    tempx=currentX + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
+                }
 
+            }break;
+            case 1: {
+                tempx=currentX + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
+                tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+            }break;
+            case 2: {
+                tempx=currentX + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+                if (currentY < ThreadLocalRandom.current().nextInt(50, 300)){
+                    tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+                }else{
+                    tempy=currentY + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
+                }
+            }break;
+            case 3: {
+                tempx=currentX + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+                tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+            }break;
+            default:
+                tempx = currentX;
+                tempy = currentY;
+        }
+
+
+
+        if (tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000) {
+            if ((simulationHandler.crashMap[tempy][tempx] == 0)) {
+                tempPos.setY(tempy);
+                tempPos.setX(tempx);
+            } else if ((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)) {
+                simulationHandler.crashMap[tempy][tempx]=1;
+            }
+        }
+
+        /*
         switch (chooseDirection) {
             case 0: {
                 for (int y = -viewableRadius; y < viewableRadius; y++) {
@@ -253,8 +304,6 @@ public class Person {
                             if ((simulationHandler.crashMap[tempy][tempx] == 0)) {
                                 tempPos.setY(tempy);
                                 tempPos.setX(tempx);
-
-
                             } else if ((simulationHandler.crashMap[tempy][tempx] < 5) && (simulationHandler.crashMap[tempy][tempx] != 0)) {
                                 simulationHandler.crashMap[tempy][tempx] = 1;
                             }
@@ -323,19 +372,21 @@ public class Person {
                 }
                 break;
 
-        }
+        }*/
 
         //checks, if chosen position is a valid one (if no walls are in between)
         if (!isWallInBetween(currentY, currentX, tempPos)) {
-            waitedSince = 0;
+            waitedSince=0;
             return tempPos;
         } else {
+
             tempPos.setX(currentX);
             tempPos.setY(currentY);
             waitedSince++;
         }
 
         if (waitedSince > 15) {
+
             //simulationHandler.getArrayOfPersons().remove(this);
         }
         return tempPos;
@@ -354,9 +405,9 @@ public class Person {
             return 0;
         }
         for (Person p : simulationHandler.getArrayOfPersons()) {
-            int x = p.getCurrentPosition().getX() - nextX;
-            int y = p.getCurrentPosition().getY() - nextY;
-            double distance = Math.sqrt(x * x + y * y);
+            int x=p.getCurrentPosition().getX() - nextX;
+            int y=p.getCurrentPosition().getY() - nextY;
+            double distance=Math.sqrt(x * x + y * y);
             //System.out.println("Dist: " + distance);
 
             if ((distance < 11) && (p.id != this.id)) {
@@ -448,35 +499,35 @@ public class Person {
 
     public int[] movePerson(int direction, int currentX, int currentY) {
 
-        int nextStep = 1;
-        int[] newPosition = {currentX, currentY};
+        int nextStep=1;
+        int[] newPosition={currentX, currentY};
 
         switch (direction) {
             case 0:
                 //right
                 if ((currentX + nextStep) <= 1000) {
-                    newPosition[0] = currentX + nextStep;
+                    newPosition[0]=currentX + nextStep;
                 }
                 break;
 
             case 1:
                 //down
                 if ((currentY + nextStep) <= 1000) {
-                    newPosition[1] = currentY + nextStep;
+                    newPosition[1]=currentY + nextStep;
                 }
                 break;
 
             case 2:
                 //left
                 if ((currentX - nextStep) >= 0) {
-                    newPosition[0] = currentX - nextStep;
+                    newPosition[0]=currentX - nextStep;
                 }
                 break;
 
             case 3:
                 //up
                 if ((currentY - nextStep) >= 0) {
-                    newPosition[1] = currentY - nextStep;
+                    newPosition[1]=currentY - nextStep;
                 }
                 break;
 
@@ -574,8 +625,44 @@ public class Person {
      * return nextDirection;
      * }
      */
-
     public int findDirectionWithHeatMap(int currentX, int currentY) {
+        int direction[]=new int[4];
+        int temp=0;
+        int nextValueHeatMap;
+
+        nextValueHeatMap=currentGoalStore.getHeatMapValue(currentX, currentY) - 1;
+
+        if (currentGoalStore.getHeatMapValue(currentX + 1, currentY) == nextValueHeatMap) {
+            //move right
+            direction[temp]=0;
+            temp++;
+        }
+        if (currentGoalStore.getHeatMapValue(currentX - 1, currentY) == nextValueHeatMap) {
+            //move left
+            direction[temp]=2;
+            temp++;
+        }
+        if (currentGoalStore.getHeatMapValue(currentX, currentY + 1) == nextValueHeatMap) {
+            //move down
+            direction[temp]=1;
+            temp++;
+        }
+        if (currentGoalStore.getHeatMapValue(currentX, currentY - 1) == nextValueHeatMap) {
+            //move up
+            direction[temp]=3;
+            temp++;
+        }
+        if (temp == 0) {
+            System.out.println("Strange");
+            return ThreadLocalRandom.current().nextInt(0, 3);
+        } else {
+            return direction[(int) random.nextInt(temp)];
+        }
+    }
+    /*
+    public int findDirectionWithHeatMap(int currentX, int currentY) {
+        TreeSet directionTreeSet = new TreeSet();
+
         int direction[] = new int[4];
         int temp = 0;
         int nextValueHeatMap;
@@ -584,31 +671,39 @@ public class Person {
 
         if ( currentGoalStore.getHeatMapValue(currentX+1, currentY) == nextValueHeatMap) {
             //move right
-            direction[temp] = 0;
-            temp++;
+            //direction[temp] = 0;
+            //temp++;
+            directionTreeSet.add(0);
+
+
         }
         if (currentGoalStore.getHeatMapValue(currentX-1, currentY) == nextValueHeatMap) {
             //move left
-            direction[temp] = 2;
-            temp++;
+            directionTreeSet.add(2);
+            //direction[temp] = 2;
+            //temp++;
         }
         if (currentGoalStore.getHeatMapValue(currentX, currentY+1) == nextValueHeatMap) {
             //move down
-            direction[temp] = 1;
-            temp++;
+            directionTreeSet.add(1);
+            //direction[temp] = 1;
+            //temp++;
         }
         if (currentGoalStore.getHeatMapValue(currentX, currentY-1) == nextValueHeatMap) {
             //move up
-            direction[temp] = 3;
-            temp++;
+            directionTreeSet.add(3);
+            //direction[temp] = 3;
+            //temp++;
         }
-        if (temp == 0) {
+        if (directionTreeSet.size() == 0) {
             System.out.println("Strange");
-            return 4;
+            return ThreadLocalRandom.current().nextInt(0, 3);
         } else {
-            return direction[(int) random.nextInt(temp)];
+            return  random.nextInt(directionTreeSet.size());
+
         }
     }
+    */
 
     /**
      * Gets speed of Person
@@ -625,7 +720,7 @@ public class Person {
      * @param speed
      */
     public void setSpeed(double speed) {
-        this.speed = speed;
+        this.speed=speed;
     }
 
     /**
@@ -643,9 +738,19 @@ public class Person {
      * @param currentPosition
      */
     public void setCurrentPosition(Position currentPosition) {
-        this.currentPosition = currentPosition;
+        this.currentPosition=currentPosition;
 
     }
 
+    public boolean isGoalMallDoor() {
+        return isGoalMallDoor;
+    }
 
+    public Store getCurrentGoalStore() {
+        return currentGoalStore;
+    }
+
+    public void setCurrentGoalStore(Store currentGoalStore) {
+        this.currentGoalStore=currentGoalStore;
+    }
 }

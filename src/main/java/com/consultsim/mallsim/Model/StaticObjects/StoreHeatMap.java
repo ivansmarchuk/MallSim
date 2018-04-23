@@ -2,8 +2,6 @@ package com.consultsim.mallsim.Model.StaticObjects;
 
 import com.consultsim.mallsim.Model.Store;
 
-import java.util.concurrent.Callable;
-
 public class StoreHeatMap implements  Runnable{
 
     private int[][] crashMap;

@@ -179,23 +179,34 @@ public class UIHandler implements Initializable {
 
                 simulationHandler.fillCrashMapWithStoresAndObjects();
 
-                StoreHeatMap[] nrTasks = new StoreHeatMap[arrayOfStores.size() +1];
+                StoreHeatMap[] nrTasks = new StoreHeatMap[arrayOfStores.size()];
 
                 for (Store s : arrayOfStores) {
-                    int id = s.getId() -1;
-                    nrTasks[id] = new StoreHeatMap();
-                    nrTasks[id].setCrashMap(simulationHandler.crashMap);
-                    nrTasks[id].setStore(s);
-                    Thread t = new Thread(nrTasks[id]);
-                    t.start();
+                        int id = s.getId() -1;
+                        nrTasks[id] = new StoreHeatMap();
+                        nrTasks[id].setCrashMap(simulationHandler.crashMap);
+                        nrTasks[id].setStore(s);
+                        Thread t = new Thread(nrTasks[id]);
+                        t.start();
                     //s.generateHeatMap(simulationHandler.crashMap);
                     //System.out.println("Heatmap done");
 
                 }
 
+
                 //HeatMap Entrance door
                 entranceDoor.generateHeatMap(simulationHandler.crashMap);
 
+
+                /*
+                Store s1 = arrayOfStores.get(1);
+
+                for (int y=768; y < 840; y++) {
+                    for (int x=495; x < 550; x++) {
+                        System.out.print(s1.getHeatMapValue(x, y) +  " ");
+                    }
+                    System.out.println();
+                }*/
 
                 drawLayoutFromXMLFile();
                 btnStartPause.setDisable(false);
@@ -247,7 +258,7 @@ public class UIHandler implements Initializable {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 //generation new persons
                 simulationHandler.generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
-                simulationHandler.computeNextPositionOfPersons();
+                simulationHandler.computeNextPositionOfPersons(sliderDayTime.getValue());
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 //TODO anders implementieren

@@ -93,6 +93,8 @@ public class Store {
       System.out.println("Heatmap generated");
   }
 
+
+
   public int countPeopleInStore(){
     return 0;
   }

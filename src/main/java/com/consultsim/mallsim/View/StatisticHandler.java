@@ -5,6 +5,7 @@ import com.consultsim.mallsim.Model.StaticObjects.Spot;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.TreeMap;
 
 
 public class StatisticHandler {
@@ -13,11 +14,14 @@ public class StatisticHandler {
     static ArrayList<int[][]> spotArrayList = new ArrayList<int[][]>();
     private static ArrayList<Person> arrayOfPerson;
     public ArrayList<Spot> hotColdSpots;
+
+
     private int matrix[][];
     private int hcmatrix[][];
     private int counterHotSpots;
     private int counterColdSpots;
     private int countOfPersons;
+    TreeMap<String, Integer> hm = new TreeMap<>();
 
     /**
      * return countOfPersons
@@ -156,6 +160,7 @@ public class StatisticHandler {
      * @return
      */
     public ArrayList<Spot> getHotColdSpots() {
+
         return hotColdSpots;
     }
 
@@ -177,6 +182,7 @@ public class StatisticHandler {
                 //REBECCA: LOOK HERE ->
                 if (hctemp[y][x] == 1) {
                     hotColdSpots.add(new Spot(x * divisorwidth, ((y * divisorheigth)), divisorwidth, divisorheigth, 1));
+
                 }
                 if (hctemp[y][x] == -1) {
                     hotColdSpots.add(new Spot(x * divisorwidth, ((y * divisorheigth)), divisorwidth, divisorheigth, 2));
@@ -269,6 +275,9 @@ public class StatisticHandler {
         for (int i = 0; i < divisorheigth; i++) {
             for (int a = 0; a < divisorwidth; a++) {
                 matrix[i][a] = 0;
+                if (!hm.containsKey(""+i+a)){
+                    hm.put(""+i+a, 0);
+                }
                 hcmatrix[i][a] = 0;
             }
         }
@@ -289,10 +298,13 @@ public class StatisticHandler {
             //System.out.println();
             for (int x = 0; x < divisorwidth; x++) {
                 if (matrix[y][x] < borderLower) {
+                    hm.put(""+x+y, hm.get(""+x+y)-1);
                     hcmatrix[y][x] = -1;
+
                 } else if (matrix[y][x] < borderHigher) {
                     hcmatrix[y][x] = 0;
                 } else {
+                    hm.put(""+x+y, hm.get(""+x+y)+ 1);
                     hcmatrix[y][x] = 1;
                 }
             }
@@ -352,6 +364,10 @@ public class StatisticHandler {
         return highest;
     }
 
+    public TreeMap<String, Integer> getHm() {
+        return hm;
+    }
 
+    
 
 }

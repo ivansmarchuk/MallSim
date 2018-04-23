@@ -11,7 +11,7 @@
     <entranceDoor>
 
       <leftupperCorner>
-        <xPos>420</xPos>
+        <xPos>500</xPos>
         <yPos>0</yPos>
       </leftupperCorner>
 
@@ -53,7 +53,7 @@
     <name>Woods Sooper Dooper Shop</name>
 
     <description>
-      <info>other</info>  <!--other/food/clothing/toys/general/tech/sport-->
+      <info>other</info>
     </description>
 
     <maxVisitors>150</maxVisitors>
@@ -116,7 +116,7 @@
 
   </store>
 
-    <!--
+
   <store id="003">
     <color>pink</color>
     <position>
@@ -162,7 +162,7 @@
     </specialOffer>
 
   </store>
-  -->
+
 
   <store id="004">
     <color>orange</color>

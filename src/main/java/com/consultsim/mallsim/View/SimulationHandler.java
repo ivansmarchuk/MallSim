@@ -1,6 +1,7 @@
 package com.consultsim.mallsim.View;
 
 
+import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.Position;
@@ -8,10 +9,7 @@ import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -24,6 +22,7 @@ public class SimulationHandler {
     double randomNum = 1.0;
     public ArrayList<Person> arrayOfPersons;
     public ArrayList<Store> arrayOfStores;
+    private ArrayList<Store> goalStoresList;
     private Store goalStores[];
     public EntranceDoor entranceDoor;
 
@@ -105,10 +104,21 @@ public class SimulationHandler {
             for (int y = yPosLeftUpper; y < yPosDownRight; y++) {
                 for (int x = xPosLeftUpper; x < xPosDownRight; x++) {
 
+
                     if (y == yPosLeftUpper || y == yPosDownRight - 1) {
                         crashMap[y][x] = 10;
+
+                        if (y-1 != -1 && y+1 != 1000){
+                            crashMap[y-1][x] = 10;
+                            crashMap[y+1][x] = 10;
+                        }
                     } else if (x == xPosLeftUpper || x == xPosDownRight - 1) {
+                        if (x-1 != -1 && x+1 != 1000){
+                            crashMap[y][x-1] = 10;
+                            crashMap[y][x+1] = 10;
+                        }
                         crashMap[y][x] = 10;
+
                     }
 
                     //crashMap[y][x] = 10;
@@ -120,21 +130,31 @@ public class SimulationHandler {
             if (s.getDoorPosition()[1] == s.getDoorPosition()[3]) {
                 if (s.getDoorPosition()[1] == s.getPosition()[1]) {
                     for (int x = s.getDoorPosition()[0]; x < s.getDoorPosition()[2]; x++) {
+                        crashMap[s.getDoorPosition()[1]-1][x] = 1;
                         crashMap[s.getDoorPosition()[1]][x] = 1;
+                        crashMap[s.getDoorPosition()[1]+1][x] = 1;
+
+
                     }
                 } else {
                     for (int x = s.getDoorPosition()[0]; x < s.getDoorPosition()[2]; x++) {
+                        crashMap[s.getDoorPosition()[1] - 2][x] = 1;
                         crashMap[s.getDoorPosition()[1] - 1][x] = 1;
+                        crashMap[s.getDoorPosition()[1]][x] = 1;
                     }
                 }
             } else {
                 if (s.getDoorPosition()[0] == s.getPosition()[0]) {
                     for (int y = s.getDoorPosition()[1]; y < s.getDoorPosition()[3]; y++) {
+                        crashMap[y][s.getDoorPosition()[0]-1] = 1;
                         crashMap[y][s.getDoorPosition()[0]] = 1;
+                        crashMap[y][s.getDoorPosition()[0]+1] = 1;
                     }
                 } else {
                     for (int y = s.getDoorPosition()[1]; y < s.getDoorPosition()[3]; y++) {
+                        crashMap[y][s.getDoorPosition()[0] - 2] = 1;
                         crashMap[y][s.getDoorPosition()[0] - 1] = 1;
+                        crashMap[y][s.getDoorPosition()[0]] = 1;
                     }
                 }
             }
@@ -196,10 +216,26 @@ public class SimulationHandler {
     /**
      * computes next position of people
      */
-    public void computeNextPositionOfPersons() {
-        for (Person p : arrayOfPersons) {
-           p.computeNext();
+    public void computeNextPositionOfPersons(double dayTime) {
+
+
+        Iterator<Person> iter = arrayOfPersons.iterator();
+
+        while (iter.hasNext()) {
+            Person person = iter.next();
+
+            if (person.isGoalMallDoor())
+                iter.remove();
+            else {
+                if (Math.round(dayTime) / 60 > Configuration.TIME_OUT) {
+                    if(!person.getCurrentPosition().equals(entranceDoor))
+                          person.setCurrentGoalStore(entranceDoor);
+                }
+                person.computeNext();
+            }
         }
+
+
 
     }
 
@@ -277,29 +313,53 @@ public class SimulationHandler {
      * @param dayTime        the period of day time
      */
     public void generatePerson(double numberOfPerson, double dayTime) {
-
+        int randTime;
+        /*
         int minX = mall.getDoorLeftUpper().getX();
         int maxX = mall.getDoorDownRight().getX();
         int minY = mall.getDoorLeftUpper().getY();
         int maxY = mall.getDoorDownRight().getY();
+*/
+        int minX = 420;
+        int maxX = 499;
+        int minY = 4;
+        int maxY = 6;
 
         Random rand = new Random();
+
         //System.out.println("DayTime: " + Math.round(dayTime)/60);
-        if (Math.round(dayTime) / 60 - dayTimeInMinutes > randomNum) {
+        if (numberOfPerson > 5){
+             randTime = ThreadLocalRandom.current().nextInt(5, 20);
+        }else {
+             randTime = ThreadLocalRandom.current().nextInt(1, 10);
+        }
+
+
+        if (Math.round(dayTime) / 60 - dayTimeInMinutes > randTime && dayTimeInMinutes < 1140) {
             for (int i = 0; i < (int) numberOfPerson; i++) {
-                int x = rand.nextInt((maxX - minX) + 1) + minX;
-                int y = rand.nextInt((maxY - minY) + 1) + minY;
+                int x = ThreadLocalRandom.current().nextInt(450, 499);
+                int y = ThreadLocalRandom.current().nextInt(2, 6);
                 //random number from 0 to 4
                 int nrGoalStores = (int )(Math.random() * 5);
                 goalStores = new Store[6];
+                goalStoresList = new ArrayList<>();
                 //System.out.println(nrGoalStores);
 
                 for(int m = 0; m <= nrGoalStores; m++) {
-                    goalStores[m] = getRandomItem(arrayOfStores);
+                    //goalStores[m] = getRandomItem(arrayOfStores);
+                    goalStoresList.add(getRandomItem(arrayOfStores));
                     //System.out.println(goalStore.getLabel());
-                    arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStores));
-                    statisticHandler.setCountOfPersons(countPersons++);
                 }
+                if (countPersons < 951){
+                    goalStoresList.add(entranceDoor);
+                    for (int j=0; j < numberOfPerson; j++) {
+                        //arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStores));
+                        arrayOfPersons.add(new Person(new Position(x, y), 10, simulationInstance, goalStoresList));
+                        statisticHandler.setCountOfPersons(countPersons++);
+                    }
+                }
+
+
                 //System.out.println(goalStores[0] + " " + goalStores[1] + " " + goalStores[2] + " " + goalStores[3] + " " + goalStores[4] + " " + goalStores[5]);
             }
             randomNum = ThreadLocalRandom.current().nextInt(1, 10);

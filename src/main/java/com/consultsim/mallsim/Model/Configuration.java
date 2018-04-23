@@ -7,7 +7,8 @@ public final class Configuration {
     public static final double CANVAS_WIDTH_SIZE = 1000.0;
     public static final double STATISTIC_WINDOW_WIDTH_SIZE = 600.0;
     public static final double STATISTIC_WINDOW_HEIGHT_SIZE = 600.0;
-    public static final char SPEED_TIME_FACTOR = 50;
+    public static final char SPEED_TIME_FACTOR = 10;
+    public static final char TIME_OUT = 1020;
 
 
 
