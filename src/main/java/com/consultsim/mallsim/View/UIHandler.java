@@ -1,14 +1,12 @@
 package com.consultsim.mallsim.View;
 
-import com.consultsim.mallsim.MainApp;
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
-import com.consultsim.mallsim.Model.Position;
+import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 import com.consultsim.mallsim.Model.StaticObjects.StoreHeatMap;
 import com.consultsim.mallsim.Model.Store;
-import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.View.CanvasFeatures.DrawFeatures;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -32,30 +30,18 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
 
 
-
-    private int speedDayOfSim;
     @FXML
     public Button btnResetSim;
     @FXML
@@ -70,6 +56,7 @@ public class UIHandler implements Initializable {
     public Label lblSpeedDayValue;
     @FXML
     public Button btnStartPause;
+    private int speedDayOfSim;
     @FXML
     private Slider sliderDayTime;
     @FXML
@@ -154,7 +141,7 @@ public class UIHandler implements Initializable {
 
             String userDirectoryString = System.getProperty("user.dir");
             File userDirectory = new File(userDirectoryString);
-            if(!userDirectory.canRead()) {
+            if (!userDirectory.canRead()) {
                 userDirectory = new File("c:/");
             }
             fileChooser.setInitialDirectory(userDirectory);
@@ -162,7 +149,7 @@ public class UIHandler implements Initializable {
             File chosenFile = fileChooser.showOpenDialog(null);
             //Make sure a file was selected, if not return default
             String path;
-            if(chosenFile != null) {
+            if (chosenFile != null) {
 
                 path = chosenFile.getPath();
                 FileHandler fileHandler = new FileHandler();
@@ -182,12 +169,12 @@ public class UIHandler implements Initializable {
                 StoreHeatMap[] nrTasks = new StoreHeatMap[arrayOfStores.size()];
 
                 for (Store s : arrayOfStores) {
-                        int id = s.getId() -1;
-                        nrTasks[id] = new StoreHeatMap();
-                        nrTasks[id].setCrashMap(simulationHandler.crashMap);
-                        nrTasks[id].setStore(s);
-                        Thread t = new Thread(nrTasks[id]);
-                        t.start();
+                    int id = s.getId() - 1;
+                    nrTasks[id] = new StoreHeatMap();
+                    nrTasks[id].setCrashMap(simulationHandler.crashMap);
+                    nrTasks[id].setStore(s);
+                    Thread t = new Thread(nrTasks[id]);
+                    t.start();
                     //s.generateHeatMap(simulationHandler.crashMap);
                     //System.out.println("Heatmap done");
 
@@ -232,7 +219,7 @@ public class UIHandler implements Initializable {
      * @param speedDayOfSim fps
      */
     private void buildSimulationStart(int speedDayOfSim) {
-        Duration duration = Duration.millis(1000/(float) (speedDayOfSim * 10));
+        Duration duration = Duration.millis(1000 / (float) (speedDayOfSim * 10));
         KeyFrame frame = getToNextFrame(duration);
         simulationLoop = new Timeline();
         simulationLoop.setCycleCount(Timeline.INDEFINITE);
@@ -442,7 +429,7 @@ public class UIHandler implements Initializable {
     private void resetSimulation() {
         Parent root = null;
         try {
-            root = FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
+            root = FXMLLoader.load(getClass().getClassLoader().getResource("MainTemplate.fxml"));
             simulationHandler.arrayOfPersons = new ArrayList<>();
             simulationHandler.arrayOfObjects = new ArrayList<>();
             statisticHandler.hotColdSpots = new ArrayList<>();
@@ -458,7 +445,6 @@ public class UIHandler implements Initializable {
 
 
     }
-
 
 
 }

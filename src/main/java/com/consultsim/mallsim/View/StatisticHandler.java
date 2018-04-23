@@ -298,14 +298,16 @@ public class StatisticHandler {
             //System.out.println();
             for (int x = 0; x < divisorwidth; x++) {
                 if (matrix[y][x] < borderLower) {
+                    //matrix[y][x] -= 1;
                     hm.put(""+x+y, hm.get(""+x+y)-1);
                     hcmatrix[y][x] = -1;
 
                 } else if (matrix[y][x] < borderHigher) {
                     hcmatrix[y][x] = 0;
                 } else {
-                    hm.put(""+x+y, hm.get(""+x+y)+ 1);
+                    //hm.put(""+x+y, hm.get(""+x+y)+ 1);
                     hcmatrix[y][x] = 1;
+                    matrix[y][x] +=1;
                 }
             }
         }
