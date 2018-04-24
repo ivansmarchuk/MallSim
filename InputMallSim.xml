@@ -24,7 +24,7 @@
   </generalInfo>
 
   <store id="001">
-    <color>red</color>
+    <color>#ea493f</color>
     <position>
       <leftupperCorner>
         <xPos>0</xPos>
@@ -71,7 +71,7 @@
   </store>
 
   <store id="002">
-    <color>green</color>
+    <color>#a89b3d</color>
     <position>
       <leftupperCorner>
         <xPos>260</xPos>
@@ -118,7 +118,7 @@
 
 
   <store id="003">
-    <color>pink</color>
+    <color>#296972</color>
     <position>
       <leftupperCorner>
         <xPos>600</xPos>
@@ -165,7 +165,7 @@
 
 
   <store id="004">
-    <color>orange</color>
+    <color>#54b7d7</color>
     <position>
       <leftupperCorner>
         <xPos>0</xPos>
@@ -211,7 +211,7 @@
   </store>
 
   <store id="005">
-    <color>FORESTGREEN</color>
+    <color>#f6d51f</color>
     <position>
       <leftupperCorner>
         <xPos>0</xPos>
@@ -257,7 +257,7 @@
   </store>
 
   <store id="006">
-    <color>AQUA</color>
+    <color>#01b4bc</color>
     <position>
       <leftupperCorner>
         <xPos>0</xPos>
@@ -349,7 +349,7 @@
   </store>
 
   <store id="008">
-    <color>gold</color>
+    <color>#5fa55a</color>
     <position>
       <leftupperCorner>
         <xPos>500</xPos>
@@ -395,7 +395,7 @@
   </store>
 
   <store id="009">
-    <color>chocolate</color>
+    <color>#dcb600</color>
     <position>
       <leftupperCorner>
         <xPos>600</xPos>
@@ -441,7 +441,7 @@
   </store>
 
   <store id="010">
-    <color>blue</color>
+    <color>#ca86c8</color>
     <position>
       <leftupperCorner>
         <xPos>820</xPos>
@@ -488,7 +488,7 @@
   </store>
 
   <store id="011">
-    <color>darkcyan</color>
+    <color>#ea493f</color>
     <position>
       <leftupperCorner>
         <xPos>820</xPos>
@@ -535,7 +535,7 @@
   </store>
 
   <store id="012">
-    <color>blue</color>
+    <color>#ffbc40</color>
     <position>
       <leftupperCorner>
         <xPos>820</xPos>
@@ -629,7 +629,7 @@
   </store>
 
   <store id="014">
-    <color>blue</color>
+    <color>#ff500d</color>
     <position>
       <leftupperCorner>
         <xPos>820</xPos>
@@ -676,7 +676,7 @@
   </store>
 
   <store id="015">
-    <color>green</color>
+    <color>#479600</color>
     <position>
       <leftupperCorner>
         <xPos>360</xPos>
@@ -770,7 +770,7 @@
   </store>
 
   <store id="017">
-    <color>chartreuse</color>
+    <color>#ffbc40</color>
     <position>
       <leftupperCorner>
         <xPos>500</xPos>

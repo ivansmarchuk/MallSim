@@ -80,22 +80,22 @@ public class UIHandler implements Initializable {
     private ArrayList<Store> arrayOfStores;
     private ArrayList<Objects> arrayOfObjects;
     private EntranceDoor entranceDoor;
-    private double dayMinutes = 540;
+    private double dayMinutes=540;
     private double daySeconds;
 
-    private DrawFeatures drawFeatures = DrawFeatures.getDrawInstance();
+    private DrawFeatures drawFeatures=DrawFeatures.getDrawInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeCanvas();
-        speedDayOfSim = Configuration.INITIAL_DAY_SPEED;
+        speedDayOfSim=Configuration.INITIAL_DAY_SPEED;
         lblSpeedDayValue.setText(String.format("%d", this.speedDayOfSim));
         btnStartPause.setText("Start");
 
         initializeSliderDayTime();
         initializeSliderNumberOfPersons();
         initializeSliderSpeedDayOfSim();
-        //initializeSimHandler();
+        initializeSimHandler();
 
 
         basePane.setPrefHeight(Configuration.STATISTIC_WINDOW_HEIGHT_SIZE);
@@ -106,15 +106,18 @@ public class UIHandler implements Initializable {
     }
 
     private void initializeSimHandler() {
+        simulationHandler=SimulationHandler.getSimulationInstance();
+        statisticHandler=StatisticHandler.getStatisticInstance();
         //simulationHandler = new SimulationHandler();
-        arrayOfPerson = new ArrayList<>();
-        arrayOfSpots = new ArrayList<>();
+        arrayOfPerson=new ArrayList<>();
+        arrayOfSpots=new ArrayList<>();
         // Here are initialized persons
         simulationHandler.initializePersons();
         //drawFeature.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
-        arrayOfPerson = simulationHandler.getArrayOfPersons();
+        arrayOfPerson=simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
-        arrayOfSpots = simulationHandler.statisticHandler.getHotColdSpots();
+        arrayOfSpots=simulationHandler.statisticHandler.getHotColdSpots();
+        buildSimulationStart(this.speedDayOfSim);
 
     }
 
@@ -125,58 +128,57 @@ public class UIHandler implements Initializable {
      * @param actionEvent Load from File was pressed
      */
     public void loadLayoutFromFile(ActionEvent actionEvent) {
-        simulationHandler = SimulationHandler.getSimulationInstance();
-        statisticHandler = StatisticHandler.getStatisticInstance();
+
 
         //for load from File
 
 
         //load from file in root directory
         try {
-            graphicsContext = canvas.getGraphicsContext2D();
-
-            final FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+            graphicsContext=canvas.getGraphicsContext2D();
+            final FileChooser fileChooser=new FileChooser();
+            FileChooser.ExtensionFilter extentionFilter=new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
             fileChooser.getExtensionFilters().add(extentionFilter);
 
-            String userDirectoryString = System.getProperty("user.dir");
-            File userDirectory = new File(userDirectoryString);
+            String userDirectoryString=System.getProperty("user.dir");
+            File userDirectory=new File(userDirectoryString);
             if (!userDirectory.canRead()) {
-                userDirectory = new File("c:/");
+                userDirectory=new File("c:/");
             }
             fileChooser.setInitialDirectory(userDirectory);
             //Choose the file
-            File chosenFile = fileChooser.showOpenDialog(null);
+            File chosenFile=fileChooser.showOpenDialog(null);
             //Make sure a file was selected, if not return default
             String path;
             if (chosenFile != null) {
 
-                path = chosenFile.getPath();
-                FileHandler fileHandler = new FileHandler();
+                path=chosenFile.getPath();
+                FileHandler fileHandler=new FileHandler();
                 System.out.println();
                 fileHandler.readFile(path);
-                arrayOfStores = fileHandler.getArrayOfStores();
-                arrayOfObjects = fileHandler.getArrarOfObjects();
-                entranceDoor = fileHandler.getEntranceDoor();
+                arrayOfStores=fileHandler.getArrayOfStores();
+                arrayOfObjects=fileHandler.getArrarOfObjects();
+                entranceDoor=fileHandler.getEntranceDoor();
                 simulationHandler.setArrayOfObjects(arrayOfObjects);
                 simulationHandler.setArrayOfStores(arrayOfStores);
                 simulationHandler.setEntranceDoor(entranceDoor);
-                initializeSimHandler();
+                //initializeSimHandler();
 
 
                 simulationHandler.fillCrashMapWithStoresAndObjects();
 
-                StoreHeatMap[] nrTasks = new StoreHeatMap[arrayOfStores.size()];
+                StoreHeatMap[] nrTasks=new StoreHeatMap[arrayOfStores.size()];
 
                 for (Store s : arrayOfStores) {
-                    int id = s.getId() - 1;
-                    nrTasks[id] = new StoreHeatMap();
+                    int id=s.getId() - 1;
+
+                    nrTasks[id]=new StoreHeatMap();
                     nrTasks[id].setCrashMap(simulationHandler.crashMap);
                     nrTasks[id].setStore(s);
-                    Thread t = new Thread(nrTasks[id]);
+                    Thread t=new Thread(nrTasks[id]);
                     t.start();
-                    //s.generateHeatMap(simulationHandler.crashMap);
-                    //System.out.println("Heatmap done");
+                    s.generateHeatMap(simulationHandler.crashMap);
+                    System.out.println("Heatmap done");
 
                 }
 
@@ -201,12 +203,12 @@ public class UIHandler implements Initializable {
                 btnResetSim.setDisable(false);
             } else {
                 //default return value
-                path = null;
+                path=null;
             }
 
             //FileHandler fileHandler = new FileHandler();
             //fileHandler.readFile("InputMallSim.xml");
-            buildSimulationStart(this.speedDayOfSim);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -219,9 +221,9 @@ public class UIHandler implements Initializable {
      * @param speedDayOfSim fps
      */
     private void buildSimulationStart(int speedDayOfSim) {
-        Duration duration = Duration.millis(1000 / (float) (speedDayOfSim * 10));
-        KeyFrame frame = getToNextFrame(duration);
-        simulationLoop = new Timeline();
+        Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * 10));
+        KeyFrame frame=getToNextFrame(duration);
+        simulationLoop=new Timeline();
         simulationLoop.setCycleCount(Timeline.INDEFINITE);
         simulationLoop.getKeyFrames().add(frame);
     }
@@ -239,7 +241,7 @@ public class UIHandler implements Initializable {
             drawLayoutFromXMLFile();
             drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, 0.2);
             drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
-            double newDayTime = sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * Configuration.SPEED_TIME_FACTOR;
+            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * Configuration.SPEED_TIME_FACTOR;
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
@@ -255,7 +257,7 @@ public class UIHandler implements Initializable {
                 showSimStatistic();
                 simulationLoop.stop();
                 clearCanvas(graphicsContext);
-                simulationHandler.arrayOfPersons = new ArrayList<>();
+                simulationHandler.arrayOfPersons=new ArrayList<>();
             }
         });
     }
@@ -263,14 +265,14 @@ public class UIHandler implements Initializable {
 
     private void showSimStatistic() {
         try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("StatisticTemplate.fxml"));
-            AnchorPane page = loader.load();
-            Stage dialogStage = new Stage();
+            FXMLLoader loader=new FXMLLoader();
+            loader.setLocation(getClass().getClassLoader().getResource("StatisticTemplate.fxml"));
+            AnchorPane page=loader.load();
+            Stage dialogStage=new Stage();
             dialogStage.initOwner(this.basePane.getScene().getWindow());
             dialogStage.setTitle("Statistics");
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            Scene scene = new Scene(page);
+            Scene scene=new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
         } catch (IOException e) {
@@ -308,9 +310,9 @@ public class UIHandler implements Initializable {
      */
     @FXML
     public void getNextStep(ActionEvent event) {
-        Duration duration = Duration.millis(1000 / (float) (speedDayOfSim * 10));
-        KeyFrame frame = getToNextFrame(duration);
-        simulationLoop = new Timeline();
+        Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * 10));
+        KeyFrame frame=getToNextFrame(duration);
+        simulationLoop=new Timeline();
         simulationLoop.setCycleCount(1);
         simulationLoop.getKeyFrames().add(frame);
         simulationLoop.play();
@@ -339,14 +341,14 @@ public class UIHandler implements Initializable {
 
         sliderDayTime.setMajorTickUnit(10000);
         sliderDayTime.setShowTickLabels(true);
-        StringConverter<Double> stringConverter = new StringConverter<Double>() {
+        StringConverter<Double> stringConverter=new StringConverter<Double>() {
             //convert int to hours format hh:mm
             @Override
             public String toString(Double object) {
-                long seconds = object.longValue();
-                long minutes = TimeUnit.SECONDS.toMinutes(seconds);
-                long hour = TimeUnit.MINUTES.toHours(minutes);
-                long remainingMinutes = minutes - TimeUnit.HOURS.toMinutes(hour);
+                long seconds=object.longValue();
+                long minutes=TimeUnit.SECONDS.toMinutes(seconds);
+                long hour=TimeUnit.MINUTES.toHours(minutes);
+                long remainingMinutes=minutes - TimeUnit.HOURS.toMinutes(hour);
                 return String.format("%02d", hour) + ":" + String.format("%02d", remainingMinutes);
             }
 
@@ -359,7 +361,7 @@ public class UIHandler implements Initializable {
         sliderDayTime.setLabelFormatter(stringConverter);
         sliderDayTime.valueProperty().addListener((observable, oldValue, newValue) ->
                 labelDayTime.setText(stringConverter.toString(newValue.doubleValue())));
-        daySeconds = sliderDayTime.getMin();
+        daySeconds=sliderDayTime.getMin();
 
     }
 
@@ -374,7 +376,7 @@ public class UIHandler implements Initializable {
     private void initializeCanvas() {
         canvas.setHeight(Configuration.CANVAS_HEIGHT_SIZE);
         canvas.setWidth(Configuration.CANVAS_WIDTH_SIZE);
-        graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext=canvas.getGraphicsContext2D();
         graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
         canvas.setLayoutY(1);
         canvas.setLayoutX(1);
@@ -392,13 +394,13 @@ public class UIHandler implements Initializable {
         sliderSpeedDayOfSim.valueProperty().addListener((observable, oldValue, newValue) -> {
             sliderSpeedDayOfSim.setValue(newValue.intValue());
             lblSpeedDayValue.setText(String.format("%d", newValue.intValue()));
-            speedDayOfSim = (int) sliderSpeedDayOfSim.getValue();
+            speedDayOfSim=(int) sliderSpeedDayOfSim.getValue();
             changeFrame(speedDayOfSim);
         });
     }
 
     private void changeFrame(int speedDayOfSim) {
-        Animation.Status status = simulationLoop.getStatus();
+        Animation.Status status=simulationLoop.getStatus();
         simulationLoop.stop();
         simulationLoop.getKeyFrames().clear();
         buildSimulationStart(speedDayOfSim);
@@ -427,13 +429,13 @@ public class UIHandler implements Initializable {
     }
 
     private void resetSimulation() {
-        Parent root = null;
+        Parent root=null;
         try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("MainTemplate.fxml"));
-            simulationHandler.arrayOfPersons = new ArrayList<>();
-            simulationHandler.arrayOfObjects = new ArrayList<>();
-            statisticHandler.hotColdSpots = new ArrayList<>();
-            simulationHandler.arrayOfStores = new ArrayList<>();
+            root=FXMLLoader.load(getClass().getClassLoader().getResource("MainTemplate.fxml"));
+            simulationHandler.arrayOfPersons=new ArrayList<>();
+            simulationHandler.arrayOfObjects=new ArrayList<>();
+            statisticHandler.hotColdSpots=new ArrayList<>();
+            simulationHandler.arrayOfStores=new ArrayList<>();
             statisticHandler.setCountOfPersons(0);
             simulationLoop.stop();
 

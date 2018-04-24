@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -25,7 +26,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("SimulationApp");
+        this.primaryStage.setTitle("MallSim");
         initMainLayout();
     }
 
@@ -41,6 +42,7 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
             primaryStage.setMinHeight(600);
             primaryStage.setMinWidth(850);
+            primaryStage.getIcons().add(new Image(String.valueOf(getClass().getClassLoader().getResource("images/icon.png"))));
             primaryStage.setOnCloseRequest((WindowEvent we) -> {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setHeaderText("");

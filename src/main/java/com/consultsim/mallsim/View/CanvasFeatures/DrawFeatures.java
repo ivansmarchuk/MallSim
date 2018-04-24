@@ -31,20 +31,20 @@ public class DrawFeatures {
      * @param arrayOfStores array of stores from XML temmplate
      */
     public void drawStores(GraphicsContext gc, ArrayList<Store> arrayOfStores) {
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(Color.WHITE);
         for (Store store : arrayOfStores) {
             gc.setFill(store.getColor());
             gc.fillRect(store.getPosition()[0], store.getPosition()[1],
                     store.getPosition()[2] - store.getPosition()[0],
                     store.getPosition()[3] - store.getPosition()[1]);
             gc.save();
-            gc.setFill(Color.BLACK);
+            gc.setFill(Color.WHITE);
             gc.setFont(new Font(gc.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
             gc.fillText(store.getLabel() + "\n", store.getPosition()[0] + 5,
                     store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2);
 
             gc.save();
-            gc.setFill(Color.DARKGRAY);
+            gc.setFill(Color.WHITE);
             gc.setFont(new Font(gc.getFont().getName(), 10.0));
             gc.fillText("(Kapazität: "+ store.getPeopleCounter() + " max)", store.getPosition()[0] + 5,
                     store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2 + 15);
