@@ -1,5 +1,6 @@
 package com.consultsim.mallsim.View;
 
+import com.consultsim.mallsim.MainApp;
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
@@ -11,6 +12,7 @@ import com.consultsim.mallsim.View.CanvasFeatures.DrawFeatures;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,8 +23,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -37,11 +42,14 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class UIHandler implements Initializable {
 
-
+    @FXML
+    public StackPane stackPane;
     @FXML
     public Button btnResetSim;
     @FXML
@@ -56,6 +64,9 @@ public class UIHandler implements Initializable {
     public Label lblSpeedDayValue;
     @FXML
     public Button btnStartPause;
+    @FXML
+    public Button layoutLoadFromFIle;
+    ProgressIndicator progressIndicator=new ProgressIndicator();
     private int speedDayOfSim;
     @FXML
     private Slider sliderDayTime;
@@ -82,7 +93,6 @@ public class UIHandler implements Initializable {
     private EntranceDoor entranceDoor;
     private double dayMinutes=540;
     private double daySeconds;
-
     private DrawFeatures drawFeatures=DrawFeatures.getDrawInstance();
 
     @Override
@@ -101,14 +111,14 @@ public class UIHandler implements Initializable {
         basePane.setPrefHeight(Configuration.STATISTIC_WINDOW_HEIGHT_SIZE);
         basePane.setPrefWidth(Configuration.STATISTIC_WINDOW_WIDTH_SIZE);
         showStatistics.setOnAction(event -> showSimStatistic());
-
+        buildSimulationStart(this.speedDayOfSim);
 
     }
 
     private void initializeSimHandler() {
+        //simulationHandler = new SimulationHandler();
         simulationHandler=SimulationHandler.getSimulationInstance();
         statisticHandler=StatisticHandler.getStatisticInstance();
-        //simulationHandler = new SimulationHandler();
         arrayOfPerson=new ArrayList<>();
         arrayOfSpots=new ArrayList<>();
         // Here are initialized persons
@@ -117,7 +127,7 @@ public class UIHandler implements Initializable {
         arrayOfPerson=simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots=simulationHandler.statisticHandler.getHotColdSpots();
-        buildSimulationStart(this.speedDayOfSim);
+
 
     }
 
@@ -127,11 +137,7 @@ public class UIHandler implements Initializable {
      *
      * @param actionEvent Load from File was pressed
      */
-    public void loadLayoutFromFile(ActionEvent actionEvent) {
-
-
-        //for load from File
-
+    public void loadLayoutFromFile(MouseEvent actionEvent) throws InterruptedException {
 
         //load from file in root directory
         try {
@@ -154,60 +160,50 @@ public class UIHandler implements Initializable {
 
                 path=chosenFile.getPath();
                 FileHandler fileHandler=new FileHandler();
-                System.out.println();
                 fileHandler.readFile(path);
+
                 arrayOfStores=fileHandler.getArrayOfStores();
                 arrayOfObjects=fileHandler.getArrarOfObjects();
                 entranceDoor=fileHandler.getEntranceDoor();
                 simulationHandler.setArrayOfObjects(arrayOfObjects);
                 simulationHandler.setArrayOfStores(arrayOfStores);
                 simulationHandler.setEntranceDoor(entranceDoor);
-                //initializeSimHandler();
-
-
                 simulationHandler.fillCrashMapWithStoresAndObjects();
 
-                StoreHeatMap[] nrTasks=new StoreHeatMap[arrayOfStores.size()];
+                StoreHeatMap nrTasks;
 
+                ExecutorService pool=Executors.newFixedThreadPool(3);
+                progressIndicator.setStyle("-fx-progress-color: #FFF;");
+                stackPane.getChildren().add(progressIndicator);
                 for (Store s : arrayOfStores) {
-                    int id=s.getId() - 1;
-
-                    nrTasks[id]=new StoreHeatMap();
-                    nrTasks[id].setCrashMap(simulationHandler.crashMap);
-                    nrTasks[id].setStore(s);
-                    Thread t=new Thread(nrTasks[id]);
-                    t.start();
-                    s.generateHeatMap(simulationHandler.crashMap);
-                    System.out.println("Heatmap done");
+                    nrTasks=new StoreHeatMap();
+                    nrTasks.setCrashMap(simulationHandler.crashMap);
+                    nrTasks.setStore(s);
+                    pool.execute(nrTasks);
 
                 }
+                pool.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        entranceDoor.generateHeatMap(simulationHandler.crashMap);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                stackPane.getChildren().remove(progressIndicator);
+                                btnStartPause.setDisable(false);
+                                btnNextStep.setDisable(false);
+                                btnResetSim.setDisable(false);
 
-
-                //HeatMap Entrance door
-                entranceDoor.generateHeatMap(simulationHandler.crashMap);
-
-
-                /*
-                Store s1 = arrayOfStores.get(1);
-
-                for (int y=768; y < 840; y++) {
-                    for (int x=495; x < 550; x++) {
-                        System.out.print(s1.getHeatMapValue(x, y) +  " ");
+                                drawLayoutFromXMLFile();
+                            }
+                        });
                     }
-                    System.out.println();
-                }*/
+                });
 
-                drawLayoutFromXMLFile();
-                btnStartPause.setDisable(false);
-                btnNextStep.setDisable(false);
-                btnResetSim.setDisable(false);
             } else {
                 //default return value
-                path=null;
+                path = null;
             }
-
-            //FileHandler fileHandler = new FileHandler();
-            //fileHandler.readFile("InputMallSim.xml");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -266,7 +262,7 @@ public class UIHandler implements Initializable {
     private void showSimStatistic() {
         try {
             FXMLLoader loader=new FXMLLoader();
-            loader.setLocation(getClass().getClassLoader().getResource("StatisticTemplate.fxml"));
+            loader.setLocation(getClass().getResource("StatisticTemplate.fxml"));
             AnchorPane page=loader.load();
             Stage dialogStage=new Stage();
             dialogStage.initOwner(this.basePane.getScene().getWindow());
@@ -431,7 +427,7 @@ public class UIHandler implements Initializable {
     private void resetSimulation() {
         Parent root=null;
         try {
-            root=FXMLLoader.load(getClass().getClassLoader().getResource("MainTemplate.fxml"));
+            root=FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
             simulationHandler.arrayOfPersons=new ArrayList<>();
             simulationHandler.arrayOfObjects=new ArrayList<>();
             statisticHandler.hotColdSpots=new ArrayList<>();
