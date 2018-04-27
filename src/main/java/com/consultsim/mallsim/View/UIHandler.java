@@ -175,14 +175,13 @@ public class UIHandler implements Initializable {
                 ExecutorService pool=Executors.newFixedThreadPool(3);
                 progressIndicator.setStyle("-fx-progress-color: #FFF;");
                 stackPane.getChildren().add(progressIndicator);
-                /*
                 for (Store s : arrayOfStores) {
                     nrTasks=new StoreHeatMap();
                     nrTasks.setCrashMap(simulationHandler.crashMap);
                     nrTasks.setStore(s);
                     pool.execute(nrTasks);
 
-                }*/
+                }
                 pool.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -428,7 +427,7 @@ public class UIHandler implements Initializable {
     private void resetSimulation() {
         Parent root=null;
         try {
-            root=FXMLLoader.load(MainApp.class.getClassLoader().getResource("MainTemplate.fxml"));
+            root=FXMLLoader.load(java.util.Objects.requireNonNull(MainApp.class.getClassLoader().getResource("MainTemplate.fxml")));
             initializeCanvas();
             drawLayoutFromXMLFile();
             simulationHandler.arrayOfPersons=new ArrayList<>();
