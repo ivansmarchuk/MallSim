@@ -175,13 +175,14 @@ public class UIHandler implements Initializable {
                 ExecutorService pool=Executors.newFixedThreadPool(3);
                 progressIndicator.setStyle("-fx-progress-color: #FFF;");
                 stackPane.getChildren().add(progressIndicator);
+                /*
                 for (Store s : arrayOfStores) {
                     nrTasks=new StoreHeatMap();
                     nrTasks.setCrashMap(simulationHandler.crashMap);
                     nrTasks.setStore(s);
                     pool.execute(nrTasks);
 
-                }
+                }*/
                 pool.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -262,7 +263,7 @@ public class UIHandler implements Initializable {
     private void showSimStatistic() {
         try {
             FXMLLoader loader=new FXMLLoader();
-            loader.setLocation(getClass().getResource("StatisticTemplate.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("StatisticTemplate.fxml"));
             AnchorPane page=loader.load();
             Stage dialogStage=new Stage();
             dialogStage.initOwner(this.basePane.getScene().getWindow());
@@ -427,19 +428,22 @@ public class UIHandler implements Initializable {
     private void resetSimulation() {
         Parent root=null;
         try {
-            root=FXMLLoader.load(MainApp.class.getResource("View/MainTemplate.fxml"));
+            root=FXMLLoader.load(MainApp.class.getClassLoader().getResource("MainTemplate.fxml"));
+            initializeCanvas();
+            drawLayoutFromXMLFile();
             simulationHandler.arrayOfPersons=new ArrayList<>();
-            simulationHandler.arrayOfObjects=new ArrayList<>();
+            //simulationHandler.arrayOfObjects=new ArrayList<>();
             statisticHandler.hotColdSpots=new ArrayList<>();
-            simulationHandler.arrayOfStores=new ArrayList<>();
+            //simulationHandler.arrayOfStores=new ArrayList<>();
             statisticHandler.setCountOfPersons(0);
-            simulationLoop.stop();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
         btnStartPause.getScene().setRoot(root);
+
         btnResetSim.setDisable(false);
+
+
 
 
     }
