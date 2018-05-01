@@ -236,7 +236,7 @@ public class FileHandler {
 
         String color = element.getElementsByTagName("color").item(0).getChildNodes().item(0).getNodeValue();
 
-        System.out.println(color);
+        //System.out.println(color);
 
 
         Store tempStore = new Store();

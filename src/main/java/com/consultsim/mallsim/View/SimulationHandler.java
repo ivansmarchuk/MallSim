@@ -20,28 +20,25 @@ public class SimulationHandler {
 
     private static SimulationHandler simulationInstance;
     public int crashMap[][];
-    public StatisticHandler statisticHandler;
-    public ArrayList<Person> arrayOfPersons;
-    public ArrayList<Store> arrayOfStores;
-    public EntranceDoor entranceDoor;
-    public ArrayList<Objects> arrayOfObjects;
-    double randomNum=1.0;
+    StatisticHandler statisticHandler;
+    ArrayList<Person> arrayOfPersons;
+    ArrayList<Store> arrayOfStores;
+    private EntranceDoor entranceDoor;
+    ArrayList<Objects> arrayOfObjects;
     private double dayTimeInMinutes=540;
-    private ArrayList<Store> goalStoresList;
-    private Store goalStores[];
     private int countPersons=0;
     private Mall mall;
     private int countOfPersons=0;
 
     //Initialize values
-    public SimulationHandler() {
+    private SimulationHandler() {
 
         statisticHandler=StatisticHandler.getStatisticInstance();
         mall=Mall.getMallInstance();
 
-        arrayOfPersons=new ArrayList<Person>();
-        arrayOfStores=new ArrayList<Store>();
-        arrayOfObjects=new ArrayList<Objects>();
+        arrayOfPersons=new ArrayList<>();
+        arrayOfStores=new ArrayList<>();
+        arrayOfObjects=new ArrayList<>();
         crashMap=new int[1000][1000];
 
         //fillCrashMapWithStoresAndObjects();
@@ -52,7 +49,7 @@ public class SimulationHandler {
      *
      * @return only one instance
      */
-    public static SimulationHandler getSimulationInstance() {
+    static SimulationHandler getSimulationInstance() {
         if (simulationInstance == null) {
             simulationInstance=new SimulationHandler();
         }
@@ -80,23 +77,23 @@ public class SimulationHandler {
     /**
      * inserts the stores and objects people cannot walk through into the crashmap (sets values to)
      */
-    public void fillCrashMapWithStoresAndObjects() {
+    void fillCrashMapWithStoresAndObjects() {
         int xPosLeftUpper;
         int yPosLeftUpper;
         int xPosDownRight;
         int yPosDownRight;
 
 
-        /**
-         * example:
-         * 0 0 0 0 0 0
-         * 0 x x x x 0
-         * 0 x 0 0 x 0
-         * 0 x 0 0 x 0
-         * 0 x 0 x x 0
-         * 0 0 0 0 0 0
-         * where x - wall, 0- free place
-         *
+        /*
+          example:
+          0 0 0 0 0 0
+          0 x x x x 0
+          0 x 0 0 x 0
+          0 x 0 0 x 0
+          0 x 0 x x 0
+          0 0 0 0 0 0
+          where x - wall, 0- free place
+
          */
         for (Store s : arrayOfStores) {
             xPosLeftUpper=s.getPosition()[0];
@@ -184,7 +181,7 @@ public class SimulationHandler {
     /**
      * Test function, adds specific amount of persons
      */
-    protected void initializePersons() {
+    void initializePersons() {
 
         //fillCrashMapWithStoresAndObjects();
         /*
@@ -205,7 +202,7 @@ public class SimulationHandler {
     /**
      * deletes content of hotcoldspots and computes them new, so only a momentary picture is shown
      */
-    public void clearEverything() {
+    void clearEverything() {
         //this.arrayOfPersons.clear();
         this.statisticHandler.hotColdSpots.clear();
 
@@ -217,14 +214,10 @@ public class SimulationHandler {
     /**
      * computes next position of people
      */
-    public void computeNextPositionOfPersons(double dayTime) {
-
-
+    void computeNextPositionOfPersons(double dayTime) {
         Iterator<Person> iter=arrayOfPersons.iterator();
-
         while (iter.hasNext()) {
             Person person=iter.next();
-
             if (person.isGoalMallDoor())
                 iter.remove();
             else {
@@ -239,24 +232,10 @@ public class SimulationHandler {
 
     }
 
-
-    //Empty methods, can be deleted at the end
-    public void addPersons() {
-
-    }
-
-    public void addStore() {
-
-    }
-
-    public void addObject() {
-
-    }
-
     /**
      * Getter or Setter
      *
-     * @return
+     * @return array of person
      */
     public ArrayList<Person> getArrayOfPersons() {
         return arrayOfPersons;
@@ -265,7 +244,7 @@ public class SimulationHandler {
     /**
      * Getter or Setter
      *
-     * @param arrayOfPersons
+     * @param arrayOfPersons array of persons
      */
     public void setArrayOfPersons(ArrayList<Person> arrayOfPersons) {
         this.arrayOfPersons=arrayOfPersons;
@@ -285,7 +264,7 @@ public class SimulationHandler {
      *
      * @param arrayOfStores
      */
-    public void setArrayOfStores(ArrayList<Store> arrayOfStores) {
+    void setArrayOfStores(ArrayList<Store> arrayOfStores) {
         this.arrayOfStores=arrayOfStores;
     }
 
@@ -303,7 +282,7 @@ public class SimulationHandler {
      *
      * @param arrayOfObjects
      */
-    public void setArrayOfObjects(ArrayList<Objects> arrayOfObjects) {
+    void setArrayOfObjects(ArrayList<Objects> arrayOfObjects) {
         this.arrayOfObjects=arrayOfObjects;
     }
 
@@ -313,7 +292,7 @@ public class SimulationHandler {
      * @param numberOfPerson amount of person that should be generated
      * @param dayTime        the period of day time
      */
-    public void generatePerson(double numberOfPerson, double dayTime) {
+    void generatePerson(double numberOfPerson, double dayTime) {
         int randTime;
         int minX=mall.getDoorLeftUpper().getX();
         int maxX=mall.getDoorDownRight().getX();
@@ -322,9 +301,9 @@ public class SimulationHandler {
 
         //System.out.println("DayTime: " + Math.round(dayTime)/60);
         if (numberOfPerson > 5) {
-            randTime=ThreadLocalRandom.current().nextInt(10, 20);
+            randTime=ThreadLocalRandom.current().nextInt(5, 20);
         } else {
-            randTime=ThreadLocalRandom.current().nextInt(2, 10);
+            randTime=ThreadLocalRandom.current().nextInt(1, 10);
         }
         if (Math.round(dayTime) / 60 - dayTimeInMinutes > randTime && dayTimeInMinutes < 1140) {
 
@@ -333,8 +312,8 @@ public class SimulationHandler {
                 int y=ThreadLocalRandom.current().nextInt(minY, maxY);
                 //random number from 0 to 4
                 int nrGoalStores=(int) (Math.random() * 5);
-                goalStores=new Store[6];
-                goalStoresList=new ArrayList<>();
+                Store[] goalStores=new Store[6];
+                ArrayList<Store> goalStoresList=new ArrayList<>();
                 //System.out.println(nrGoalStores);
                 for (int m=0; m <= nrGoalStores; m++) {
                     //goalStores[m] = getRandomItem(arrayOfStores);
@@ -358,7 +337,7 @@ public class SimulationHandler {
         return entranceDoor;
     }
 
-    public void setEntranceDoor(EntranceDoor entranceDoor) {
+    void setEntranceDoor(EntranceDoor entranceDoor) {
         this.entranceDoor=entranceDoor;
     }
 

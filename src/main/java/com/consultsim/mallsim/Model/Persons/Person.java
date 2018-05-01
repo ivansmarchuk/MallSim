@@ -17,9 +17,6 @@ public class Person {
     public static ArrayList<Store> arrayOfStores;
     private static int nextID=0;
     boolean isGoalMallDoor=false;
-    private int timeInShop;
-    private boolean inShop;
-    private int timeSearching;
     private Position currentPosition;
     private Position nextPosition;
     private Store[] goalStores;
@@ -249,39 +246,42 @@ public class Person {
 
         //chooses the direction the person should "escape"
         //tempx = currentX + ThreadLocalRandom.current().nextInt(-viewableRadius, viewableRadius);
-        int chooseDirection = ThreadLocalRandom.current().nextInt(0, 4);
+        int chooseDirection=ThreadLocalRandom.current().nextInt(0, 4);
         switch (chooseDirection) {
             case 0: {
-                if (currentY < ThreadLocalRandom.current().nextInt(50, 300)){
+                if (currentY < ThreadLocalRandom.current().nextInt(50, 300)) {
                     tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
-                    tempx=currentX + ThreadLocalRandom.current().nextInt( 0, viewableRadius);
-                }else{
+                    tempx=currentX + ThreadLocalRandom.current().nextInt(0, viewableRadius);
+                } else {
                     tempy=currentY + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
                     tempx=currentX + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
                 }
 
-            }break;
+            }
+            break;
             case 1: {
                 tempx=currentX + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
                 tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
-            }break;
+            }
+            break;
             case 2: {
                 tempx=currentX + ThreadLocalRandom.current().nextInt(0, viewableRadius);
-                if (currentY < ThreadLocalRandom.current().nextInt(50, 300)){
+                if (currentY < ThreadLocalRandom.current().nextInt(50, 300)) {
                     tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
-                }else{
+                } else {
                     tempy=currentY + ThreadLocalRandom.current().nextInt(-viewableRadius, 0);
                 }
-            }break;
+            }
+            break;
             case 3: {
                 tempx=currentX + ThreadLocalRandom.current().nextInt(0, viewableRadius);
                 tempy=currentY + ThreadLocalRandom.current().nextInt(0, viewableRadius);
-            }break;
+            }
+            break;
             default:
-                tempx = currentX;
-                tempy = currentY;
+                tempx=currentX;
+                tempy=currentY;
         }
-
 
 
         if (tempx >= 0 && tempy >= 0 && tempx < 1000 & tempy < 1000) {
@@ -385,10 +385,6 @@ public class Person {
             waitedSince++;
         }
 
-        if (waitedSince > 15) {
-
-            //simulationHandler.getArrayOfPersons().remove(this);
-        }
         return tempPos;
 
     }
@@ -497,7 +493,7 @@ public class Person {
      * }
      */
 
-    public int[] movePerson(int direction, int currentX, int currentY) {
+    private int[] movePerson(int direction, int currentX, int currentY) {
 
         int nextStep=1;
         int[] newPosition={currentX, currentY};
