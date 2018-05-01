@@ -236,14 +236,16 @@ public class UIHandler implements Initializable {
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
             drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, 0.2);
-            drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
             double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * Configuration.SPEED_TIME_FACTOR;
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
                 //generation new persons
+                simulationLoop.pause();
                 simulationHandler.generatePerson(sliderNumberOfPersons.getValue(), sliderDayTime.getValue());
                 simulationHandler.computeNextPositionOfPersons(sliderDayTime.getValue());
+                simulationLoop.play();
+                drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
                 //TODO anders implementieren
