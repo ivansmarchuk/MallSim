@@ -12,7 +12,7 @@ public final class Configuration {
     public static final double OPACITY_SPOTS_MAIN_WINDOW = 0.2;
 
 
-    public static final char SPEED_TIME_FACTOR = 10;
+    public static final char SPEED_TIME_FACTOR = 20;
     public static final char TIME_OUT = 1020;
     public static final int INITIAL_DAY_SPEED = 5;
     public static final int STATISTIC_COUNT_HOT_COLD_SPOTS = 20; //max 50

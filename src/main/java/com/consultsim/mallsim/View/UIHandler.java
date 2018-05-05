@@ -224,7 +224,7 @@ public class UIHandler implements Initializable {
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
             drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, Configuration.OPACITY_SPOTS_MAIN_WINDOW);
-            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * Math.pow(sliderSpeedDayOfSim.getValue(), 2) * Configuration.SPEED_TIME_FACTOR;
+            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue()* Configuration.SPEED_TIME_FACTOR;
 
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
