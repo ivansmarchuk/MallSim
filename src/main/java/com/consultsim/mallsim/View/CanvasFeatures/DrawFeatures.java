@@ -117,4 +117,17 @@ public class DrawFeatures {
         }
     }
 
+    public void drawHotSpot(GraphicsContext gc, String key, double opasity) {
+        gc.setFill(Color.rgb(255, 64, 64, opasity));
+        String[] ary = key.split("");
+
+        gc.fillRect(Integer.parseInt(ary[0])*100, Integer.parseInt(ary[1])*100, 100,100 );
+    }
+
+    public void drawColdSpot(GraphicsContext gc, String key, double opasity) {
+        gc.setFill(Color.rgb(0, 0, 139, opasity));
+        String[] ary = key.split("");
+
+        gc.fillRect(Integer.parseInt(ary[0])*100, Integer.parseInt(ary[1])*100, 100,100 );
+    }
 }

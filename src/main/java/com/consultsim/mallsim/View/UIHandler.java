@@ -1,6 +1,5 @@
 package com.consultsim.mallsim.View;
 
-import com.consultsim.mallsim.MainApp;
 import com.consultsim.mallsim.Model.Configuration;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Persons.Person;
@@ -17,7 +16,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -127,8 +125,6 @@ public class UIHandler implements Initializable {
         arrayOfPerson=simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots=simulationHandler.statisticHandler.getHotColdSpots();
-
-
     }
 
 
@@ -156,6 +152,7 @@ public class UIHandler implements Initializable {
             File chosenFile=fileChooser.showOpenDialog(null);
             //Make sure a file was selected, if not return default
             String path;
+            //default return value
             if (chosenFile != null) {
 
                 path=chosenFile.getPath();
@@ -182,28 +179,19 @@ public class UIHandler implements Initializable {
                     pool.execute(nrTasks);
 
                 }
-                pool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        entranceDoor.generateHeatMap(simulationHandler.crashMap);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                stackPane.getChildren().remove(progressIndicator);
-                                btnStartPause.setDisable(false);
-                                btnNextStep.setDisable(false);
-                                btnResetSim.setDisable(false);
+                pool.execute(() -> {
+                    entranceDoor.generateHeatMap(simulationHandler.crashMap);
+                    Platform.runLater(() -> {
+                        stackPane.getChildren().remove(progressIndicator);
+                        btnStartPause.setDisable(false);
+                        btnNextStep.setDisable(false);
+                        btnResetSim.setDisable(false);
 
-                                drawLayoutFromXMLFile();
-                            }
-                        });
-                    }
+                        drawLayoutFromXMLFile();
+                    });
                 });
 
-            } else {
-                //default return value
-                path = null;
-            }
+            } else path=null;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -235,8 +223,9 @@ public class UIHandler implements Initializable {
             simulationHandler.clearEverything();
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
-            drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, 0.2);
-            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue() * Configuration.SPEED_TIME_FACTOR;
+            drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, Configuration.OPACITY_SPOTS_MAIN_WINDOW);
+            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * Math.pow(sliderSpeedDayOfSim.getValue(), 2) * Configuration.SPEED_TIME_FACTOR;
+
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
                 lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
@@ -248,7 +237,6 @@ public class UIHandler implements Initializable {
                 drawFeatures.drawPersons(graphicsContext, arrayOfPerson);
                 //drawFeatures.drawCrashMap(graphicsContext, SimulationHandler.crashMap);
             } else {
-                //TODO anders implementieren
                 btnStartPause.setText("Start");
                 btnStartPause.setDisable(true);
                 sliderDayTime.setValue(sliderDayTime.getMin());
@@ -273,6 +261,8 @@ public class UIHandler implements Initializable {
             Scene scene=new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
+            //System.out.println(statisticHandler.getHm());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -308,6 +298,11 @@ public class UIHandler implements Initializable {
      */
     @FXML
     public void getNextStep(ActionEvent event) {
+
+        getOneSimulationStep();
+    }
+
+    private void getOneSimulationStep() {
         Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * 10));
         KeyFrame frame=getToNextFrame(duration);
         simulationLoop=new Timeline();
@@ -402,9 +397,11 @@ public class UIHandler implements Initializable {
         simulationLoop.stop();
         simulationLoop.getKeyFrames().clear();
         buildSimulationStart(speedDayOfSim);
+
         if (status == Animation.Status.RUNNING) {
             simulationLoop.play();
         }
+
     }
 
     /**
@@ -427,26 +424,21 @@ public class UIHandler implements Initializable {
     }
 
     private void resetSimulation() {
-        Parent root=null;
-        try {
-            root=FXMLLoader.load(java.util.Objects.requireNonNull(MainApp.class.getClassLoader().getResource("MainTemplate.fxml")));
-            initializeCanvas();
-            drawLayoutFromXMLFile();
-            simulationHandler.arrayOfPersons=new ArrayList<>();
-            //simulationHandler.arrayOfObjects=new ArrayList<>();
-            statisticHandler.hotColdSpots=new ArrayList<>();
-            //simulationHandler.arrayOfStores=new ArrayList<>();
-            statisticHandler.setCountOfPersons(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        btnStartPause.getScene().setRoot(root);
+        initializeCanvas();
+        simulationHandler.arrayOfPersons.clear();
+        //simulationHandler.arrayOfObjects=new ArrayList<>();
+        statisticHandler.hotColdSpots.clear();
+        //simulationHandler.arrayOfStores=new ArrayList<>();
+        statisticHandler.setCountOfPersons(0);
+        sliderDayTime.setValue(sliderDayTime.getMin());
+        clearCanvas(graphicsContext);
+        drawLayoutFromXMLFile();
+        simulationLoop.pause();
+        dayMinutes=540;
+        simulationHandler.setDayTimeInMinutes(dayMinutes);
 
         btnResetSim.setDisable(false);
-
-
-
-
+        btnStartPause.textProperty().setValue("Start");
     }
 
 

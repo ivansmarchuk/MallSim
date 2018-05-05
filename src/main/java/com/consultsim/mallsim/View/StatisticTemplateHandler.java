@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NavigableSet;
 import java.util.ResourceBundle;
 
 public class StatisticTemplateHandler implements Initializable{
@@ -56,7 +59,30 @@ public class StatisticTemplateHandler implements Initializable{
     private void drawStatistic() {
         drawFeatures.drawStores(graphicsContext, simulationHandler.arrayOfStores);
         drawFeatures.drawObjects(graphicsContext, simulationHandler.arrayOfObjects);
-        drawFeatures.drawHotColdSpots(graphicsContext, statisticHandler.hotColdSpots, 0.5);
+
+        System.out.println();
+        //String key=statisticHandler.getHm().last().getKey();
+        NavigableSet<Map.Entry<String, Integer>> hmMap = statisticHandler.getHm();
+
+        int counter;
+        //System.out.println(statisticHandler.getHm());
+        counter=Configuration.STATISTIC_COUNT_HOT_COLD_SPOTS > 50 ? 50 : Configuration.STATISTIC_COUNT_HOT_COLD_SPOTS;
+
+        for (int i=0; i < counter; i++) {
+            String key =hmMap.pollLast().getKey();
+            System.out.println(key);
+            drawFeatures.drawHotSpot(graphicsContext, key, Configuration.OPACITY_SPOTS_STATISTIC_WINDOW);
+        }
+        for (int i=0; i <counter; i++) {
+            String key =hmMap.pollFirst().getKey();
+            System.out.println(key);
+            drawFeatures.drawColdSpot(graphicsContext, key, Configuration.OPACITY_SPOTS_STATISTIC_WINDOW);
+        }
+
+        //drawFeatures.drawHotColdSpots(graphicsContext, statisticHandler.hotColdSpots, 0.5);
+
+
+
     }
 
     private void initializeCanvas() {

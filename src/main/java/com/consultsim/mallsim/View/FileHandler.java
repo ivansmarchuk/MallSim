@@ -37,7 +37,7 @@ public class FileHandler {
     /**
      * Konstrukor
      */
-    public FileHandler() {
+    FileHandler() {
         arrayOfStores = new ArrayList<>();
         arrarOfObjects = new ArrayList<>();
     }
@@ -138,14 +138,12 @@ public class FileHandler {
 
         } catch (SAXParseException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Validierungsprüfung fehlgeschlagen\n "
+            Alert alert=new Alert(Alert.AlertType.ERROR, "Validierungsprüfung fehlgeschlagen\n "
                     + "File: " + e.getSystemId() + "\n"
                     + "Zeile: " + e.getLineNumber() + " Spalte: " + e.getColumnNumber() + " " + e.getMessage() + "\n"
                     , ButtonType.OK);
             alert.showAndWait();
-            if (alert.getResult() == ButtonType.YES) {
-                //do stuff
-            }
+            alert.getResult();
 
 
         } catch (ParserConfigurationException e) {

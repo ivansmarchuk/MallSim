@@ -3,9 +3,7 @@ package com.consultsim.mallsim.View;
 import com.consultsim.mallsim.Model.Persons.Person;
 import com.consultsim.mallsim.Model.StaticObjects.Spot;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
 
 public class StatisticHandler {
@@ -366,10 +364,22 @@ public class StatisticHandler {
         return highest;
     }
 
-    public TreeMap<String, Integer> getHm() {
-        return hm;
+    public NavigableSet<Map.Entry<String, Integer>> getHm() {
+        return entriesSortedByValues(hm);
     }
 
-    
+    static <K,V extends Comparable<? super V>>
+    NavigableSet<Map.Entry<K,V>> entriesSortedByValues(Map<K,V> map) {
+        NavigableSet<Map.Entry<K,V>> sortedEntries = new TreeSet<Map.Entry<K,V>>(
+                new Comparator<Map.Entry<K,V>>() {
+                    @Override public int compare(Map.Entry<K,V> e1, Map.Entry<K,V> e2) {
+                        int res = e1.getValue().compareTo(e2.getValue());
+                        return res != 0 ? res : 1;
+                    }
+                }
+        );
+        sortedEntries.addAll(map.entrySet());
+        return sortedEntries;
+    }
 
 }

@@ -354,4 +354,8 @@ public class SimulationHandler {
         int randomIndex=random.nextInt(listSize);
         return list.get(randomIndex);
     }
+
+    public void setDayTimeInMinutes(double dayTimeInMinutes) {
+        this.dayTimeInMinutes=dayTimeInMinutes;
+    }
 }
