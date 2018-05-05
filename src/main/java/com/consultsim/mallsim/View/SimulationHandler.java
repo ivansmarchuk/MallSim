@@ -9,10 +9,7 @@ import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -182,19 +179,6 @@ public class SimulationHandler {
      * Test function, adds specific amount of persons
      */
     void initializePersons() {
-
-        //fillCrashMapWithStoresAndObjects();
-        /*
-        for (int i = 0; i < 1; i++) {
-            x = random.nextInt(1000);
-            y = random.nextInt(1000);
-            if(crashMap[y][x] != 10){
-                arrayOfPersons.add(new Person(new Position(x,y), 0.0, this));
-                //System.out.println("x: " + x + " y: " + y);
-                crashMap[y][x] = 1;
-            }
-        }
-*/
         int m[][]=statisticHandler.recognizeHCSpots(1000, 1000, 100, 100, arrayOfPersons);
         statisticHandler.createSpotObjects(1000, 1000, 100, 100, m);
     }
@@ -215,9 +199,9 @@ public class SimulationHandler {
      * computes next position of people
      */
     void computeNextPositionOfPersons(double dayTime) {
-        Iterator<Person> iter=arrayOfPersons.iterator();
-        while (iter.hasNext()) {
-            Person person=iter.next();
+        ListIterator<Person> iter=arrayOfPersons.listIterator(arrayOfPersons.size());
+        while (iter.hasPrevious()) {
+            Person person=iter.previous();
             if (person.isGoalMallDoor())
                 iter.remove();
             else {
@@ -294,8 +278,8 @@ public class SimulationHandler {
      */
     void generatePerson(double numberOfPerson, double dayTime) {
         int randTime;
-        int minX=mall.getDoorLeftUpper().getX();
-        int maxX=mall.getDoorDownRight().getX();
+        int minX=mall.getDoorLeftUpper().getX()-100;
+        int maxX=mall.getDoorDownRight().getX()-100;
         int minY=mall.getDoorLeftUpper().getY();
         int maxY=mall.getDoorDownRight().getY();
 
@@ -305,13 +289,13 @@ public class SimulationHandler {
         } else {
             randTime=ThreadLocalRandom.current().nextInt(1, 10);
         }
-        if (Math.round(dayTime) / 60 - dayTimeInMinutes > randTime && dayTimeInMinutes < 1140) {
+        if (Math.round(dayTime) / 60 - dayTimeInMinutes > randTime && dayTimeInMinutes < 1080) {
 
             for (int i=0; i < (int) numberOfPerson; i++) {
                 int x=ThreadLocalRandom.current().nextInt(minX, maxX);
                 int y=ThreadLocalRandom.current().nextInt(minY, maxY);
                 //random number from 0 to 4
-                int nrGoalStores=(int) (Math.random() * 5);
+                int nrGoalStores=(int) (Math.random() * 6);
                 Store[] goalStores=new Store[6];
                 ArrayList<Store> goalStoresList=new ArrayList<>();
                 //System.out.println(nrGoalStores);

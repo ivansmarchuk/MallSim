@@ -107,7 +107,7 @@
                               <Label fx:id="lblSpeedDayValue" text="labelDaySpeedValue" />
                            </children>
                         </HBox>
-                        <Slider fx:id="sliderSpeedDayOfSim" blockIncrement="1" max="15" maxHeight="25.0" maxWidth="300.0" min="1" prefHeight="25.0" prefWidth="300.0" showTickMarks="true" value="5.0" />
+                        <Slider fx:id="sliderSpeedDayOfSim" blockIncrement="1" max="20" maxHeight="25.0" maxWidth="300.0" min="1" prefHeight="25.0" prefWidth="300.0" showTickMarks="true" value="5.0" />
                         <HBox>
                            <children>
                               <Label alignment="TOP_LEFT" style="-fx-font-size: 16; -fx-font-weight: bold;" text="Statistik" textAlignment="RIGHT">

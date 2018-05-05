@@ -181,6 +181,7 @@ public class UIHandler implements Initializable {
                 }
                 pool.execute(() -> {
                     entranceDoor.generateHeatMap(simulationHandler.crashMap);
+                    
                     Platform.runLater(() -> {
                         stackPane.getChildren().remove(progressIndicator);
                         btnStartPause.setDisable(false);
@@ -205,11 +206,20 @@ public class UIHandler implements Initializable {
      * @param speedDayOfSim fps
      */
     private void buildSimulationStart(int speedDayOfSim) {
-        Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * 10));
+        Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * Configuration.SPEED_TIME_FACTOR));
+
         KeyFrame frame=getToNextFrame(duration);
         simulationLoop=new Timeline();
         simulationLoop.setCycleCount(Timeline.INDEFINITE);
-        simulationLoop.getKeyFrames().add(frame);
+       if (speedDayOfSim > 8) {
+            for (int i=1; i < speedDayOfSim / 4; i++) {
+                simulationLoop.getKeyFrames().add(frame);
+            }
+        }
+        else  simulationLoop.getKeyFrames().add(frame);
+
+
+
     }
 
     /**
@@ -224,7 +234,7 @@ public class UIHandler implements Initializable {
             clearCanvas(graphicsContext);
             drawLayoutFromXMLFile();
             drawFeatures.drawHotColdSpots(graphicsContext, arrayOfSpots, Configuration.OPACITY_SPOTS_MAIN_WINDOW);
-            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue()* Configuration.SPEED_TIME_FACTOR;
+            double newDayTime=sliderDayTime.getValue() + duration.toSeconds() * sliderSpeedDayOfSim.getValue()* Configuration.SPEED_TIME_FACTOR * 2;
 
             sliderDayTime.setValue(newDayTime);
             if (sliderDayTime.getValue() != sliderDayTime.getMax()) {
@@ -303,7 +313,7 @@ public class UIHandler implements Initializable {
     }
 
     private void getOneSimulationStep() {
-        Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * 10));
+        Duration duration=Duration.millis(1000 / (float) (speedDayOfSim * Configuration.SPEED_TIME_FACTOR));
         KeyFrame frame=getToNextFrame(duration);
         simulationLoop=new Timeline();
         simulationLoop.setCycleCount(1);
@@ -423,6 +433,7 @@ public class UIHandler implements Initializable {
         resetSimulation();
     }
 
+
     private void resetSimulation() {
         initializeCanvas();
         simulationHandler.arrayOfPersons.clear();
@@ -439,6 +450,7 @@ public class UIHandler implements Initializable {
 
         btnResetSim.setDisable(false);
         btnStartPause.textProperty().setValue("Start");
+
     }
 
 

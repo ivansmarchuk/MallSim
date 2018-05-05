@@ -11,12 +11,12 @@
     <entranceDoor>
 
       <leftupperCorner>
-        <xPos>420</xPos>
+        <xPos>520</xPos>
         <yPos>0</yPos>
       </leftupperCorner>
 
       <downrightCorner>
-        <xPos>500</xPos>
+        <xPos>600</xPos>
         <yPos>6</yPos>
       </downrightCorner>
 
