@@ -125,6 +125,7 @@ public class UIHandler implements Initializable {
         arrayOfPerson=simulationHandler.getArrayOfPersons();
         lblCountPerson.setText(Integer.toString(arrayOfPerson.size()));
         arrayOfSpots=simulationHandler.statisticHandler.getHotColdSpots();
+
     }
 
 
@@ -159,6 +160,7 @@ public class UIHandler implements Initializable {
                 FileHandler fileHandler=new FileHandler();
                 fileHandler.readFile(path);
 
+
                 arrayOfStores=fileHandler.getArrayOfStores();
                 arrayOfObjects=fileHandler.getArrarOfObjects();
                 entranceDoor=fileHandler.getEntranceDoor();
@@ -181,7 +183,7 @@ public class UIHandler implements Initializable {
                 }
                 pool.execute(() -> {
                     entranceDoor.generateHeatMap(simulationHandler.crashMap);
-                    
+
                     Platform.runLater(() -> {
                         stackPane.getChildren().remove(progressIndicator);
                         btnStartPause.setDisable(false);
@@ -290,9 +292,11 @@ public class UIHandler implements Initializable {
                 simulationLoop.pause();
                 btnStartPause.setText("Start");
                 btnNextStep.setDisable(false);
+                stackPane.setDisable(false);
                 break;
             case PAUSED:
             case STOPPED:
+                stackPane.setDisable(true);
                 simulationLoop.play();
                 btnStartPause.setText("Pause");
                 btnNextStep.setDisable(true);

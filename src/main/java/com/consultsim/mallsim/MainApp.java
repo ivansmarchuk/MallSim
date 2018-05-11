@@ -30,7 +30,7 @@ public class MainApp extends Application {
         initMainLayout();
     }
 
-    private void initMainLayout() {
+   public void initMainLayout() {
         try {
             //Load the main layout from the fxml file.
             FXMLLoader loader = new FXMLLoader();

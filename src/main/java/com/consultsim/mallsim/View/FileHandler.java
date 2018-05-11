@@ -1,11 +1,13 @@
 package com.consultsim.mallsim.View;
 
 
+import com.consultsim.mallsim.MainApp;
 import com.consultsim.mallsim.Model.Objects;
 import com.consultsim.mallsim.Model.Position;
 import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
+import game.Main;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
@@ -144,6 +146,7 @@ public class FileHandler {
                     , ButtonType.OK);
             alert.showAndWait();
             alert.getResult();
+
 
 
         } catch (ParserConfigurationException e) {
