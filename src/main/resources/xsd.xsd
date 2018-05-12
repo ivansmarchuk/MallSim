@@ -147,7 +147,7 @@
           </xs:annotation>
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="leftDownCorner">
+              <xs:element name="leftupperCorner">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element type="xs:short" name="xPos"/>
@@ -155,7 +155,7 @@
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="uprightCorner">
+              <xs:element name="downrightCorner">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element type="xs:short" name="xPos"/>

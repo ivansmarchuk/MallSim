@@ -7,9 +7,7 @@
       <xSize>1000</xSize>
       <ySize>1000</ySize>
     </size>
-
     <entranceDoor>
-
       <leftupperCorner>
         <xPos>520</xPos>
         <yPos>0</yPos>
@@ -19,10 +17,8 @@
         <xPos>600</xPos>
         <yPos>6</yPos>
       </downrightCorner>
-
     </entranceDoor>
   </generalInfo>
-
   <store id="001">
     <color>#ea493f</color>
     <position>
@@ -866,15 +862,15 @@
 
   <object id="019">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>455</xPos>
       <yPos>800</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>465</xPos>
       <yPos>830</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>bench</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
 
@@ -882,15 +878,15 @@
 
   <object id="020">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>455</xPos>
       <yPos>850</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>465</xPos>
       <yPos>880</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>bench</type>                     <!-- “plant” oder “bench” oder “trash bin”-->
 
@@ -898,15 +894,15 @@
 
   <object id="021">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>455</xPos>
       <yPos>900</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>465</xPos>
       <yPos>930</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>bench</type>
 
@@ -915,15 +911,15 @@
 
   <object id="022">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>180</xPos>
       <yPos>740</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>200</xPos>
       <yPos>760</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
 
@@ -931,30 +927,30 @@
 
   <object id="023">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>330</xPos>
       <yPos>610</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>350</xPos>
       <yPos>630</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
   </object>
 
   <object id="024">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>180</xPos>
       <yPos>180</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>200</xPos>
       <yPos>200</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
 
@@ -962,15 +958,15 @@
 
   <object id="025">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>330</xPos>
       <yPos>330</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>350</xPos>
       <yPos>350</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
 
@@ -978,15 +974,15 @@
 
   <object id="026">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>750</xPos>
       <yPos>330</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>770</xPos>
       <yPos>350</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
 
@@ -994,15 +990,15 @@
 
   <object id="027">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>780</xPos>
       <yPos>180</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>800</xPos>
       <yPos>200</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
 
@@ -1010,15 +1006,15 @@
 
   <object id="028">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>780</xPos>
       <yPos>640</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>800</xPos>
       <yPos>660</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>plant</type>
 
@@ -1026,15 +1022,15 @@
 
   <object id="029">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>180</xPos>
       <yPos>430</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>190</xPos>
       <yPos>440</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>trash bin</type>
 
@@ -1042,15 +1038,15 @@
 
   <object id="030">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>510</xPos>
       <yPos>320</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>520</xPos>
       <yPos>330</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>trash bin</type>
 
@@ -1058,15 +1054,15 @@
 
   <object id="031">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>750</xPos>
       <yPos>600</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>760</xPos>
       <yPos>610</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>trash bin</type>
 
@@ -1074,30 +1070,30 @@
 
   <object id="032">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>380</xPos>
       <yPos>750</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>390</xPos>
       <yPos>760</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>trash bin</type>
   </object>
 
   <object id="033">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>425</xPos>
       <yPos>770</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>435</xPos>
       <yPos>780</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>trash bin</type>
 
@@ -1105,15 +1101,15 @@
 
   <object id="034">
 
-    <leftDownCorner>
+    <leftupperCorner>
       <xPos>510</xPos>
       <yPos>750</yPos>
-    </leftDownCorner>
+    </leftupperCorner>
 
-    <uprightCorner>
+    <downrightCorner>
       <xPos>520</xPos>
       <yPos>760</yPos>
-    </uprightCorner>
+    </downrightCorner>
 
     <type>trash bin</type>
 
