@@ -9,12 +9,12 @@ public class Spot {
 
     //point of origin is bottom left corner!!! -> 1000 (heigth) must be subtracted from y
 
-    public Spot(int x, int y, int width, int heigth, int semaphor){
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.heigth = heigth;
-        this.semaphor = semaphor;
+    public Spot(int x, int y, int width, int heigth, int semaphor) {
+        this.x=x;
+        this.y=y;
+        this.width=width;
+        this.heigth=heigth;
+        this.semaphor=semaphor;
 
 
         /*
@@ -35,7 +35,7 @@ public class Spot {
     }
 
     public void setSemaphor(int semaphor) {
-        this.semaphor = semaphor;
+        this.semaphor=semaphor;
     }
 
     public int getX() {
@@ -43,7 +43,7 @@ public class Spot {
     }
 
     public void setX(int x) {
-        this.x = x;
+        this.x=x;
     }
 
     public int getY() {
@@ -51,7 +51,7 @@ public class Spot {
     }
 
     public void setY(int y) {
-        this.y = y;
+        this.y=y;
     }
 
     public int getWidth() {
@@ -59,7 +59,7 @@ public class Spot {
     }
 
     public void setWidth(int width) {
-        this.width = width;
+        this.width=width;
     }
 
     public int getHeigth() {
@@ -67,6 +67,6 @@ public class Spot {
     }
 
     public void setHeigth(int heigth) {
-        this.heigth = heigth;
+        this.heigth=heigth;
     }
 }

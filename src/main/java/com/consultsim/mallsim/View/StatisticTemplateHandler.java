@@ -10,12 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.ResourceBundle;
 
-public class StatisticTemplateHandler implements Initializable{
+public class StatisticTemplateHandler implements Initializable {
 
     @FXML
     public Label lblTitle;
@@ -32,12 +31,11 @@ public class StatisticTemplateHandler implements Initializable{
     public Label lblCountAllPeople;
     @FXML
     public Canvas canvas;
+    SimulationHandler simulationHandler=SimulationHandler.getSimulationInstance();
+    StatisticHandler statisticHandler=StatisticHandler.getStatisticInstance();
     @FXML
     private GraphicsContext graphicsContext;
-    private DrawFeatures drawFeatures = DrawFeatures.getDrawInstance();
-
-    SimulationHandler simulationHandler = SimulationHandler.getSimulationInstance();
-    StatisticHandler statisticHandler = StatisticHandler.getStatisticInstance();
+    private DrawFeatures drawFeatures=DrawFeatures.getDrawInstance();
 
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -55,26 +53,25 @@ public class StatisticTemplateHandler implements Initializable{
     }
 
 
-
     private void drawStatistic() {
         drawFeatures.drawStores(graphicsContext, simulationHandler.arrayOfStores);
         drawFeatures.drawObjects(graphicsContext, simulationHandler.arrayOfObjects);
 
         System.out.println();
         //String key=statisticHandler.getHm().last().getKey();
-        NavigableSet<Map.Entry<String, Integer>> hmMap = statisticHandler.getHm();
+        NavigableSet<Map.Entry<String, Integer>> hmMap=statisticHandler.getHm();
 
         int counter;
         //System.out.println(statisticHandler.getHm());
         counter=Configuration.STATISTIC_COUNT_HOT_COLD_SPOTS > 50 ? 50 : Configuration.STATISTIC_COUNT_HOT_COLD_SPOTS;
 
         for (int i=0; i < counter; i++) {
-            String key =hmMap.pollLast().getKey();
+            String key=hmMap.pollLast().getKey();
             System.out.println(key);
             drawFeatures.drawHotSpot(graphicsContext, key, Configuration.OPACITY_SPOTS_STATISTIC_WINDOW);
         }
-        for (int i=0; i <counter; i++) {
-            String key =hmMap.pollFirst().getKey();
+        for (int i=0; i < counter; i++) {
+            String key=hmMap.pollFirst().getKey();
             System.out.println(key);
             drawFeatures.drawColdSpot(graphicsContext, key, Configuration.OPACITY_SPOTS_STATISTIC_WINDOW);
         }
@@ -82,13 +79,12 @@ public class StatisticTemplateHandler implements Initializable{
         //drawFeatures.drawHotColdSpots(graphicsContext, statisticHandler.hotColdSpots, 0.5);
 
 
-
     }
 
     private void initializeCanvas() {
         canvas.setHeight(Configuration.CANVAS_HEIGHT_SIZE);
         canvas.setWidth(Configuration.CANVAS_WIDTH_SIZE);
-        graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext=canvas.getGraphicsContext2D();
         graphicsContext.setFont(new Font(graphicsContext.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
 
 

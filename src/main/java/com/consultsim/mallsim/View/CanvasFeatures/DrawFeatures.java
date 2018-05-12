@@ -13,17 +13,15 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 
 public class DrawFeatures {
-    private static DrawFeatures drawInstance = null;
+    private static DrawFeatures drawInstance=null;
 
 
     public static DrawFeatures getDrawInstance() {
         if (drawInstance == null) {
-            drawInstance = new DrawFeatures();
+            drawInstance=new DrawFeatures();
         }
         return drawInstance;
     }
-
-
 
 
     /**
@@ -41,13 +39,13 @@ public class DrawFeatures {
             gc.setFill(Color.WHITE);
             gc.setFont(new Font(gc.getFont().getName(), Configuration.DEFAULT_FONT_SIZE));
             gc.fillText(store.getLabel() + "\n", store.getPosition()[0] + 5,
-                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2);
+                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1]) / 2);
 
             gc.save();
             gc.setFill(Color.WHITE);
             gc.setFont(new Font(gc.getFont().getName(), 10.0));
-            gc.fillText("(Kapazität: "+ store.getPeopleCounter() + " max)", store.getPosition()[0] + 5,
-                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1])/2 + 15);
+            gc.fillText("(Kapazität: " + store.getPeopleCounter() + " max)", store.getPosition()[0] + 5,
+                    store.getPosition()[1] + (store.getPosition()[3] - store.getPosition()[1]) / 2 + 15);
             gc.restore();
 
             gc.strokeLine(store.getDoorPosition()[0], store.getDoorPosition()[1], store.getDoorPosition()[2], store.getDoorPosition()[3]);
@@ -77,9 +75,9 @@ public class DrawFeatures {
     public void drawCrashMap(GraphicsContext gc, int[][] crashMap) {
         gc.setFill(Color.AQUA);
         gc.setLineWidth(0.5);
-        for (int y = 0; y < 1000; y++) {
-            for (int x = 0; x < 1000; x++) {
-                if (crashMap[y][x] == 10){
+        for (int y=0; y < 1000; y++) {
+            for (int x=0; x < 1000; x++) {
+                if (crashMap[y][x] == 10) {
                     gc.strokeOval(x, y, 1, 1);
                     //gc.fillOval(x, y, 1, 1);
                 }
@@ -119,15 +117,15 @@ public class DrawFeatures {
 
     public void drawHotSpot(GraphicsContext gc, String key, double opasity) {
         gc.setFill(Color.rgb(255, 64, 64, opasity));
-        String[] ary = key.split("");
+        String[] ary=key.split("");
 
-        gc.fillRect(Integer.parseInt(ary[0])*100, Integer.parseInt(ary[1])*100, 100,100 );
+        gc.fillRect(Integer.parseInt(ary[0]) * 100, Integer.parseInt(ary[1]) * 100, 100, 100);
     }
 
     public void drawColdSpot(GraphicsContext gc, String key, double opasity) {
         gc.setFill(Color.rgb(0, 0, 139, opasity));
-        String[] ary = key.split("");
+        String[] ary=key.split("");
 
-        gc.fillRect(Integer.parseInt(ary[0])*100, Integer.parseInt(ary[1])*100, 100,100 );
+        gc.fillRect(Integer.parseInt(ary[0]) * 100, Integer.parseInt(ary[1]) * 100, 100, 100);
     }
 }

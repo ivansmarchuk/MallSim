@@ -2,7 +2,7 @@ package com.consultsim.mallsim.Model.StaticObjects;
 
 import com.consultsim.mallsim.Model.Store;
 
-public class StoreHeatMap implements  Runnable{
+public class StoreHeatMap implements Runnable {
 
     private int[][] crashMap;
     private Store store;
@@ -19,12 +19,12 @@ public class StoreHeatMap implements  Runnable{
 
     }
 
-    public void setCrashMap(int[][] crashMap){
-        this.crashMap = crashMap;
+    public void setCrashMap(int[][] crashMap) {
+        this.crashMap=crashMap;
     }
 
-    public void setStore(Store store){
-        this.store = store;
+    public void setStore(Store store) {
+        this.store=store;
     }
 
 }

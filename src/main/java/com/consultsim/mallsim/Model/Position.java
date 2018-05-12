@@ -1,7 +1,6 @@
 package com.consultsim.mallsim.Model;
 
 
-
 /**
  * The Position with x and y coordinate
  */
@@ -9,9 +8,9 @@ public class Position {
     private int x;
     private int y;
 
-    public Position(int x, int y){
-        this.x = x;
-        this.y = y;
+    public Position(int x, int y) {
+        this.x=x;
+        this.y=y;
     }
 
     public int getX() {
@@ -19,7 +18,7 @@ public class Position {
     }
 
     public void setX(int x) {
-        this.x = x;
+        this.x=x;
     }
 
     public int getY() {
@@ -27,6 +26,6 @@ public class Position {
     }
 
     public void setY(int y) {
-        this.y = y;
+        this.y=y;
     }
 }

@@ -3,7 +3,7 @@ package com.consultsim.mallsim.Model.StaticObjects;
 import com.consultsim.mallsim.Model.Position;
 
 public class Mall {
-    private static Mall mallInstance = null;
+    private static Mall mallInstance=null;
 
     private Position doorLeftUpper;
     private Position doorDownRight;
@@ -12,7 +12,7 @@ public class Mall {
 
     public static Mall getMallInstance() {
         if (mallInstance == null) {
-            mallInstance = new Mall();
+            mallInstance=new Mall();
         }
         return mallInstance;
     }
@@ -22,7 +22,7 @@ public class Mall {
     }
 
     public void setDoorLeftUpper(Position doorLeftUpper) {
-        this.doorLeftUpper = doorLeftUpper;
+        this.doorLeftUpper=doorLeftUpper;
     }
 
     public Position getDoorDownRight() {
@@ -30,7 +30,7 @@ public class Mall {
     }
 
     public void setDoorDownRight(Position doorDownRight) {
-        this.doorDownRight = doorDownRight;
+        this.doorDownRight=doorDownRight;
     }
 
     public int getySize() {
@@ -38,7 +38,7 @@ public class Mall {
     }
 
     public void setySize(int ySize) {
-        this.ySize = ySize;
+        this.ySize=ySize;
     }
 
     public int getxSize() {
@@ -46,6 +46,6 @@ public class Mall {
     }
 
     public void setxSize(int xSize) {
-        this.xSize = xSize;
+        this.xSize=xSize;
     }
 }

@@ -9,7 +9,10 @@ import com.consultsim.mallsim.Model.StaticObjects.EntranceDoor;
 import com.consultsim.mallsim.Model.StaticObjects.Mall;
 import com.consultsim.mallsim.Model.Store;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -20,8 +23,8 @@ public class SimulationHandler {
     StatisticHandler statisticHandler;
     ArrayList<Person> arrayOfPersons;
     ArrayList<Store> arrayOfStores;
-    private EntranceDoor entranceDoor;
     ArrayList<Objects> arrayOfObjects;
+    private EntranceDoor entranceDoor;
     private double dayTimeInMinutes=540;
     private int countPersons=0;
     private Mall mall;
@@ -278,8 +281,8 @@ public class SimulationHandler {
      */
     void generatePerson(double numberOfPerson, double dayTime) {
         int randTime;
-        int minX=mall.getDoorLeftUpper().getX()-100;
-        int maxX=mall.getDoorDownRight().getX()-100;
+        int minX=mall.getDoorLeftUpper().getX() - 100;
+        int maxX=mall.getDoorDownRight().getX() - 100;
         int minY=mall.getDoorLeftUpper().getY();
         int maxY=mall.getDoorDownRight().getY();
 
@@ -312,7 +315,7 @@ public class SimulationHandler {
                 }
                 //System.out.println(goalStores[0] + " " + goalStores[1] + " " + goalStores[2] + " " + goalStores[3] + " " + goalStores[4] + " " + goalStores[5]);
             }
-            dayTimeInMinutes =Math.round(dayTime) / 60;
+            dayTimeInMinutes=Math.round(dayTime) / 60;
         }
 
     }
